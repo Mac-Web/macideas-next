@@ -1,0 +1,165 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum QuestionType {
+  multiple
+  text
+}
+
+model User {
+  id            String     @id
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  image         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  about         String?
+  picture       Int?
+  accounts      Account[]
+  sessions      Session[]
+  forms         Form[]
+  collabForms   Form[]     @relation(name: "collaborators")
+  taskLists     TaskList[]
+  tasks         Task[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Form {
+  id            String     @id @default(uuid())
+  shortened     String?    @unique
+  userId        String
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collaborators User[]     @relation(name: "collaborators")
+  title         String
+  description   String?
+  private       Boolean    @default(false)
+  code          String?
+  open          Boolean    @default(true)
+  quiz          Boolean    @default(false)
+  starred       Boolean    @default(false) //TODO: starred shouldn't be on the form it should be for each individual user/collaborator
+  codes         String[]
+  questions     Question[]
+  responses     Response[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  optional    Boolean      @default(false)
+  type        QuestionType
+  correct     String?
+  config      Json
+  formId      String
+  form        Form         @relation(fields: [formId], references: [id], onDelete: Cascade)
+  answers     Answer[]
+}
+
+model Response {
+  id      String   @id @default(uuid())
+  answers Answer[]
+
+  formId String
+  form   Form   @relation(fields: [formId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Answer {
+  id     Int          @id @default(autoincrement())
+  type   QuestionType
+  config Json
+
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  responseId String
+  response   Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
+}
+
+model TaskList {
+  id      String  @id @default(uuid())
+  name    String
+  emoji   String?
+  starred Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks  Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id        String  @id @default(uuid())
+  text      String
+  completed Boolean @default(false)
+  starred   Boolean @default(false)
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskListId String
+  taskList   TaskList @relation(fields: [taskListId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
