@@ -29,7 +29,7 @@ export default function TasksLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="pl-5 md:pl-20 lg:pl-[calc(50%-550px)] flex">
+    <div className="flex">
       <Sidebar />
       {children}
     </div>

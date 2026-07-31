@@ -1,14 +1,15 @@
 "use client";
 
 import type { TaskType } from "@/types/tasks";
-import React, { useState } from "react";
+import { useState } from "react";
+import { FaCalendar, FaRegStar, FaStar, FaTag } from "react-icons/fa";
+import { addTask } from "@/app/tasks/[id]/actions";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
-import { FaCalendar, FaRegStar, FaStar, FaTag } from "react-icons/fa";
 
 const blankTask = { text: "" };
 
-function TaskInput() {
+function TaskInput({ id }: { id: string }) {
   const [newTask, setNewTask] = useState<TaskType>(blankTask);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -16,7 +17,7 @@ function TaskInput() {
     e.preventDefault();
     if (newTask.text.trim().length > 0) {
       setLoading(true);
-      console.log(newTask);
+      await addTask(newTask, id);
       setLoading(false);
       setNewTask(blankTask);
     }
@@ -25,7 +26,7 @@ function TaskInput() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-[calc(100%-24px)] absolute bottom-3"
+      className="border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full"
     >
       <div className="flex gap-x-5 text-gray-300 px-3">
         <FaCalendar size={17} title="Due date" className="cursor-pointer" />
