@@ -47,3 +47,20 @@ export async function renameTaskList(id: string, name: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function starTaskList(id: string, starred: boolean) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.taskList.update({
+        where: { id, userId: session.user.id },
+        data: {
+          starred,
+        },
+      });
+      revalidatePath("/tasks");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

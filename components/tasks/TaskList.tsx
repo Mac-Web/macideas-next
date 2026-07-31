@@ -3,18 +3,27 @@
 import type { TaskList as TaskListType } from "@/generated/prisma/client";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { FaEllipsisV, FaPen, FaRegStar, FaTrash } from "react-icons/fa";
+import { FaEllipsisV, FaPen, FaRegStar, FaStar, FaTrash } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { deleteTaskList, renameTaskList } from "@/app/tasks/actions";
-import Link from "next/link";
-import Modal from "../ui/Modal";
-import Btn from "../ui/Btn";
+import {
+  deleteTaskList,
+  renameTaskList,
+  starTaskList,
+} from "@/app/tasks/actions";
+import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
+import Link from "next/link";
+import { FaFaceSmile } from "react-icons/fa6";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
 
-function TaskList({ taskList }: { taskList: TaskListType }) {
+interface TaskListProps {
+  taskList: TaskListType;
+  starred?: boolean;
+}
+
+function TaskList({ taskList, starred }: TaskListProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
@@ -37,6 +46,11 @@ function TaskList({ taskList }: { taskList: TaskListType }) {
       setRename(taskList.name);
       setMenuOpen(false);
     }
+  }
+
+  async function handleEmoji(e: React.MouseEvent) {
+    e.preventDefault();
+    console.log("Please select an emoji"); //TODO: add emoji mart picker component for this
   }
 
   useEffect(() => {
@@ -64,10 +78,15 @@ function TaskList({ taskList }: { taskList: TaskListType }) {
       ) : (
         <Link
           href={`/tasks/${taskList.id}`}
-          className={`text-gray-300 px-4 py-2 rounded group-hover:bg-gray-900/60 w-full
-        ${pathname.includes(taskList.id) && "bg-gray-900 group-hover:bg-gray-900! text-teal-600 font-bold"}`}
+          className={`flex gap-x-3 items-center whitespace-nowrap text-gray-300 px-4 py-2 rounded group-hover:bg-gray-900/60
+            w-full ${pathname.includes(taskList.id) && "bg-gray-900 group-hover:bg-gray-900! text-teal-600 font-bold"}`}
         >
-          {taskList.name}
+          <FaFaceSmile size={17} title="Select emoji" onClick={handleEmoji} />
+          {taskList.name.slice(0, 18) +
+            (taskList.name.length > 18 ? "..." : "")}{" "}
+          {taskList.starred && !starred && (
+            <FaStar size={13} className="text-teal-600" title="Starred" />
+          )}
         </Link>
       )}
       <div
@@ -87,8 +106,18 @@ function TaskList({ taskList }: { taskList: TaskListType }) {
               <div className={optionStyles} onClick={(e) => handleRename(e)}>
                 <FaPen size={15} /> Rename
               </div>
-              <div className={optionStyles}>
-                <FaRegStar size={15} /> Star
+              <div
+                className={optionStyles}
+                onClick={async () =>
+                  await starTaskList(taskList.id, !taskList.starred)
+                }
+              >
+                {taskList.starred ? (
+                  <FaStar size={15} className="text-teal-600" />
+                ) : (
+                  <FaRegStar size={15} />
+                )}{" "}
+                {taskList.starred ? "Starred" : "Star"}
               </div>
               <div
                 className={optionStyles + " text-red-500"}
@@ -102,27 +131,13 @@ function TaskList({ taskList }: { taskList: TaskListType }) {
       </div>
       <AnimatePresence>
         {deleting && (
-          <Modal closeModal={() => setDeleting(false)}>
-            <div className="flex flex-col gap-y-5">
-              <h2 className="text-white text-xl font-bold">
-                Delete confirmation
-              </h2>
-              <p className="text-gray-300">
-                Are you sure you want to delete the task list {taskList.name}?
-                This will delete all its data and tasks. This action cannot be
-                undone.
-              </p>
-              <div className="flex gap-x-3">
-                <Btn
-                  text={loading ? "Loading..." : "Confirm"}
-                  onclick={handleDelete}
-                  styles="bg-red-600! hover:bg-red-700! border-red-600! hover:border-red-700!"
-                  primary
-                />
-                <Btn text="Cancel" onclick={() => setDeleting(false)} />
-              </div>
-            </div>
-          </Modal>
+          <WarningModal
+            title="Delete confirmation"
+            description={`Are you sure you want to delete the task list ${taskList.name}? This will delete all its data and tasks. This action cannot be undone.`}
+            confirm={handleDelete}
+            closeModal={() => setDeleting(false)}
+            loading={loading}
+          />
         )}
       </AnimatePresence>
     </div>

@@ -10,6 +10,7 @@ interface InputProps {
   onblur?: () => void;
   styles?: string;
   clear?: boolean;
+  full?: boolean;
 }
 
 function Input({
@@ -19,6 +20,7 @@ function Input({
   onblur,
   styles,
   clear,
+  full,
 }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,7 +30,7 @@ function Input({
   }
 
   return (
-    <div className="flex items-center relative">
+    <div className={`flex items-center relative ${full && "w-full"}`}>
       <input
         placeholder={placeholder}
         value={value}

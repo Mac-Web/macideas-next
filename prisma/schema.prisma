@@ -136,10 +136,11 @@ model Answer {
 }
 
 model TaskList {
-  id      String  @id @default(uuid())
-  name    String
-  emoji   String?
-  starred Boolean @default(false)
+  id          String  @id @default(uuid())
+  name        String
+  emoji       String?
+  starred     Boolean @default(false)
+  description String?
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
