@@ -40,7 +40,7 @@ function Bar({ taskList }: { taskList: TaskList }) {
   }
 
   return (
-    <div className="w-full border-b border-b-gray-700 flex items-center gap-x-5 px-8 py-2 relative">
+    <div className="w-full border-b border-b-gray-700 flex items-center gap-x-5 px-3 py-2 relative">
       {editing !== null ? (
         <Input
           placeholder="Untitled task list"
@@ -81,7 +81,7 @@ function Bar({ taskList }: { taskList: TaskList }) {
           Add description
         </div>
       )}
-      <div className="absolute right-8 flex items-center gap-x-5">
+      <div className="absolute right-3 flex items-center gap-x-5">
         <div
           className="cursor-pointer"
           onClick={async () =>

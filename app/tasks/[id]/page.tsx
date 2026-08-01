@@ -51,7 +51,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex flex-col items-center flex-1 relative">
       <Bar taskList={taskList} />
-      <Tasks tasks={taskList.tasks} id={taskList.id} />
+      <Tasks tasks={taskList.tasks} id={taskList.id} name={taskList.name} />
     </div>
   );
 }

@@ -84,3 +84,18 @@ export async function starTask(id: string, starred: boolean) {
     console.error("Error: " + err);
   }
 }
+
+export async function completeTask(id: string, completed: boolean) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedTask = await prisma.task.update({
+        where: { id, userId: session.user.id },
+        data: { completed },
+      });
+      revalidatePath(`/tasks/${updatedTask.taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

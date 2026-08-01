@@ -6,11 +6,14 @@ interface CheckboxProps {
   text: string;
   checked: boolean;
   setChecked: (value: boolean) => void;
+  styles?: string;
 }
 
-function Checkbox({ text, checked, setChecked }: CheckboxProps) {
+function Checkbox({ text, checked, setChecked, styles }: CheckboxProps) {
   return (
-    <label className="flex items-center gap-x-3 text-gray-300 cursor-pointer w-fit">
+    <label
+      className={`flex items-center gap-x-3 text-gray-300 cursor-pointer w-fit ${styles}`}
+    >
       <input
         type="checkbox"
         checked={checked}

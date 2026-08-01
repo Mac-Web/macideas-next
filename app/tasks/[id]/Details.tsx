@@ -52,7 +52,7 @@ function Details({ task, setDetails }: DetailsProps) {
   }, [task]);
 
   return (
-    <div className="w-80 border-l border-l-gray-700 h-full bg-gray-950 p-5 relative">
+    <div className="w-70 border-l border-l-gray-700 h-full bg-gray-950 p-5 relative">
       <motion.div
         initial={{ x: "100%", opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}

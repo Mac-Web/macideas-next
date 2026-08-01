@@ -30,13 +30,16 @@ function Input({
   }
 
   return (
-    <div className={`flex items-center relative ${full && "w-full"}`}>
+    <div
+      className={`flex items-center relative bg-gray-900 rounded ${full && "w-full"}`}
+    >
       <input
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onblur}
-        className={`bg-gray-900 rounded px-3 py-1.5 outline-none text-white text-lg ${styles}`}
+        className={`px-3 py-1.5 outline-none text-white text-lg ${styles}
+        ${clear && "w-[calc(100%-30px)]"}`}
         ref={inputRef}
       />
       {clear && value.length > 0 && (
