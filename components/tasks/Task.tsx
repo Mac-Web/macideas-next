@@ -16,6 +16,7 @@ import { useState, useRef } from "react";
 import { completeTask, deleteTask, starTask } from "@/app/tasks/[id]/actions";
 import WarningModal from "../modals/WarningModal";
 import TagModal from "../modals/TagModal";
+import DateModal from "../modals/DateModal";
 
 const optionStyles = "opacity-0 group-hover:opacity-100 transition-opacity!";
 
@@ -34,6 +35,7 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [tagging, setTagging] = useState<boolean>(false);
+  const [picking, setPicking] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const completeRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +71,25 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           className={`absolute ${!task.completed && "opacity-0"} group-hover/complete:opacity-100 transition-opacity!`}
         />
       </div>
-      <span className={task.completed ? "line-through" : ""}>{task.text}</span>
+      <div className="flex flex-col">
+        <span className={task.completed ? "line-through" : ""}>
+          {task.text}
+        </span>
+        {(task.start || task.due) && (
+          <div className="flex gap-x-3">
+            {task.start && (
+              <span className="text-xs" title={task.start.toISOString()}>
+                Starts {task.start.toLocaleDateString()}
+              </span>
+            )}
+            {task.due && (
+              <span className="text-xs" title={task.due.toISOString()}>
+                Dues {task.due.toLocaleDateString()}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
       {task.tags && (
         <div className="flex gap-x-1 absolute right-40 min-w-60">
           {task.tags.slice(0, 3).map((tag) => (
@@ -97,7 +117,12 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           className={optionStyles}
           onClick={() => setTagging(true)}
         />
-        <FaCalendar size={15} title="Edit due date" className={optionStyles} />
+        <FaCalendar
+          size={15}
+          title="Edit due date"
+          className={optionStyles}
+          onClick={() => setPicking(true)}
+        />
         {task.starred ? (
           <FaStar
             size={15}
@@ -136,6 +161,14 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
               confirm={handleDelete}
               closeModal={() => setDeleting(false)}
               loading={loading}
+            />
+          )}
+          {picking && (
+            <DateModal
+              taskId={task.id}
+              startDate={task.start || undefined}
+              dueDate={task.due || undefined}
+              closeModal={() => setPicking(false)}
             />
           )}
         </AnimatePresence>

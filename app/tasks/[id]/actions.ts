@@ -194,4 +194,19 @@ export async function emojiTag(id: string, emoji: string, taskListId: string) {
   }
 }
 
-//TODO: merge these together and use another parameter to determine what to update
+//TODO: merge the above functions together and use another parameter to determine what to update
+
+export async function updateDates(id: string, start?: Date, due?: Date) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedTask = await prisma.task.update({
+        where: { id },
+        data: { start: start || null, due: due || null },
+      });
+      revalidatePath(`/tasks/${updatedTask.taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

@@ -162,11 +162,13 @@ model TaskList {
 }
 
 model Task {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   text        String
   description String?
-  completed   Boolean @default(false)
-  starred     Boolean @default(false)
+  completed   Boolean   @default(false)
+  starred     Boolean   @default(false)
+  start       DateTime?
+  due         DateTime?
 
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)

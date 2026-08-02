@@ -5,7 +5,7 @@ import type { TaskType } from "@/components/tasks/Task";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { FaPlusCircle, FaTag } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaCalendarCheck, FaCalendarDay, FaXmark } from "react-icons/fa6";
 import { deleteTask, updateTask } from "./actions";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
@@ -13,6 +13,7 @@ import Btn from "@/components/ui/Btn";
 import Checkbox from "@/components/ui/Checkbox";
 import WarningModal from "@/components/modals/WarningModal";
 import TagModal from "@/components/modals/TagModal";
+import DateModal from "@/components/modals/DateModal";
 
 interface DetailsProps {
   task: TaskType;
@@ -26,6 +27,7 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [adding, setAdding] = useState<boolean>(false);
+  const [picking, setPicking] = useState<boolean>(false);
 
   function displayTime(time: Date) {
     return `${time.toLocaleDateString()} ${(time.getHours() % 12 !== 0
@@ -85,6 +87,29 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
             }
           />
         </label>
+        {(task.start || task.due) && (
+          <div
+            className="flex flex-col gap-y-2 cursor-pointer"
+            onClick={() => setPicking(true)}
+          >
+            {task.start && (
+              <span
+                className="flex items-center gap-x-3"
+                title={task.start.toISOString()}
+              >
+                <FaCalendarDay size={15} /> Starts {displayTime(task.start)}
+              </span>
+            )}
+            {task.due && (
+              <span
+                className="flex items-center gap-x-3"
+                title={task.due.toISOString()}
+              >
+                <FaCalendarCheck size={15} /> Dues {displayTime(task.due)}
+              </span>
+            )}
+          </div>
+        )}
         <div className="flex flex-col gap-y-2">
           Tags
           <div className="flex gap-2 flex-wrap">
@@ -163,6 +188,14 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
             taskListId={id}
             selected={task.tags.map((t) => t.id)}
             taskId={task.id}
+          />
+        )}
+        {picking && (
+          <DateModal
+            taskId={task.id}
+            startDate={task.start || undefined}
+            dueDate={task.due || undefined}
+            closeModal={() => setPicking(false)}
           />
         )}
       </AnimatePresence>
