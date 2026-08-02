@@ -4,6 +4,7 @@ import type { TaskList } from "@/generated/prisma/client";
 import { useState } from "react";
 import { FaRegStar, FaStar, FaTrash } from "react-icons/fa";
 import {
+  addEmoji,
   deleteTaskList,
   renameTaskList,
   starTaskList,
@@ -12,6 +13,7 @@ import { addDescription } from "@/app/tasks/[id]/actions";
 import { AnimatePresence } from "framer-motion";
 import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
+import Emoji from "../ui/Emoji";
 
 function Bar({ taskList }: { taskList: TaskList }) {
   const [editing, setEditing] = useState<string | null>(null);
@@ -40,7 +42,11 @@ function Bar({ taskList }: { taskList: TaskList }) {
   }
 
   return (
-    <div className="w-full border-b border-b-gray-700 flex items-center gap-x-5 px-3 py-2 relative">
+    <div className="w-full border-b border-b-gray-700 flex items-center gap-x-3 px-3 py-2 relative">
+      <Emoji
+        setSelected={async (e) => await addEmoji(taskList.id, e)}
+        placeholder={taskList.emoji || undefined}
+      />
       {editing !== null ? (
         <Input
           placeholder="Untitled task list"

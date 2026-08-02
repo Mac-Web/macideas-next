@@ -64,3 +64,19 @@ export async function starTaskList(id: string, starred: boolean) {
     console.error("Error: " + err);
   }
 }
+
+export async function addEmoji(id: string, emoji?: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedList = await prisma.taskList.update({
+        where: { id, userId: session.user.id },
+        data: { emoji },
+      });
+      console.log(updatedList);
+      revalidatePath("/tasks");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

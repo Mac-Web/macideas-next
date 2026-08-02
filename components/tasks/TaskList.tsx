@@ -6,14 +6,15 @@ import { usePathname } from "next/navigation";
 import { FaEllipsisV, FaPen, FaRegStar, FaStar, FaTrash } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  addEmoji,
   deleteTaskList,
   renameTaskList,
   starTaskList,
 } from "@/app/tasks/actions";
+import Emoji from "../ui/Emoji";
 import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
 import Link from "next/link";
-import { FaFaceSmile } from "react-icons/fa6";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
@@ -48,11 +49,6 @@ function TaskList({ taskList, starred }: TaskListProps) {
     }
   }
 
-  async function handleEmoji(e: React.MouseEvent) {
-    e.preventDefault();
-    console.log("Please select an emoji"); //TODO: add emoji mart picker component for this
-  }
-
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
       if (!menuRef.current?.contains(e.target as Node)) {
@@ -81,7 +77,10 @@ function TaskList({ taskList, starred }: TaskListProps) {
           className={`flex gap-x-3 items-center whitespace-nowrap text-gray-300 px-4 py-2 rounded group-hover:bg-gray-900/60
             w-full ${pathname.includes(taskList.id) && "bg-gray-900 group-hover:bg-gray-900! text-teal-600 font-bold"}`}
         >
-          <FaFaceSmile size={17} title="Select emoji" onClick={handleEmoji} />
+          <Emoji
+            setSelected={async (e) => await addEmoji(taskList.id, e)}
+            placeholder={taskList.emoji || undefined}
+          />
           {taskList.name.slice(0, 18) +
             (taskList.name.length > 18 ? "..." : "")}{" "}
           {taskList.starred && !starred && (
