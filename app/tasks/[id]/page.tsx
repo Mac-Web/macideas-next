@@ -9,7 +9,12 @@ async function fetchTaskListData(id: string) {
   if (!session) redirect("/");
   const taskList = await prisma.taskList.findUnique({
     where: { id, userId: session.user.id },
-    include: { tasks: { orderBy: { createdAt: "desc" } } },
+    include: {
+      tasks: {
+        include: { tags: { orderBy: { name: "asc" } } },
+        orderBy: { createdAt: "desc" },
+      },
+    },
   });
   if (!taskList) redirect("/tasks");
   return taskList;
@@ -47,11 +52,21 @@ export async function generateMetadata({
 async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const taskList = await fetchTaskListData(id);
+  const session = await getSession();
+  const tags = await prisma.tag.findMany({
+    where: { userId: session!.user.id },
+    orderBy: { name: "asc" },
+  });
 
   return (
-    <div className="flex flex-col items-center flex-1 relative">
+    <div className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)]">
       <Bar taskList={taskList} />
-      <Tasks tasks={taskList.tasks} id={taskList.id} name={taskList.name} />
+      <Tasks
+        tasks={taskList.tasks}
+        id={taskList.id}
+        name={taskList.name}
+        tags={tags}
+      />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   renameTaskList,
   starTaskList,
 } from "@/app/tasks/actions";
+import { BsList } from "react-icons/bs";
 import Emoji from "../ui/Emoji";
 import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
@@ -79,7 +80,7 @@ function TaskList({ taskList, starred }: TaskListProps) {
         >
           <Emoji
             setSelected={async (e) => await addEmoji(taskList.id, e)}
-            placeholder={taskList.emoji || undefined}
+            placeholder={taskList.emoji || <BsList size={20} />}
           />
           {taskList.name.slice(0, 18) +
             (taskList.name.length > 18 ? "..." : "")}{" "}

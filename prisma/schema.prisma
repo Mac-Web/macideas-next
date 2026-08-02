@@ -26,8 +26,10 @@ model User {
   sessions      Session[]
   forms         Form[]
   collabForms   Form[]     @relation(name: "collaborators")
+  responses     Response[]
   taskLists     TaskList[]
   tasks         Task[]
+  tags          Tag[]
 
   @@map("user")
 }
@@ -80,21 +82,28 @@ model Verification {
 }
 
 model Form {
-  id            String     @id @default(uuid())
-  shortened     String?    @unique
+  id            String  @id @default(uuid())
+  shortened     String? @unique
   userId        String
-  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  collaborators User[]     @relation(name: "collaborators")
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collaborators User[]  @relation(name: "collaborators")
   title         String
   description   String?
-  private       Boolean    @default(false)
+  private       Boolean @default(false)
   code          String?
-  open          Boolean    @default(true)
-  quiz          Boolean    @default(false)
-  starred       Boolean    @default(false) //TODO: starred shouldn't be on the form it should be for each individual user/collaborator
-  codes         String[]
-  questions     Question[]
-  responses     Response[]
+  open          Boolean @default(true)
+  quiz          Boolean @default(false)
+  starred       Boolean @default(false) //TODO: starred shouldn't be on the form it should be for each individual user/collaborator
+
+  shuffleQuestions       Boolean @default(false)
+  shuffleOptions         Boolean @default(false)
+  allowMultipleResponses Boolean @default(true)
+  allowEditingResponses  Boolean @default(true)
+  backgroundColor        String?
+
+  codes     String[]
+  questions Question[]
+  responses Response[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,7 +127,9 @@ model Response {
   answers Answer[]
 
   formId String
-  form   Form   @relation(fields: [formId], references: [id], onDelete: Cascade)
+  form   Form    @relation(fields: [formId], references: [id], onDelete: Cascade)
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -161,6 +172,21 @@ model Task {
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   taskListId String
   taskList   TaskList @relation(fields: [taskListId], references: [id], onDelete: Cascade)
+  tags       Tag[]    @relation(name: "tags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id    String  @id @default(uuid())
+  name  String
+  emoji String?
+  color String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks  Task[] @relation(name: "tags")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

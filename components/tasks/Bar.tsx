@@ -11,6 +11,7 @@ import {
 } from "@/app/tasks/actions";
 import { addDescription } from "@/app/tasks/[id]/actions";
 import { AnimatePresence } from "framer-motion";
+import { BsList } from "react-icons/bs";
 import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
 import Emoji from "../ui/Emoji";
@@ -45,7 +46,7 @@ function Bar({ taskList }: { taskList: TaskList }) {
     <div className="w-full border-b border-b-gray-700 flex items-center gap-x-3 px-3 py-2 relative">
       <Emoji
         setSelected={async (e) => await addEmoji(taskList.id, e)}
-        placeholder={taskList.emoji || undefined}
+        placeholder={taskList.emoji || <BsList size={20} />}
       />
       {editing !== null ? (
         <Input

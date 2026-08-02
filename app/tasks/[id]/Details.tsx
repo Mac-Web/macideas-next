@@ -1,8 +1,10 @@
 "use client";
 
-import type { Task } from "@/generated/prisma/client";
+import type { Tag, Task } from "@/generated/prisma/client";
+import type { TaskType } from "@/components/tasks/Task";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { FaPlusCircle, FaTag } from "react-icons/fa";
 import { FaXmark } from "react-icons/fa6";
 import { deleteTask, updateTask } from "./actions";
 import Input from "@/components/ui/Input";
@@ -10,16 +12,20 @@ import Textarea from "@/components/ui/Textarea";
 import Btn from "@/components/ui/Btn";
 import Checkbox from "@/components/ui/Checkbox";
 import WarningModal from "@/components/modals/WarningModal";
+import TagModal from "@/components/modals/TagModal";
 
 interface DetailsProps {
-  task: Task;
+  task: TaskType;
   setDetails: React.Dispatch<React.SetStateAction<string | null>>;
+  tags: Tag[];
+  id: string;
 }
 
-function Details({ task, setDetails }: DetailsProps) {
+function Details({ task, setDetails, tags, id }: DetailsProps) {
   const [openedTask, setOpenedTask] = useState<Task>(task);
   const [loading, setLoading] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
+  const [adding, setAdding] = useState<boolean>(false);
 
   function displayTime(time: Date) {
     return `${time.toLocaleDateString()} ${(time.getHours() % 12 !== 0
@@ -52,7 +58,7 @@ function Details({ task, setDetails }: DetailsProps) {
   }, [task]);
 
   return (
-    <div className="w-70 border-l border-l-gray-700 h-full bg-gray-950 p-5 relative">
+    <div className="w-70 border-l border-l-gray-700 h-full bg-gray-950 p-5 relative overflow-y-auto overflow-x-hidden">
       <motion.div
         initial={{ x: "100%", opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -79,6 +85,28 @@ function Details({ task, setDetails }: DetailsProps) {
             }
           />
         </label>
+        <div className="flex flex-col gap-y-2">
+          Tags
+          <div className="flex gap-2 flex-wrap">
+            {task.tags.map((tag) => (
+              <div
+                key={tag.id}
+                className="flex gap-x-2 items-center bg-gray-900 rounded px-2 py-1"
+                style={{ backgroundColor: tag.color || undefined }}
+              >
+                {tag.emoji ? <span>{tag.emoji}</span> : <FaTag size={13} />}
+                {tag.name}
+              </div>
+            ))}
+            <div
+              className="border-2 border-gray-700 rounded px-2 py-1 flex gap-x-1 items-center cursor-pointer
+             hover:bg-gray-900 w-fit"
+              onClick={() => setAdding(true)}
+            >
+              <FaPlusCircle size={15} /> Add tags
+            </div>
+          </div>
+        </div>
         <Checkbox
           text="Completed"
           checked={openedTask.completed}
@@ -126,6 +154,15 @@ function Details({ task, setDetails }: DetailsProps) {
             confirm={handleDelete}
             closeModal={() => setDeleting(false)}
             loading={loading}
+          />
+        )}
+        {adding && (
+          <TagModal
+            tags={tags}
+            closeModal={() => setAdding(false)}
+            taskListId={id}
+            selected={task.tags.map((t) => t.id)}
+            taskId={task.id}
           />
         )}
       </AnimatePresence>

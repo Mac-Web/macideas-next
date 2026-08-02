@@ -1,6 +1,6 @@
 "use client";
 
-import type { Task as TaskType } from "@/generated/prisma/client";
+import type { Tag, Task as TaskT } from "@/generated/prisma/client";
 import { AnimatePresence } from "framer-motion";
 import {
   FaCalendar,
@@ -15,17 +15,25 @@ import {
 import { useState, useRef } from "react";
 import { completeTask, deleteTask, starTask } from "@/app/tasks/[id]/actions";
 import WarningModal from "../modals/WarningModal";
+import TagModal from "../modals/TagModal";
 
 const optionStyles = "opacity-0 group-hover:opacity-100 transition-opacity!";
+
+export type TaskType = TaskT & {
+  tags: Tag[];
+};
 
 interface TaskProps {
   task: TaskType;
   setDetails: React.Dispatch<React.SetStateAction<string | null>>;
+  tags: Tag[];
+  taskListId: string;
 }
 
-function Task({ task, setDetails }: TaskProps) {
+function Task({ task, setDetails, tags, taskListId }: TaskProps) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [tagging, setTagging] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const completeRef = useRef<HTMLDivElement>(null);
 
@@ -62,9 +70,33 @@ function Task({ task, setDetails }: TaskProps) {
         />
       </div>
       <span className={task.completed ? "line-through" : ""}>{task.text}</span>
+      {task.tags && (
+        <div className="flex gap-x-1 absolute right-40 min-w-60">
+          {task.tags.slice(0, 3).map((tag) => (
+            <div
+              key={tag.id}
+              className="flex gap-x-2 text-sm items-center bg-gray-950 rounded px-2 py-0.5"
+              style={{ backgroundColor: tag.color || undefined }}
+            >
+              {tag.emoji ? <span>{tag.emoji}</span> : <FaTag size={10} />}
+              {tag.name}
+            </div>
+          ))}
+          {task.tags.length > 3 && (
+            <div className="text-sm bg-gray-950 rounded px-2">
+              +{task.tags.length - 3}
+            </div>
+          )}
+        </div>
+      )}
       <div ref={menuRef} className="flex gap-x-5 absolute right-3">
         <FaPen size={15} title="Edit task" className={optionStyles} />
-        <FaTag size={15} title="Edit tags" className={optionStyles} />
+        <FaTag
+          size={15}
+          title="Edit tags"
+          className={optionStyles}
+          onClick={() => setTagging(true)}
+        />
         <FaCalendar size={15} title="Edit due date" className={optionStyles} />
         {task.starred ? (
           <FaStar
@@ -88,6 +120,15 @@ function Task({ task, setDetails }: TaskProps) {
           onClick={() => setDeleting(true)}
         />
         <AnimatePresence>
+          {tagging && (
+            <TagModal
+              tags={tags}
+              closeModal={() => setTagging(false)}
+              taskListId={taskListId}
+              selected={task.tags.map((t) => t.id)}
+              taskId={task.id}
+            />
+          )}
           {deleting && (
             <WarningModal
               title="Delete confirmation"

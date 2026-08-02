@@ -99,3 +99,99 @@ export async function completeTask(id: string, completed: boolean) {
     console.error("Error: " + err);
   }
 }
+
+export async function createTag(name: string, taskListId: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.tag.create({
+        data: { name, userId: session.user.id },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function setTags(id: string, tags: string[]) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedTask = await prisma.task.update({
+        where: { id, userId: session.user.id },
+        data: {
+          tags: {
+            set: tags.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+      revalidatePath(`/tasks/${updatedTask.taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function renameTag(id: string, name: string, taskListId: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.tag.update({
+        where: { id, userId: session.user.id },
+        data: { name },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function deleteTag(id: string, taskListId: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.tag.delete({
+        where: { id, userId: session.user.id },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function colorTag(id: string, color: string, taskListId: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.tag.update({
+        where: { id, userId: session.user.id },
+        data: { color },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function emojiTag(id: string, emoji: string, taskListId: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.tag.update({
+        where: { id, userId: session.user.id },
+        data: { emoji },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+//TODO: merge these together and use another parameter to determine what to update

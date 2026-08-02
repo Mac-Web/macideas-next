@@ -26,7 +26,9 @@ function Input({
 
   function handleClear() {
     setValue("");
-    inputRef.current?.focus();
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 10);
   }
 
   return (
@@ -47,7 +49,7 @@ function Input({
           className="flex items-center justify-center hover:bg-gray-300 hover:dark:bg-gray-800 rounded cursor-pointer 
                   duration-300 w-7.5 h-7.5 absolute right-2 text-gray-300"
           title="Clear"
-          onClick={handleClear}
+          onMouseDown={handleClear}
         >
           <FaXmark size={20} title="Clear" />
         </div>

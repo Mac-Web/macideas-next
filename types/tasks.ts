@@ -7,5 +7,5 @@ export interface TaskType {
 
 export interface TagType {
   text: string;
-  icon?: string;
+  emoji?: string;
 }

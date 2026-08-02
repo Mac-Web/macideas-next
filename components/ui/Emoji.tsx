@@ -2,16 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BsList } from "react-icons/bs";
+import { FaFaceSmile } from "react-icons/fa6";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
 interface EmojiProps {
   setSelected: (emoji: string | undefined) => void;
-  placeholder?: string;
+  placeholder?: string | React.ReactNode;
+  ref?: React.RefObject<HTMLDivElement | null>;
 }
 
-function Emoji({ setSelected, placeholder }: EmojiProps) {
+function Emoji({ setSelected, placeholder, ref }: EmojiProps) {
   const [picking, setPicking] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +28,7 @@ function Emoji({ setSelected, placeholder }: EmojiProps) {
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
-      if (!menuRef.current?.contains(e.target as Node)) {
+      if (!ref && !menuRef.current?.contains(e.target as Node)) {
         setPicking(false);
       }
     };
@@ -35,12 +36,12 @@ function Emoji({ setSelected, placeholder }: EmojiProps) {
     return () => {
       document.removeEventListener("click", clickHandler);
     };
-  }, []);
+  }, [ref]);
 
   return (
     <div className="relative text-gray-300 cursor-pointer" ref={menuRef}>
-      <div title="Select emoji" onClick={handleSelect}>
-        {placeholder || <BsList size={20} />}
+      <div title="Select emoji" onClick={handleSelect} ref={ref}>
+        {placeholder || <FaFaceSmile size={15} />}
       </div>
       <AnimatePresence>
         {picking && (

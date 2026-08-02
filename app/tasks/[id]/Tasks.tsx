@@ -1,6 +1,7 @@
 "use client";
 
-import type { Task as TaskType } from "@/generated/prisma/client";
+import type { Tag } from "@/generated/prisma/client";
+import type { TaskType } from "@/components/tasks/Task";
 import { useState, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaArrowsAltV, FaCheckCircle, FaFilter, FaSort } from "react-icons/fa";
@@ -19,9 +20,10 @@ interface TasksProps {
   tasks: TaskType[];
   id: string;
   name: string;
+  tags: Tag[];
 }
 
-function Tasks({ tasks, id, name }: TasksProps) {
+function Tasks({ tasks, id, name, tags }: TasksProps) {
   const [details, setDetails] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
@@ -130,10 +132,18 @@ function Tasks({ tasks, id, name }: TasksProps) {
             styles="text-sm gap-x-2!"
           />
         </div>
-        <div className="flex flex-col gap-y-2 pb-3 overflow-auto h-122.25">
+        <div className="flex flex-col gap-y-2 pb-3 overflow-auto h-[calc(100%-163px)]">
           {displayedTasks.length > 0 ? (
             displayedTasks.map((task) => {
-              return <Task key={task.id} task={task} setDetails={setDetails} />;
+              return (
+                <Task
+                  key={task.id}
+                  task={task}
+                  setDetails={setDetails}
+                  tags={tags}
+                  taskListId={id}
+                />
+              );
             })
           ) : tasks.filter((t) => !t.completed).length > 0 ? (
             <div className="text-gray-300 text-center py-10">
@@ -151,7 +161,7 @@ function Tasks({ tasks, id, name }: TasksProps) {
       <AnimatePresence mode="popLayout">
         {task && (
           <motion.div exit={{ x: "100%" }}>
-            <Details task={task} setDetails={setDetails} />
+            <Details task={task} setDetails={setDetails} tags={tags} id={id} />
           </motion.div>
         )}
       </AnimatePresence>
