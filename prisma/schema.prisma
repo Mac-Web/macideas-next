@@ -169,6 +169,7 @@ model Task {
   starred     Boolean   @default(false)
   start       DateTime?
   due         DateTime?
+  priority    String?
 
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)

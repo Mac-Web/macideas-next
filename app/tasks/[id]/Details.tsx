@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import { FaPlusCircle, FaTag } from "react-icons/fa";
 import { FaCalendarCheck, FaCalendarDay, FaXmark } from "react-icons/fa6";
 import { deleteTask, updateTask } from "./actions";
+import { priorities } from "@/lib/constants";
+import Dropdown from "@/components/ui/Dropdown";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Btn from "@/components/ui/Btn";
@@ -85,6 +87,19 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
             setValue={(description) =>
               setOpenedTask({ ...openedTask, description })
             }
+          />
+        </label>
+        <label className="flex flex-col gap-y-1">
+          Priority
+          <Dropdown
+            selected={openedTask.priority || "None"}
+            setSelected={(priority) =>
+              setOpenedTask({ ...openedTask, priority })
+            }
+            values={priorities.map((p) => p.name)}
+            text="Priority"
+            styles={`py-0.5! border-none! bg-gray-900 ${priorities.find((p) => p.name === openedTask.priority)?.color}`}
+            hover={false}
           />
         </label>
         {(task.start || task.due) && (

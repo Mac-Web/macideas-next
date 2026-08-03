@@ -6,8 +6,10 @@ import { useState } from "react";
 import { FaCalendar, FaRegStar, FaStar, FaTag } from "react-icons/fa";
 import { addTask } from "@/app/tasks/[id]/actions";
 import { AnimatePresence } from "framer-motion";
+import { priorities } from "@/lib/constants";
 import DateModal from "../modals/DateModal";
 import TagModal from "../modals/TagModal";
+import Dropdown from "../ui/Dropdown";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 
@@ -40,6 +42,15 @@ function TaskInput({ id, tags }: TaskInputProps) {
       className="border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full"
     >
       <div className="flex gap-x-5 text-gray-300 px-3">
+        <Dropdown
+          selected={newTask.priority || "None"}
+          setSelected={(priority) => setNewTask({ ...newTask, priority })}
+          values={priorities.map((p) => p.name)}
+          text="Priority"
+          styles={`py-0.5! ${priorities.find((p) => p.name === newTask.priority)?.color}`}
+          hover={false}
+          above
+        />
         <FaTag
           size={17}
           title="Add tags"
@@ -77,7 +88,6 @@ function TaskInput({ id, tags }: TaskInputProps) {
             Starts {newTask.start.toLocaleDateString()}
           </span>
         )}
-        {/* TODO: add priority dropdown */}
       </div>
       <div className="flex items-center w-full relative pr-2">
         <Input

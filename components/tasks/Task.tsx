@@ -18,10 +18,13 @@ import {
   deleteTask,
   renameTask,
   starTask,
+  updatePriority,
 } from "@/app/tasks/[id]/actions";
+import { priorities } from "@/lib/constants";
 import WarningModal from "../modals/WarningModal";
 import TagModal from "../modals/TagModal";
 import DateModal from "../modals/DateModal";
+import Dropdown from "../ui/Dropdown";
 import Input from "../ui/Input";
 
 const optionStyles = "opacity-0 group-hover:opacity-100 transition-opacity!";
@@ -126,7 +129,7 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
         </div>
       )}
       {task.tags && (
-        <div className="flex gap-x-1 absolute right-40 min-w-60">
+        <div className="flex gap-x-1 absolute right-70 min-w-60">
           {task.tags.slice(0, 3).map((tag) => (
             <div
               key={tag.id}
@@ -144,7 +147,15 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           )}
         </div>
       )}
-      <div ref={menuRef} className="flex gap-x-5 absolute right-3">
+      <div ref={menuRef} className="flex gap-x-5 absolute right-3 items-center">
+        <Dropdown
+          selected={task.priority || "None"}
+          setSelected={async (p) => await updatePriority(task.id, p)}
+          values={priorities.map((p) => p.name)}
+          text="Priority"
+          styles={`${task.priority && task.priority !== "None" ? "" : optionStyles} py-0.5! ${priorities.find((p) => p.name === task.priority)?.color}`}
+          hover={false}
+        />
         <FaPen
           size={15}
           title="Edit task"

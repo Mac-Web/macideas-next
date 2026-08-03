@@ -11,6 +11,7 @@ import {
   FaSort,
   FaTag,
 } from "react-icons/fa";
+import { priorities } from "@/lib/constants";
 import Task from "@/components/tasks/Task";
 import TaskInput from "@/components/tasks/TaskInput";
 import Input from "@/components/ui/Input";
@@ -67,9 +68,21 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             base = base && t.completed;
             break;
           default:
-            if (filter !== "All")
-              base =
-                base && t.tags.find((tag) => tag.id === filter) ? true : false;
+            if (filter !== "All") {
+              const priority = priorities.find((p) => p.name === filter);
+              if (priority) {
+                base =
+                  base &&
+                  (priority.name === "None"
+                    ? !t.priority || t.priority === "None"
+                    : t.priority === priority.name);
+              } else {
+                base =
+                  base && t.tags.find((tag) => tag.id === filter)
+                    ? true
+                    : false;
+              }
+            }
         }
         return base;
       })
@@ -90,7 +103,10 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             if (b.start && !a.start) return 1;
             return (a.start?.getTime() || 0) - (b.start?.getTime() || 0);
           case "Priority":
-            return a.createdAt.getTime() - b.createdAt.getTime(); //TODO: add once priority is implemented
+            return (
+              (priorities.find((p) => p.name === b.priority)?.value || 0) -
+              (priorities.find((p) => p.name === a.priority)?.value || 0)
+            );
           case "Name":
             return a.text.localeCompare(b.text);
           case "Starred":
@@ -134,7 +150,8 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             <Dropdown
               selected={
                 !filters.find((f) => f === filter)
-                  ? tags.find((t) => t.id === filter)!.name
+                  ? priorities.find((p) => p.name === filter)?.name ||
+                    tags.find((t) => t.id === filter)!.name
                   : filter
               }
               setSelected={(f) => setFilter(f)}
@@ -143,6 +160,20 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
               setOpen={() => setFilterOpen(true)}
               text="Filter by"
             >
+              {priorities.map((p, i) => (
+                <div
+                  key={i}
+                  className={`flex gap-x-2 items-center cursor-pointer hover:bg-gray-900 px-2 py-1 rounded
+                    ${filter === p.name && "font-bold text-teal-600"}`}
+                  onClick={() => {
+                    setFilter(p.name);
+                    setFilterOpen(false);
+                  }}
+                >
+                  {p.name}
+                </div>
+              ))}
+              <hr className="my-2 border-0 min-h-0.5 w-full bg-gray-700" />
               {tags.length > 0
                 ? tags.map((tag) => (
                     <div

@@ -25,7 +25,7 @@ export async function addTask(newTask: TaskType, taskListId: string) {
   try {
     const session = await getSession();
     if (session) {
-      const { text, start, due, tags, starred } = newTask;
+      const { text, start, due, tags, starred, priority } = newTask;
       await prisma.taskList.update({
         where: { id: taskListId, userId: session.user.id },
         data: {
@@ -36,6 +36,7 @@ export async function addTask(newTask: TaskType, taskListId: string) {
               start,
               due,
               starred,
+              priority,
               tags: {
                 connect: tags?.map((id) => {
                   return { id };
@@ -57,8 +58,8 @@ export async function updateTask(task: Task) {
   try {
     const session = await getSession();
     if (session) {
-      const { text, description, completed, starred } = task;
-      const updated = { text, description, completed, starred };
+      const { text, description, completed, starred, priority } = task;
+      const updated = { text, description, completed, starred, priority };
       await prisma.task.update({
         where: { id: task.id, userId: session.user.id },
         data: { ...updated },
@@ -232,6 +233,21 @@ export async function renameTask(id: string, text: string) {
       const updatedTask = await prisma.task.update({
         where: { id, userId: session.user.id },
         data: { text },
+      });
+      revalidatePath(`/tasks/${updatedTask.taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function updatePriority(id: string, priority: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedTask = await prisma.task.update({
+        where: { id, userId: session.user.id },
+        data: { priority },
       });
       revalidatePath(`/tasks/${updatedTask.taskListId}`);
     }

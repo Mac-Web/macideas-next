@@ -4,6 +4,7 @@ export interface TaskType {
   due?: Date;
   tags?: string[];
   starred?: boolean;
+  priority?: string;
 }
 
 export interface TagType {

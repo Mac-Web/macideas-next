@@ -12,6 +12,8 @@ interface DropdownProps {
   children?: React.ReactNode;
   styles?: string;
   text?: string;
+  hover?: boolean;
+  above?: boolean;
 }
 
 function Dropdown({
@@ -23,6 +25,8 @@ function Dropdown({
   children,
   styles,
   text,
+  hover = true,
+  above,
 }: DropdownProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -47,7 +51,7 @@ function Dropdown({
   return (
     <div className="relative" ref={dropdownRef}>
       <div
-        className={`border-2 border-gray-700 text-sm hover:bg-gray-900 rounded px-2 py-1 cursor-pointer text-gray-300
+        className={`border-2 border-gray-700 text-sm ${hover ? "hover:bg-gray-900" : ""} rounded px-2 py-1 cursor-pointer text-gray-300
       text-center whitespace-nowrap ${styles}`}
         onClick={() => {
           setMenuOpen(true);
@@ -62,8 +66,9 @@ function Dropdown({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute bg-gray-950 border-2 border-gray-700 rounded flex flex-col gap-y-1 p-2 top-[calc(100%+10px)]
-        z-5 text-gray-300 w-30 left-[50%] translate-x-[-50%]"
+            className={`absolute bg-gray-950 border-2 border-gray-700 rounded flex flex-col gap-y-1 p-2
+              ${above ? "bottom-[calc(100%+10px)]" : "top-[calc(100%+10px)]"}
+        z-5 text-gray-300 w-40 left-[50%] translate-x-[-50%] max-h-100 overflow-y-auto`}
           >
             {text && <div className="text-center">{text}</div>}
             {values.map((value, i) => {
@@ -80,7 +85,7 @@ function Dropdown({
             })}
             {children && (
               <>
-                <hr className="my-2 border-0 h-0.5 bg-gray-700 rounded" />
+                <hr className="my-2 border-0 min-h-0.5 bg-gray-700 rounded" />
                 {children}
               </>
             )}
