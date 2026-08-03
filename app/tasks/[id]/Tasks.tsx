@@ -4,7 +4,13 @@ import type { Tag } from "@/generated/prisma/client";
 import type { TaskType } from "@/components/tasks/Task";
 import { useState, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaArrowsAltV, FaCheckCircle, FaFilter, FaSort } from "react-icons/fa";
+import {
+  FaArrowsAltV,
+  FaCheckCircle,
+  FaFilter,
+  FaSort,
+  FaTag,
+} from "react-icons/fa";
 import Task from "@/components/tasks/Task";
 import TaskInput from "@/components/tasks/TaskInput";
 import Input from "@/components/ui/Input";
@@ -12,7 +18,15 @@ import Details from "./Details";
 import Checkbox from "@/components/ui/Checkbox";
 import Dropdown from "@/components/ui/Dropdown";
 
-const sorts = ["Created", "Updated", "Due date", "Priority", "Name", "Starred"];
+const sorts = [
+  "Created",
+  "Updated",
+  "Due date",
+  "Start date",
+  "Priority",
+  "Name",
+  "Starred",
+];
 const filters = ["All", "Starred", "Incomplete", "Completed"];
 const optionStyles = "flex items-center gap-x-2 text-gray-300";
 
@@ -30,6 +44,7 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
   const [sort, setSort] = useState<string>(sorts[0]);
   const [filter, setFilter] = useState<string>(filters[0]);
   const [order, setOrder] = useState<string>("Ascending");
+  const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const displayedTasks = useMemo(() => {
     const query = search.trim().toLowerCase();
     const sorted = tasks
@@ -51,6 +66,10 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             setShowCompleted(true);
             base = base && t.completed;
             break;
+          default:
+            if (filter !== "All")
+              base =
+                base && t.tags.find((tag) => tag.id === filter) ? true : false;
         }
         return base;
       })
@@ -63,7 +82,13 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
           case "Updated":
             return b.updatedAt.getTime() - a.updatedAt.getTime();
           case "Due date":
-            return a.createdAt.getTime() - b.createdAt.getTime(); //TODO: add once due date is implemented
+            if (a.due && !b.due) return -1;
+            if (b.due && !a.due) return 1;
+            return (a.due?.getTime() || 0) - (b.due?.getTime() || 0);
+          case "Start date":
+            if (a.start && !b.start) return -1;
+            if (b.start && !a.start) return 1;
+            return (a.start?.getTime() || 0) - (b.start?.getTime() || 0);
           case "Priority":
             return a.createdAt.getTime() - b.createdAt.getTime(); //TODO: add once priority is implemented
           case "Name":
@@ -107,11 +132,36 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
           <div className={optionStyles}>
             <FaFilter size={17} />
             <Dropdown
-              selected={filter}
+              selected={
+                !filters.find((f) => f === filter)
+                  ? tags.find((t) => t.id === filter)!.name
+                  : filter
+              }
               setSelected={(f) => setFilter(f)}
               values={filters}
+              open={filterOpen}
+              setOpen={() => setFilterOpen(true)}
               text="Filter by"
-            />
+            >
+              {tags.length > 0
+                ? tags.map((tag) => (
+                    <div
+                      key={tag.id}
+                      className={`flex gap-x-2 items-center text-sm cursor-pointer hover:bg-gray-900 px-2 py-1 rounded
+                    ${filter === tag.id && "font-bold text-teal-600"}`}
+                      onClick={() => {
+                        setFilter(tag.id);
+                        setFilterOpen(false);
+                      }}
+                    >
+                      <span className="text-xs">
+                        {tag.emoji || <FaTag size={13} />}
+                      </span>
+                      {tag.name}
+                    </div>
+                  ))
+                : null}
+            </Dropdown>
           </div>
           <div className={optionStyles}>
             <FaArrowsAltV size={17} />
@@ -156,7 +206,7 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             </div>
           )}
         </div>
-        <TaskInput id={id} />
+        <TaskInput id={id} tags={tags} />
       </div>
       <AnimatePresence mode="popLayout">
         {task && (

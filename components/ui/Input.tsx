@@ -1,7 +1,7 @@
 "use client";
 
 import { FaXmark } from "react-icons/fa6";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 interface InputProps {
   placeholder: string;
@@ -10,6 +10,7 @@ interface InputProps {
   onblur?: () => void;
   styles?: string;
   clear?: boolean;
+  focused?: boolean;
   full?: boolean;
 }
 
@@ -20,6 +21,7 @@ function Input({
   onblur,
   styles,
   clear,
+  focused,
   full,
 }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,6 +32,10 @@ function Input({
       inputRef.current?.focus();
     }, 10);
   }
+
+  useEffect(() => {
+    if (focused) inputRef.current?.focus();
+  }, [focused]);
 
   return (
     <div

@@ -25,10 +25,24 @@ export async function addTask(newTask: TaskType, taskListId: string) {
   try {
     const session = await getSession();
     if (session) {
+      const { text, start, due, tags, starred } = newTask;
       await prisma.taskList.update({
         where: { id: taskListId, userId: session.user.id },
         data: {
-          tasks: { create: { text: newTask.text, userId: session.user.id } },
+          tasks: {
+            create: {
+              text,
+              userId: session.user.id,
+              start,
+              due,
+              starred,
+              tags: {
+                connect: tags?.map((id) => {
+                  return { id };
+                }),
+              },
+            },
+          },
         },
         include: { tasks: true },
       });
@@ -203,6 +217,21 @@ export async function updateDates(id: string, start?: Date, due?: Date) {
       const updatedTask = await prisma.task.update({
         where: { id },
         data: { start: start || null, due: due || null },
+      });
+      revalidatePath(`/tasks/${updatedTask.taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function renameTask(id: string, text: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedTask = await prisma.task.update({
+        where: { id, userId: session.user.id },
+        data: { text },
       });
       revalidatePath(`/tasks/${updatedTask.taskListId}`);
     }

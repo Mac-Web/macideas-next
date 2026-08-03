@@ -92,20 +92,20 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
             className="flex flex-col gap-y-2 cursor-pointer"
             onClick={() => setPicking(true)}
           >
-            {task.start && (
-              <span
-                className="flex items-center gap-x-3"
-                title={task.start.toISOString()}
-              >
-                <FaCalendarDay size={15} /> Starts {displayTime(task.start)}
-              </span>
-            )}
             {task.due && (
               <span
                 className="flex items-center gap-x-3"
                 title={task.due.toISOString()}
               >
                 <FaCalendarCheck size={15} /> Dues {displayTime(task.due)}
+              </span>
+            )}
+            {task.start && (
+              <span
+                className="flex items-center gap-x-3"
+                title={task.start.toISOString()}
+              >
+                <FaCalendarDay size={15} /> Starts {displayTime(task.start)}
               </span>
             )}
           </div>

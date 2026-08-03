@@ -1,7 +1,8 @@
 export interface TaskType {
   text: string;
+  start?: Date;
   due?: Date;
-  tags?: TagType[];
+  tags?: string[];
   starred?: boolean;
 }
 

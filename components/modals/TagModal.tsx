@@ -13,7 +13,8 @@ interface TagModalProps {
   closeModal: () => void;
   taskListId: string;
   selected: string[];
-  taskId: string;
+  taskId?: string;
+  returnTags?: (tags: string[]) => void;
 }
 
 function TagModal({
@@ -22,6 +23,7 @@ function TagModal({
   taskListId,
   selected,
   taskId,
+  returnTags,
 }: TagModalProps) {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,9 +45,14 @@ function TagModal({
   }
 
   async function handleSave(clear?: boolean) {
-    setLoading(true);
-    await setTags(taskId, clear ? [] : selectedTags);
-    setLoading(false);
+    if (taskId) {
+      setLoading(true);
+      await setTags(taskId, clear ? [] : selectedTags);
+      setLoading(false);
+    }
+    if (returnTags) {
+      returnTags(selectedTags);
+    }
     closeModal();
   }
 
@@ -85,7 +92,6 @@ function TagModal({
             placeholder="New tag"
             value={newTag}
             setValue={(n) => setNewTag(n)}
-            onblur={handleCreate}
             styles="text-base!"
           />
         )}
@@ -101,7 +107,7 @@ function TagModal({
           )}
           <Btn
             text="Create"
-            onclick={() => (newTag ? handleCreate : setNewTag(""))}
+            onclick={() => (newTag ? handleCreate() : setNewTag(""))}
             primary={newTag !== null}
           />
           {newTag === null ? (

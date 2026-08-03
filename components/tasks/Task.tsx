@@ -13,10 +13,16 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { useState, useRef } from "react";
-import { completeTask, deleteTask, starTask } from "@/app/tasks/[id]/actions";
+import {
+  completeTask,
+  deleteTask,
+  renameTask,
+  starTask,
+} from "@/app/tasks/[id]/actions";
 import WarningModal from "../modals/WarningModal";
 import TagModal from "../modals/TagModal";
 import DateModal from "../modals/DateModal";
+import Input from "../ui/Input";
 
 const optionStyles = "opacity-0 group-hover:opacity-100 transition-opacity!";
 
@@ -36,8 +42,10 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [tagging, setTagging] = useState<boolean>(false);
   const [picking, setPicking] = useState<boolean>(false);
+  const [editing, setEditing] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const completeRef = useRef<HTMLDivElement>(null);
+  const editRef = useRef<HTMLDivElement>(null);
 
   async function handleDelete() {
     setLoading(true);
@@ -45,10 +53,20 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
     setLoading(false);
   }
 
+  async function handleRename() {
+    if (editing && editing.trim().length > 0) {
+      await renameTask(task.id, editing);
+      setEditing(null);
+    } else if (editing === null) {
+      setEditing(task.text);
+    }
+  }
+
   function handlePanel(e: React.MouseEvent) {
     if (
       !menuRef.current?.contains(e.target as Node) &&
-      !completeRef.current?.contains(e.target as Node)
+      !completeRef.current?.contains(e.target as Node) &&
+      !editRef.current?.contains(e.target as Node)
     ) {
       setDetails((prev) => (prev === task.id ? null : task.id));
     }
@@ -71,25 +89,42 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           className={`absolute ${!task.completed && "opacity-0"} group-hover/complete:opacity-100 transition-opacity!`}
         />
       </div>
-      <div className="flex flex-col">
-        <span className={task.completed ? "line-through" : ""}>
-          {task.text}
-        </span>
-        {(task.start || task.due) && (
-          <div className="flex gap-x-3">
-            {task.start && (
-              <span className="text-xs" title={task.start.toISOString()}>
-                Starts {task.start.toLocaleDateString()}
-              </span>
-            )}
-            {task.due && (
-              <span className="text-xs" title={task.due.toISOString()}>
-                Dues {task.due.toLocaleDateString()}
-              </span>
-            )}
-          </div>
-        )}
-      </div>
+      {editing !== null ? (
+        <div
+          className="transition-none! border-2 border-gray-700 rounded"
+          onClick={(e: React.MouseEvent) => e.preventDefault()}
+          ref={editRef}
+        >
+          <Input
+            placeholder="Task"
+            value={editing}
+            setValue={(e) => setEditing(e)}
+            onblur={handleRename}
+            styles="py-0! px-1!"
+            focused
+          />
+        </div>
+      ) : (
+        <div className="flex flex-col">
+          <span className={task.completed ? "line-through" : ""}>
+            {task.text}
+          </span>
+          {(task.start || task.due) && (
+            <div className="flex gap-x-3">
+              {task.due && (
+                <span className="text-xs" title={task.due.toISOString()}>
+                  Dues {task.due.toLocaleDateString()}
+                </span>
+              )}
+              {task.start && (
+                <span className="text-xs" title={task.start.toISOString()}>
+                  Starts {task.start.toLocaleDateString()}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
       {task.tags && (
         <div className="flex gap-x-1 absolute right-40 min-w-60">
           {task.tags.slice(0, 3).map((tag) => (
@@ -110,7 +145,12 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
         </div>
       )}
       <div ref={menuRef} className="flex gap-x-5 absolute right-3">
-        <FaPen size={15} title="Edit task" className={optionStyles} />
+        <FaPen
+          size={15}
+          title="Edit task"
+          className={optionStyles}
+          onClick={handleRename}
+        />
         <FaTag
           size={15}
           title="Edit tags"
@@ -119,7 +159,7 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
         />
         <FaCalendar
           size={15}
-          title="Edit due date"
+          title="Edit dates"
           className={optionStyles}
           onClick={() => setPicking(true)}
         />

@@ -7,6 +7,9 @@ interface DropdownProps {
   selected: string;
   setSelected: (value: string) => void;
   values: string[];
+  open?: boolean;
+  setOpen?: () => void;
+  children?: React.ReactNode;
   styles?: string;
   text?: string;
 }
@@ -15,6 +18,9 @@ function Dropdown({
   selected,
   setSelected,
   values,
+  open = true,
+  setOpen,
+  children,
   styles,
   text,
 }: DropdownProps) {
@@ -43,12 +49,15 @@ function Dropdown({
       <div
         className={`border-2 border-gray-700 text-sm hover:bg-gray-900 rounded px-2 py-1 cursor-pointer text-gray-300
       text-center whitespace-nowrap ${styles}`}
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => {
+          setMenuOpen(true);
+          if (setOpen) setOpen();
+        }}
       >
         {selected}
       </div>
       <AnimatePresence>
-        {menuOpen && (
+        {menuOpen && open && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -69,6 +78,12 @@ function Dropdown({
                 </div>
               );
             })}
+            {children && (
+              <>
+                <hr className="my-2 border-0 h-0.5 bg-gray-700 rounded" />
+                {children}
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

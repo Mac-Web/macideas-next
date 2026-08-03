@@ -18,7 +18,7 @@ function Btn({ text, link, onclick, type, styles, primary }: BtnProps) {
       {text}
     </Link>
   ) : (
-    <button type={type} onClick={onclick} className={btnStyles}>
+    <button type={type || "button"} onClick={onclick} className={btnStyles}>
       {text}
     </button>
   );

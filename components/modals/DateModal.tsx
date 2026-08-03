@@ -8,22 +8,35 @@ import Modal from "../ui/Modal";
 import Btn from "../ui/Btn";
 
 interface DateModalProps {
-  taskId: string;
+  taskId?: string;
+  setDates?: (s: Date | undefined, due: Date | undefined) => void;
   closeModal: () => void;
   startDate?: Date;
   dueDate?: Date;
 }
 
-function DateModal({ taskId, closeModal, startDate, dueDate }: DateModalProps) {
+function DateModal({
+  taskId,
+  setDates,
+  closeModal,
+  startDate,
+  dueDate,
+}: DateModalProps) {
   const [start, setStart] = useState<Date | undefined>(startDate);
   const [due, setDue] = useState<Date | undefined>(dueDate);
   const [loading, setLoading] = useState<boolean>(false);
 
   async function handleSelect() {
-    setLoading(true);
-    await updateDates(taskId, start, due);
-    setLoading(false);
-    closeModal();
+    if (taskId) {
+      setLoading(true);
+      await updateDates(taskId, start, due);
+      setLoading(false);
+      closeModal();
+    }
+    if (setDates) {
+      setDates(start, due);
+      closeModal();
+    }
   }
 
   return (
