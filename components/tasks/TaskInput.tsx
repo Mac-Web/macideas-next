@@ -41,16 +41,7 @@ function TaskInput({ id, tags }: TaskInputProps) {
       onSubmit={handleSubmit}
       className="border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full"
     >
-      <div className="flex gap-x-5 text-gray-300 px-3">
-        <Dropdown
-          selected={newTask.priority || "None"}
-          setSelected={(priority) => setNewTask({ ...newTask, priority })}
-          values={priorities.map((p) => p.name)}
-          text="Priority"
-          styles={`py-0.5! ${priorities.find((p) => p.name === newTask.priority)?.color}`}
-          hover={false}
-          above
-        />
+      <div className="flex gap-x-5 text-gray-300 px-3 items-center">
         <FaTag
           size={17}
           title="Add tags"
@@ -78,6 +69,15 @@ function TaskInput({ id, tags }: TaskInputProps) {
             onClick={() => setNewTask({ ...newTask, starred: true })}
           />
         )}
+        <Dropdown
+          selected={newTask.priority || "None"}
+          setSelected={(priority) => setNewTask({ ...newTask, priority })}
+          values={priorities.map((p) => p.name)}
+          text="Priority"
+          styles={`py-0.5! ${priorities.find((p) => p.name === newTask.priority)?.color}`}
+          hover={false}
+          above
+        />
         {newTask.due && (
           <span className="text-sm" title={newTask.due.toISOString()}>
             Dues {newTask.due.toLocaleDateString()}

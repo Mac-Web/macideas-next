@@ -1,8 +1,13 @@
 "use client";
 
-import { FaBook, FaChevronUp, FaFolder, FaPlusCircle } from "react-icons/fa";
+import {
+  FaBook,
+  FaChevronUp,
+  FaFolderPlus,
+  FaPlusCircle,
+} from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
-import { createTaskList } from "@/app/tasks/actions";
+import { createFolder, createTaskList } from "@/app/tasks/actions";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -69,8 +74,11 @@ function CreateTaskList() {
             className="bg-gray-950 absolute bottom-13 z-1 border-gray-700 border-2 rounded p-2 flex flex-col gap-y-1 w-full"
             ref={menuRef}
           >
-            <div className={optionStyles}>
-              <FaFolder size={17} /> Create Folder
+            <div
+              className={optionStyles}
+              onClick={async () => await createFolder(pathname)}
+            >
+              <FaFolderPlus size={17} /> Create Folder
             </div>
             <div className={optionStyles}>
               <FaBook size={17} /> Create Project

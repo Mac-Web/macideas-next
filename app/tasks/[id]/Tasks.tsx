@@ -213,7 +213,7 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             styles="text-sm gap-x-2!"
           />
         </div>
-        <div className="flex flex-col gap-y-2 pb-3 overflow-auto h-[calc(100%-163px)]">
+        <div className="flex flex-col gap-y-2 pb-3 overflow-auto h-[calc(100%-174px)]">
           {displayedTasks.length > 0 ? (
             displayedTasks.map((task) => {
               return (
@@ -231,7 +231,7 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
               No tasks found! Create one below or try a different search.
             </div>
           ) : (
-            <div className="text-gray-300 flex flex-col gap-y-5 justify-center h-[calc(100%-103px)] items-center">
+            <div className="text-gray-300 flex flex-col gap-y-5 justify-center h-[calc(100%-114px)] items-center">
               <FaCheckCircle size={50} />
               <p>Great work, all tasks are completed!</p>
             </div>

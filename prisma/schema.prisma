@@ -30,6 +30,7 @@ model User {
   taskLists     TaskList[]
   tasks         Task[]
   tags          Tag[]
+  folders       Folder[]
 
   @@map("user")
 }
@@ -153,9 +154,11 @@ model TaskList {
   starred     Boolean @default(false)
   description String?
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks  Task[]
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId String?
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  tasks    Task[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -190,6 +193,19 @@ model Tag {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks  Task[] @relation(name: "tags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Folder {
+  id    String  @id @default(uuid())
+  name  String
+  color String?
+
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskLists TaskList[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

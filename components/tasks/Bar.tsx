@@ -1,8 +1,8 @@
 "use client";
 
-import type { TaskList } from "@/generated/prisma/client";
+import type { Folder, TaskList } from "@/generated/prisma/client";
 import { useState } from "react";
-import { FaRegStar, FaStar, FaTrash } from "react-icons/fa";
+import { FaFolder, FaRegStar, FaStar, FaTrash } from "react-icons/fa";
 import {
   addEmoji,
   deleteTaskList,
@@ -16,7 +16,12 @@ import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
 import Emoji from "../ui/Emoji";
 
-function Bar({ taskList }: { taskList: TaskList }) {
+interface BarProps {
+  taskList: TaskList;
+  folder: Folder | null;
+}
+
+function Bar({ taskList, folder }: BarProps) {
   const [editing, setEditing] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<boolean>(false);
@@ -86,6 +91,12 @@ function Bar({ taskList }: { taskList: TaskList }) {
           onClick={() => setDescription("")}
         >
           Add description
+        </div>
+      )}
+      {folder && (
+        <div className="ml-3 flex text-gray-300 items-center gap-x-2 text-xs">
+          <FaFolder size={15} style={{ color: folder.color || "" }} />{" "}
+          {folder.name}
         </div>
       )}
       <div className="absolute right-3 flex items-center gap-x-5">

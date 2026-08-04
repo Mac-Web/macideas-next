@@ -14,6 +14,7 @@ async function fetchTaskListData(id: string) {
         include: { tags: { orderBy: { name: "asc" } } },
         orderBy: { createdAt: "desc" },
       },
+      folder: true,
     },
   });
   if (!taskList) redirect("/tasks");
@@ -60,7 +61,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)]">
-      <Bar taskList={taskList} />
+      <Bar taskList={taskList} folder={taskList.folder} />
       <Tasks
         tasks={taskList.tasks}
         id={taskList.id}

@@ -1,9 +1,19 @@
 "use client";
 
-import type { TaskList as TaskListType } from "@/generated/prisma/client";
+import type {
+  Folder,
+  TaskList as TaskListType,
+} from "@/generated/prisma/client";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { FaEllipsisV, FaPen, FaRegStar, FaStar, FaTrash } from "react-icons/fa";
+import {
+  FaEllipsisV,
+  FaPen,
+  FaRegFolder,
+  FaRegStar,
+  FaStar,
+  FaTrash,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   addEmoji,
@@ -16,6 +26,7 @@ import Emoji from "../ui/Emoji";
 import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
 import Link from "next/link";
+import MoveModal from "../modals/MoveModal";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
@@ -23,13 +34,15 @@ const optionStyles =
 interface TaskListProps {
   taskList: TaskListType;
   starred?: boolean;
+  folders: Folder[];
 }
 
-function TaskList({ taskList, starred }: TaskListProps) {
+function TaskList({ taskList, starred, folders }: TaskListProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [moving, setMoving] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -119,6 +132,9 @@ function TaskList({ taskList, starred }: TaskListProps) {
                 )}{" "}
                 {taskList.starred ? "Starred" : "Star"}
               </div>
+              <div className={optionStyles} onClick={() => setMoving(true)}>
+                <FaRegFolder size={15} /> Move
+              </div>
               <div
                 className={optionStyles + " text-red-500"}
                 onClick={() => setDeleting(true)}
@@ -137,6 +153,14 @@ function TaskList({ taskList, starred }: TaskListProps) {
             confirm={handleDelete}
             closeModal={() => setDeleting(false)}
             loading={loading}
+          />
+        )}
+        {moving && (
+          <MoveModal
+            id={taskList.id}
+            folders={folders}
+            folder={taskList.folderId}
+            closeModal={() => setMoving(false)}
           />
         )}
       </AnimatePresence>
