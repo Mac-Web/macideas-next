@@ -1,28 +1,55 @@
 "use client";
 
-import type { Tag, Task } from "@/generated/prisma/client";
+import type { TaskType } from "../Task";
+import type { Tag } from "@/generated/prisma/client";
 import { useState } from "react";
+import Task from "./Task";
 import Dropdown from "@/components/ui/Dropdown";
+import { FaCircleCheck } from "react-icons/fa6";
 
 type TagType = Tag & {
-  tasks: Task[];
+  tasks: TaskType[];
 };
 
-function Tags({ tags }: { tags: TagType[] }) {
-  const [selectedTag, setSelectedTag] = useState<Tag>(tags[0]);
+interface TagsProps {
+  tags: TagType[];
+  showCompleted?: boolean;
+}
+
+function Tags({ tags, showCompleted }: TagsProps) {
+  const [selectedTag, setSelectedTag] = useState<TagType>(tags[0]);
+  const tasks = selectedTag.tasks.filter((t) =>
+    showCompleted ? true : !t.completed,
+  ); //TODO: handle tags with same name id problem and show the tag's emoji and background color
 
   return (
     <div className="border-2 border-gray-700 rounded p-5 flex flex-col gap-y-5 flex-1 min-w-[40%]">
-      <h2 className="text-white text-xl font-bold">
-        Tasks with{" "}
+      <div className="flex gap-x-3 items-center">
+        <div className="text-white text-xl font-bold">
+          Task{tasks.length === 1 ? "" : "s"} with
+        </div>
         <Dropdown
-          selected={selectedTag.id}
-          setSelected={(t) => setSelectedTag(tags.find((tag) => tag.id === t)!)}
+          selected={selectedTag.name}
+          setSelected={(t) =>
+            setSelectedTag(tags.find((tag) => tag.name === t)!)
+          }
           values={tags.map((t) => t.name)}
-        />{" "}
-        tag
-      </h2>
-      {/* TODO: make this work */}
+          styles="text-sm!"
+        />
+        <div className="text-white text-xl font-bold">tag ({tasks.length})</div>
+      </div>
+      {tasks.length > 0 ? (
+        <div>
+          {tasks.map((task) => (
+            <Task key={task.id} task={task} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-y-5 items-center text-gray-300 text-center py-10 justify-center h-full">
+          <FaCircleCheck size={40} />
+          You don&apos;t have any tasks with the {selectedTag.name} tag
+        </div>
+      )}
     </div>
   );
 }

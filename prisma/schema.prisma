@@ -13,25 +13,27 @@ enum QuestionType {
 }
 
 model User {
-  id            String     @id
-  name          String
-  email         String     @unique
-  emailVerified Boolean    @default(false)
-  image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  about         String?
-  picture       Int?
-  accounts      Account[]
-  sessions      Session[]
-  forms         Form[]
-  collabForms   Form[]     @relation(name: "collaborators")
-  responses     Response[]
-  taskLists     TaskList[]
-  tasks         Task[]
-  subtasks      Subtask[]
-  tags          Tag[]
-  folders       Folder[]
+  id                 String            @id
+  name               String
+  email              String            @unique
+  emailVerified      Boolean           @default(false)
+  image              String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  about              String?
+  picture            Int?
+  accounts           Account[]
+  sessions           Session[]
+  forms              Form[]
+  collabForms        Form[]            @relation(name: "collaborators")
+  responses          Response[]
+  taskLists          TaskList[]
+  tasks              Task[]
+  subtasks           Subtask[]
+  tags               Tag[]
+  folders            Folder[]
+  macIdeasSettingsId String?
+  macIdeasSettings   MacIdeasSettings?
 
   @@map("user")
 }
@@ -222,6 +224,19 @@ model Subtask {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   taskId String
   task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MacIdeasSettings {
+  id            String  @id @default(uuid())
+  selected      Int[]   @default([0, 1, 2, 3, 4, 5])
+  showCompleted Boolean @default(false)
+  showOverdue   Boolean @default(false)
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

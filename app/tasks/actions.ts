@@ -1,5 +1,6 @@
 "use server";
 
+import type { MacIdeasSettings } from "@/generated/prisma/client";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -170,6 +171,38 @@ export async function moveFolder(id: string, folderId: string, path: string) {
         data: { folderId: folderId || null },
       });
       revalidatePath(path);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function saveSettings(settings: MacIdeasSettings) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const { selected, showCompleted, showOverdue } = settings;
+      const base = { selected, showCompleted, showOverdue };
+      await prisma.macIdeasSettings.upsert({
+        where: { userId: session.user.id },
+        update: { ...base },
+        create: { ...base, userId: session.user.id },
+      });
+      revalidatePath("/tasks");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function resetSettings() {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.macIdeasSettings.delete({
+        where: { userId: session.user.id },
+      });
+      revalidatePath("/tasks");
     }
   } catch (err) {
     console.error("Error: " + err);

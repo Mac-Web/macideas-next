@@ -1,46 +1,64 @@
+import type { TaskType } from "@/components/tasks/Task";
+import type { Task } from "@/generated/prisma/client";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { priorities } from "@/lib/constants";
-import {
-  FaCalendarCheck,
-  FaCalendarDay,
-  FaCheckCircle,
-  FaClock,
-  FaStar,
-} from "react-icons/fa";
+import { dashboardSettings } from "@/lib/constants";
+import { FaFaceFrown } from "react-icons/fa6";
+import Settings from "@/components/tasks/dashboard/Settings";
 import Section from "@/components/tasks/dashboard/Section";
 import Tags from "@/components/tasks/dashboard/Tags";
 
 async function Page() {
   const session = await getSession();
   if (!session) redirect("/");
+  const userSettings = await prisma.macIdeasSettings.findUnique({
+    where: { userId: session.user.id },
+  });
   const tasks = await prisma.task.findMany({
-    where: { userId: session.user.id, completed: false }, //TODO: add settings to also show completed tasks on dashboard?
+    where: {
+      userId: session.user.id,
+      completed: userSettings?.showCompleted ? undefined : false || false,
+    },
+    include: { tags: true, subtasks: true },
     orderBy: { createdAt: "desc" },
   });
   const tags = await prisma.tag.findMany({
     where: { userId: session.user.id },
-    include: { tasks: true },
+    include: { tasks: { include: { tags: true, subtasks: true } } },
   });
-  const starredTasks = tasks.filter((task) => task.starred);
-  const priorityTasks = tasks
-    .filter((task) => task.priority && task.priority !== "None")
-    .sort(
-      (a, b) =>
-        priorities.find((p) => p.name === b.priority)!.value -
-        priorities.find((p) => p.name === a.priority)!.value,
-    );
-  const upcomingTasks = tasks
-    .filter((task) => task.due && task.due > new Date())
-    .sort((a, b) => a.due!.getTime() - b.due!.getTime());
-  const startTasks = tasks
-    .filter((task) => task.start && task.start > new Date())
-    .sort((a, b) => a.start!.getTime() - b.start!.getTime());
-  const recentTasks = tasks.slice(0, 5);
+  const allTasks: Record<string, Task[]> = {
+    0: tasks
+      .filter(
+        (task) =>
+          task.due &&
+          (userSettings?.showOverdue ? true : task.due > new Date()),
+      )
+      .sort((a, b) => a.due!.getTime() - b.due!.getTime()),
+    1: tasks
+      .filter((task) => task.priority && task.priority !== "None")
+      .sort(
+        (a, b) =>
+          priorities.find((p) => p.name === b.priority)!.value -
+          priorities.find((p) => p.name === a.priority)!.value,
+      ),
+    2: tasks
+      .filter(
+        (task) =>
+          task.start &&
+          (userSettings?.showOverdue ? true : task.start > new Date()),
+      )
+      .sort((a, b) => a.start!.getTime() - b.start!.getTime()),
+    3: tasks.filter((task) => task.starred),
+    5: tasks.slice(0, 5),
+  };
+  const displayedSections = dashboardSettings.filter(
+    (s) => !userSettings || userSettings.selected.includes(s.id),
+  );
 
   return (
-    <div className="flex flex-col items-center py-10 gap-y-5 flex-1 h-[calc(100vh-68px)] overflow-auto">
+    <div className="flex flex-col items-center py-10 gap-y-5 flex-1 h-[calc(100vh-68px)] overflow-auto relative">
       <h2 className="text-white font-bold text-2xl">Tasks Dashboard</h2>
       <p className="text-gray-300 text-center w-[60%]">
         Easily view and manage all your daily, starred, upcoming, and recent
@@ -48,23 +66,35 @@ async function Page() {
         this dashboard!
       </p>
       <div className="flex flex-wrap w-full px-10 gap-5">
-        <Section title="Due soon" tasks={upcomingTasks}>
-          <FaCalendarCheck size={40} />
-        </Section>
-        <Section title="Priority tasks" tasks={priorityTasks}>
-          <FaCheckCircle size={40} />
-        </Section>
-        <Section title="Start soon" tasks={startTasks}>
-          <FaCalendarDay size={40} />
-        </Section>
-        <Section title="Starred tasks" tasks={starredTasks}>
-          <FaStar size={40} />
-        </Section>
-        <Tags tags={tags} />
-        <Section title="Recently created tasks" tasks={recentTasks}>
-          <FaClock size={40} />
-        </Section>
+        {displayedSections.length > 0 ? (
+          displayedSections.map((setting) => {
+            return setting.id === 4 ? (
+              <Tags
+                key={setting.id}
+                tags={tags}
+                showCompleted={userSettings?.showCompleted}
+              />
+            ) : (
+              <Section
+                key={setting.id}
+                title={setting.name}
+                tasks={allTasks[setting.id] as TaskType[]}
+              >
+                {setting.icon}
+              </Section>
+            );
+          })
+        ) : (
+          <div className="h-100 w-full flex flex-col gap-y-5 justify-center items-center text-gray-300">
+            <FaFaceFrown size={50} />
+            <div className="text-center w-[60%]">
+              You don&apos;t have any pinned sections on the homepage. Click on
+              the settings icon on the top right to customize your dashboard!
+            </div>
+          </div>
+        )}
       </div>
+      <Settings settings={userSettings || undefined} />
     </div>
   );
 }

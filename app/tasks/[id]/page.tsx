@@ -58,6 +58,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
     where: { userId: session!.user.id },
     orderBy: { name: "asc" },
   });
+  //TODO: add option to upload/choose custom background
 
   return (
     <div className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)]">
