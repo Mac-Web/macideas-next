@@ -2,10 +2,11 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { FaCheckCircle, FaRegStar } from "react-icons/fa";
+import { Folder as FolderType } from "@/generated/prisma/client";
 import CreateTaskList from "./CreateTaskList";
 import TaskList from "./TaskList";
 import Folder from "./Folder";
-import { Folder as FolderType } from "@/generated/prisma/client";
+import Home from "./Home";
 
 async function Sidebar() {
   const session = await getSession();
@@ -27,10 +28,11 @@ async function Sidebar() {
 
   return (
     <div className="w-70 border-r border-gray-700 h-[calc(100vh-68px)] py-5 relative">
-      <div className="flex flex-col gap-y-3 flex-1 h-[calc(100%-45px)] px-5 overflow-auto">
+      <div className="flex flex-col gap-y-3 flex-1 h-[calc(100%-45px)] px-3 overflow-auto">
+        <Home />
         {starredTaskLists.length > 0 && (
           <>
-            <h2 className="text-white font-bold flex gap-x-3 mb-2 items-center cursor-pointer">
+            <h2 className="text-white font-bold flex gap-x-3 px-2 mb-2 items-center">
               <FaRegStar size={15} /> Starred task lists
             </h2>
             {starredTaskLists.map((taskList) => {
@@ -45,7 +47,7 @@ async function Sidebar() {
             })}
           </>
         )}
-        <h2 className="text-white font-bold flex gap-x-3 items-center mb-2">
+        <h2 className="text-white font-bold flex gap-x-3 px-2 items-center mb-2">
           <FaCheckCircle size={15} /> All task lists
         </h2>
         {folders?.map((folder) => (
