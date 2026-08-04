@@ -16,6 +16,7 @@ import Checkbox from "@/components/ui/Checkbox";
 import WarningModal from "@/components/modals/WarningModal";
 import TagModal from "@/components/modals/TagModal";
 import DateModal from "@/components/modals/DateModal";
+import Subtasks from "@/components/tasks/Subtasks";
 
 interface DetailsProps {
   task: TaskType;
@@ -89,6 +90,7 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
             }
           />
         </label>
+        <Subtasks taskId={task.id} subtasks={task.subtasks} taskListId={id} />
         <label className="flex flex-col gap-y-1">
           Priority
           <Dropdown

@@ -1,6 +1,6 @@
 "use client";
 
-import type { Tag, Task as TaskT } from "@/generated/prisma/client";
+import type { Subtask, Tag, Task as TaskT } from "@/generated/prisma/client";
 import { AnimatePresence } from "framer-motion";
 import {
   FaCalendar,
@@ -12,8 +12,9 @@ import {
   FaTag,
   FaTrash,
 } from "react-icons/fa";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import {
+  completeSubtask,
   completeTask,
   deleteTask,
   renameTask,
@@ -21,6 +22,7 @@ import {
   updatePriority,
 } from "@/app/tasks/[id]/actions";
 import { priorities } from "@/lib/constants";
+import { FaCircleCheck } from "react-icons/fa6";
 import WarningModal from "../modals/WarningModal";
 import TagModal from "../modals/TagModal";
 import DateModal from "../modals/DateModal";
@@ -31,6 +33,7 @@ const optionStyles = "opacity-0 group-hover:opacity-100 transition-opacity!";
 
 export type TaskType = TaskT & {
   tags: Tag[];
+  subtasks: Subtask[];
 };
 
 interface TaskProps {
@@ -49,6 +52,11 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const completeRef = useRef<HTMLDivElement>(null);
   const editRef = useRef<HTMLDivElement>(null);
+  const subtasks = useMemo(() => {
+    return task.subtasks.sort((a, b) => {
+      return String(a.completed).localeCompare(String(b.completed));
+    });
+  }, [task.subtasks]);
 
   async function handleDelete() {
     setLoading(true);
@@ -75,23 +83,21 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
     }
   }
 
+  async function handleCompleteSubtask(
+    e: React.MouseEvent,
+    id: string,
+    completed: boolean,
+  ) {
+    e.preventDefault();
+    e.stopPropagation();
+    await completeSubtask(id, taskListId, completed);
+  }
+
   return (
     <div
       className={`group ${task.completed ? "bg-gray-900/40" : "bg-gray-900"} rounded px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-gray-300 relative`}
       onClick={handlePanel}
     >
-      <div
-        className="relative group/complete flex items-center justify-center"
-        title={`${task.completed ? "Unmark" : "Mark"} as completed`}
-        onClick={async () => await completeTask(task.id, !task.completed)}
-        ref={completeRef}
-      >
-        <FaRegCircle size={17} />
-        <FaCheck
-          size={12}
-          className={`absolute ${!task.completed && "opacity-0"} group-hover/complete:opacity-100 transition-opacity!`}
-        />
-      </div>
       {editing !== null ? (
         <div
           className="transition-none! border-2 border-gray-700 rounded"
@@ -108,22 +114,73 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           />
         </div>
       ) : (
-        <div className="flex flex-col">
-          <span className={task.completed ? "line-through" : ""}>
-            {task.text}
-          </span>
-          {(task.start || task.due) && (
-            <div className="flex gap-x-3">
-              {task.due && (
-                <span className="text-xs" title={task.due.toISOString()}>
-                  Dues {task.due.toLocaleDateString()}
-                </span>
+        <div className="flex flex-col gap-y-1">
+          <div className="flex gap-x-3 items-center">
+            <div
+              className="relative group/complete flex items-center justify-center"
+              title={`${task.completed ? "Unmark" : "Mark"} as completed`}
+              onClick={async () => await completeTask(task.id, !task.completed)}
+              ref={completeRef}
+            >
+              {task.completed ? (
+                <FaCircleCheck size={17} />
+              ) : (
+                <>
+                  <FaRegCircle size={17} />
+                  <FaCheck
+                    size={12}
+                    className={`absolute ${!task.completed && "opacity-0"} group-hover/complete:opacity-100 transition-opacity!`}
+                  />
+                </>
               )}
-              {task.start && (
-                <span className="text-xs" title={task.start.toISOString()}>
-                  Starts {task.start.toLocaleDateString()}
-                </span>
+            </div>
+            <div className="flex flex-col">
+              <span className={task.completed ? "line-through" : ""}>
+                {task.text}
+              </span>
+              {(task.start || task.due) && (
+                <div className="flex gap-x-3">
+                  {task.due && (
+                    <span className="text-xs" title={task.due.toISOString()}>
+                      Dues {task.due.toLocaleDateString()}
+                    </span>
+                  )}
+                  {task.start && (
+                    <span className="text-xs" title={task.start.toISOString()}>
+                      Starts {task.start.toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
               )}
+            </div>
+          </div>
+          {subtasks.length > 0 && (
+            <div className="ml-7 flex flex-col gap-y-0.5">
+              {subtasks.map((subtask) => (
+                <div
+                  key={subtask.id}
+                  className={`${subtask.completed && "line-through"} text-sm flex items-center gap-x-2`}
+                >
+                  {subtask.completed ? (
+                    <FaCircleCheck
+                      size={13}
+                      title="Unmark as completed"
+                      onClick={(e) =>
+                        handleCompleteSubtask(e, subtask.id, false)
+                      }
+                    />
+                  ) : (
+                    <FaRegCircle
+                      size={13}
+                      title="Mark as completed"
+                      onClick={(e) =>
+                        handleCompleteSubtask(e, subtask.id, true)
+                      }
+                    />
+                  )}
+                  {subtask.text}
+                </div>
+              ))}
             </div>
           )}
         </div>

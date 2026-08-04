@@ -11,7 +11,7 @@ async function fetchTaskListData(id: string) {
     where: { id, userId: session.user.id },
     include: {
       tasks: {
-        include: { tags: { orderBy: { name: "asc" } } },
+        include: { tags: { orderBy: { name: "asc" } }, subtasks: true },
         orderBy: { createdAt: "desc" },
       },
       folder: true,

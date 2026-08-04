@@ -29,6 +29,7 @@ model User {
   responses     Response[]
   taskLists     TaskList[]
   tasks         Task[]
+  subtasks      Subtask[]
   tags          Tag[]
   folders       Folder[]
 
@@ -175,10 +176,11 @@ model Task {
   priority    String?
 
   userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   taskListId String
-  taskList   TaskList @relation(fields: [taskListId], references: [id], onDelete: Cascade)
-  tags       Tag[]    @relation(name: "tags")
+  taskList   TaskList  @relation(fields: [taskListId], references: [id], onDelete: Cascade)
+  tags       Tag[]     @relation(name: "tags")
+  subtasks   Subtask[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -206,6 +208,20 @@ model Folder {
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   taskLists TaskList[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subtask {
+  id        String  @id @default(uuid())
+  text      String
+  completed Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

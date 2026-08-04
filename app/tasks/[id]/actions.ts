@@ -255,3 +255,73 @@ export async function updatePriority(id: string, priority: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function addSubtask(
+  id: string,
+  subtask: string,
+  taskListId: string,
+) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.subtask.create({
+        data: { taskId: id, text: subtask, userId: session.user.id },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function completeSubtask(
+  id: string,
+  taskListId: string,
+  completed: boolean,
+) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.subtask.update({
+        where: { id, userId: session.user.id },
+        data: { completed },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function deleteSubtask(id: string, taskListId: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.subtask.delete({
+        where: { id, userId: session.user.id },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function renameSubtask(
+  id: string,
+  text: string,
+  taskListId: string,
+) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.subtask.update({
+        where: { id, userId: session.user.id },
+        data: { text },
+      });
+      revalidatePath(`/tasks/${taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error:" + err);
+  }
+}
