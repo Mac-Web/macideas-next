@@ -7,6 +7,7 @@ import CreateTaskList from "./CreateTaskList";
 import TaskList from "./TaskList";
 import Folder from "./Folder";
 import Home from "./Home";
+import Day from "./Day";
 
 async function Sidebar() {
   const session = await getSession();
@@ -30,6 +31,7 @@ async function Sidebar() {
     <div className="w-70 border-r border-gray-700 h-[calc(100vh-68px)] py-5 relative">
       <div className="flex flex-col gap-y-3 flex-1 h-[calc(100%-45px)] px-3 overflow-auto">
         <Home />
+        <Day />
         {starredTaskLists.length > 0 && (
           <>
             <h2 className="text-white font-bold flex gap-x-3 px-2 mb-2 items-center">

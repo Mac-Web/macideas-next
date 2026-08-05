@@ -16,7 +16,7 @@ export default async function Home() {
         >
           <div className="mb-10 flex gap-x-5">
             <Btn
-              text={session ? "Get started" : "Sign in"}
+              text={session ? "Go to tasks" : "Sign in"}
               link={
                 session
                   ? "/tasks"

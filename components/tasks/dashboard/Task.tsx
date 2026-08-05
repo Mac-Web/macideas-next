@@ -9,7 +9,7 @@ function Task({ task }: { task: TaskType }) {
   return (
     <Link
       key={task.id}
-      href={`/tasks/${task.taskListId}`}
+      href={`/tasks/${task.taskListId || "day"}`}
       className="flex items-center gap-x-5 bg-gray-900 px-5 py-1.5 rounded text-gray-300 whitespace-nowrap overflow-hidden"
     >
       <FaRegCircle size={17} />

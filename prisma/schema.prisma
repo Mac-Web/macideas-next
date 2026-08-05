@@ -176,11 +176,12 @@ model Task {
   start       DateTime?
   due         DateTime?
   priority    String?
+  myDay       Boolean   @default(false)
 
   userId     String
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  taskListId String
-  taskList   TaskList  @relation(fields: [taskListId], references: [id], onDelete: Cascade)
+  taskListId String?
+  taskList   TaskList? @relation(fields: [taskListId], references: [id], onDelete: Cascade)
   tags       Tag[]     @relation(name: "tags")
   subtasks   Subtask[]
 

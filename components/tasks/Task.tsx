@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import {
   FaCalendar,
   FaCheck,
+  FaEyeSlash,
   FaPen,
   FaRegCircle,
   FaRegStar,
@@ -81,6 +82,11 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
     ) {
       setDetails((prev) => (prev === task.id ? null : task.id));
     }
+  }
+
+  async function hideTask() {
+    console.log("hiding task...");
+    //TODO: implement hiding tasks from my day
   }
 
   async function handleCompleteSubtask(
@@ -213,6 +219,14 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           styles={`${task.priority && task.priority !== "None" ? "" : optionStyles} py-0.5! ${priorities.find((p) => p.name === task.priority)?.color}`}
           hover={false}
         />
+        {taskListId === "day" && (
+          <FaEyeSlash
+            size={15}
+            title="Remove from My Day"
+            className={optionStyles}
+            onClick={hideTask}
+          />
+        )}
         <FaPen
           size={15}
           title="Edit task"

@@ -36,9 +36,10 @@ interface TasksProps {
   id: string;
   name: string;
   tags: Tag[];
+  myDay?: boolean;
 }
 
-function Tasks({ tasks, id, name, tags }: TasksProps) {
+function Tasks({ tasks, id, name, tags, myDay }: TasksProps) {
   const [details, setDetails] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
@@ -237,7 +238,7 @@ function Tasks({ tasks, id, name, tags }: TasksProps) {
             </div>
           )}
         </div>
-        <TaskInput id={id} tags={tags} />
+        <TaskInput id={id} tags={tags} myDay={myDay} />
       </div>
       <AnimatePresence mode="popLayout">
         {task && (

@@ -18,9 +18,10 @@ const blankTask = { text: "" };
 interface TaskInputProps {
   id: string;
   tags: Tag[];
+  myDay?: boolean;
 }
 
-function TaskInput({ id, tags }: TaskInputProps) {
+function TaskInput({ id, tags, myDay }: TaskInputProps) {
   const [newTask, setNewTask] = useState<TaskType>(blankTask);
   const [loading, setLoading] = useState<boolean>(false);
   const [picking, setPicking] = useState<boolean>(false);
@@ -30,7 +31,7 @@ function TaskInput({ id, tags }: TaskInputProps) {
     e.preventDefault();
     if (newTask.text.trim().length > 0) {
       setLoading(true);
-      await addTask(newTask, id);
+      await addTask(newTask, id, myDay);
       setLoading(false);
       setNewTask(blankTask);
     }

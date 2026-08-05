@@ -23,7 +23,7 @@ MacIdeas, an app under the [MacWeb](https://macweb.app) collection of online app
 - Add custom emojis and colors to your folders, task lists, and tags to customize their appearance
 - View your daily, starred, due/start soon, recent tasks, and more on the tasks dashboard
 - Customize your preferences for what tasks and widgets to show on the tasks dashboard
-- Plan and manage your daily work by adding tasks to the special My Day task list that refreshed every day
+- Plan and manage your daily work by adding tasks to the special My Day task list that refreshes every day
 - Customize MacIdeas' look by choosing custom theme colors and uploading custom backdrops to task lists
 - Efficiently search through all your folders, task lists, tasks, and more with the search bar
 - _more stuff coming soon_

@@ -21,33 +21,56 @@ export async function addDescription(id: string, description: string) {
   }
 }
 
-export async function addTask(newTask: TaskType, taskListId: string) {
+export async function addTask(
+  newTask: TaskType,
+  taskListId: string,
+  myDay?: boolean,
+) {
   try {
     const session = await getSession();
     if (session) {
       const { text, start, due, tags, starred, priority } = newTask;
-      await prisma.taskList.update({
-        where: { id: taskListId, userId: session.user.id },
-        data: {
-          tasks: {
-            create: {
-              text,
-              userId: session.user.id,
-              start,
-              due,
-              starred,
-              priority,
-              tags: {
-                connect: tags?.map((id) => {
-                  return { id };
-                }),
+      if (myDay) {
+        await prisma.task.create({
+          data: {
+            text,
+            start,
+            due,
+            tags: {
+              connect: tags?.map((id) => {
+                return { id };
+              }),
+            },
+            starred,
+            priority,
+            myDay: true,
+            userId: session.user.id,
+          },
+        });
+        revalidatePath("/tasks/day");
+      } else {
+        await prisma.taskList.update({
+          where: { id: taskListId, userId: session.user.id },
+          data: {
+            tasks: {
+              create: {
+                text,
+                userId: session.user.id,
+                start,
+                due,
+                starred,
+                priority,
+                tags: {
+                  connect: tags?.map((id) => {
+                    return { id };
+                  }),
+                },
               },
             },
           },
-        },
-        include: { tasks: true },
-      });
-      revalidatePath(`/tasks/${taskListId}`);
+        });
+        revalidatePath(`/tasks/${taskListId}`);
+      }
     }
   } catch (err) {
     console.error("Error: " + err);

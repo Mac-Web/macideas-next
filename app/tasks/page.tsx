@@ -29,29 +29,40 @@ async function Page() {
     include: { tasks: { include: { tags: true, subtasks: true } } },
   });
   const allTasks: Record<string, Task[]> = {
-    0: tasks
+    0: tasks.filter((task) => {
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
+      const end = new Date();
+      end.setHours(23, 59, 59, 999);
+      return (
+        task.myDay ||
+        (task.due && task.due > start && task.due < end) ||
+        (task.start && task.start > start && task.start < end)
+      );
+    }),
+    1: tasks
       .filter(
         (task) =>
           task.due &&
           (userSettings?.showOverdue ? true : task.due > new Date()),
       )
       .sort((a, b) => a.due!.getTime() - b.due!.getTime()),
-    1: tasks
+    2: tasks
       .filter((task) => task.priority && task.priority !== "None")
       .sort(
         (a, b) =>
           priorities.find((p) => p.name === b.priority)!.value -
           priorities.find((p) => p.name === a.priority)!.value,
       ),
-    2: tasks
+    3: tasks
       .filter(
         (task) =>
           task.start &&
           (userSettings?.showOverdue ? true : task.start > new Date()),
       )
       .sort((a, b) => a.start!.getTime() - b.start!.getTime()),
-    3: tasks.filter((task) => task.starred),
-    5: tasks.slice(0, 5),
+    4: tasks.filter((task) => task.starred),
+    6: tasks.slice(0, 5),
   };
   const displayedSections = dashboardSettings.filter(
     (s) => !userSettings || userSettings.selected.includes(s.id),
@@ -68,7 +79,7 @@ async function Page() {
       <div className="flex flex-wrap w-full px-10 gap-5">
         {displayedSections.length > 0 ? (
           displayedSections.map((setting) => {
-            return setting.id === 4 ? (
+            return setting.id === 5 ? (
               <Tags
                 key={setting.id}
                 tags={tags}
@@ -79,6 +90,7 @@ async function Page() {
                 key={setting.id}
                 title={setting.name}
                 tasks={allTasks[setting.id] as TaskType[]}
+                link={setting.id === 0 ? "/tasks/day" : undefined}
               >
                 {setting.icon}
               </Section>

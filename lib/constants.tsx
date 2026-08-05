@@ -1,4 +1,10 @@
-import { FaCalendarDay, FaCheckCircle, FaClock, FaStar } from "react-icons/fa";
+import {
+  FaCalendarDay,
+  FaCheckCircle,
+  FaClock,
+  FaStar,
+  FaSun,
+} from "react-icons/fa";
 import { FaCalendarCheck } from "react-icons/fa6";
 
 export const priorities = [
@@ -9,10 +15,11 @@ export const priorities = [
 ];
 
 export const dashboardSettings = [
-  { id: 0, name: "Due soon", icon: <FaCalendarCheck size={40} /> },
-  { id: 1, name: "Priority tasks", icon: <FaCheckCircle size={40} /> },
-  { id: 2, name: "Start soon", icon: <FaCalendarDay size={40} /> },
-  { id: 3, name: "Starred tasks", icon: <FaStar size={40} /> },
-  { id: 4, name: "Tasks with tag" },
-  { id: 5, name: "Recent tasks", icon: <FaClock size={40} /> },
+  { id: 0, name: "Daily tasks", icon: <FaSun size={40} /> },
+  { id: 1, name: "Due soon", icon: <FaCalendarCheck size={40} /> },
+  { id: 2, name: "Priority tasks", icon: <FaCheckCircle size={40} /> },
+  { id: 3, name: "Start soon", icon: <FaCalendarDay size={40} /> },
+  { id: 4, name: "Starred tasks", icon: <FaStar size={40} /> },
+  { id: 5, name: "Tasks with tag" },
+  { id: 6, name: "Recent tasks", icon: <FaClock size={40} /> },
 ];
