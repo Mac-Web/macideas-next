@@ -9,6 +9,7 @@ import { FaFaceFrown } from "react-icons/fa6";
 import Settings from "@/components/tasks/dashboard/Settings";
 import Section from "@/components/tasks/dashboard/Section";
 import Tags from "@/components/tasks/dashboard/Tags";
+import Options from "@/components/tasks/dashboard/Options";
 
 async function Page() {
   const session = await getSession();
@@ -76,6 +77,7 @@ async function Page() {
         tasks, organized tags, and other information about your task lists on
         this dashboard!
       </p>
+      <Options />
       <div className="flex flex-wrap w-full px-10 gap-5">
         {displayedSections.length > 0 ? (
           displayedSections.map((setting) => {
@@ -91,6 +93,7 @@ async function Page() {
                 title={setting.name}
                 tasks={allTasks[setting.id] as TaskType[]}
                 link={setting.id === 0 ? "/tasks/day" : undefined}
+                sectionId={setting.id}
               >
                 {setting.icon}
               </Section>

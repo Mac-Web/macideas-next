@@ -348,3 +348,18 @@ export async function renameSubtask(
     console.error("Error:" + err);
   }
 }
+
+export async function hideTask(id: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.task.update({
+        where: { id, userId: session.user.id },
+        data: { myDay: false, myDayVisible: false },
+      });
+      revalidatePath("/tasks/day");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

@@ -13,7 +13,7 @@ function Day() {
       className={`font-bold flex gap-x-3 mb-2 p-2 rounded items-center
         ${pathname === "/tasks/day" ? "bg-gray-900 text-teal-600" : "hover:bg-gray-900 text-white"}`}
     >
-      <FaSun size={15} /> My Day
+      <FaSun size={15} /> My day
     </Link>
   );
 }

@@ -208,3 +208,25 @@ export async function resetSettings() {
     console.error("Error: " + err);
   }
 }
+
+export async function hideSection(sectionId: number) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const existingSettings = await prisma.macIdeasSettings.findUnique({
+        where: { userId: session.user.id },
+      });
+      const selected = (
+        existingSettings?.selected || [0, 1, 2, 3, 4, 5, 6]
+      ).filter((s) => s !== sectionId);
+      await prisma.macIdeasSettings.upsert({
+        where: { userId: session.user.id },
+        update: { selected },
+        create: { selected, userId: session.user.id },
+      });
+      revalidatePath("/tasks");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

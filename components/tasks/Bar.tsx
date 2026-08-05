@@ -2,7 +2,15 @@
 
 import type { Folder, TaskList } from "@/generated/prisma/client";
 import { useState } from "react";
-import { FaFolder, FaRegStar, FaStar, FaSun, FaTrash } from "react-icons/fa";
+import {
+  FaFolder,
+  FaImage,
+  FaPalette,
+  FaRegStar,
+  FaStar,
+  FaSun,
+  FaTrash,
+} from "react-icons/fa";
 import {
   addEmoji,
   deleteTaskList,
@@ -105,7 +113,21 @@ function Bar({ taskList, folder, myDay }: BarProps) {
         </div>
       )}
       {!myDay && (
-        <div className="absolute right-3 flex items-center gap-x-5">
+        <div className="absolute right-3 flex items-center gap-x-5 text-gray-300">
+          <FaImage
+            size={17}
+            className="cursor-pointer"
+            title="Upload background image"
+          />
+          <label className="cursor-pointer" title="Customize color">
+            <input
+              type="color"
+              onChange={(e) => console.log(e.target.value)}
+              className="hidden"
+            />
+            <FaPalette size={17} />
+            {/* TODO: add option to upload/choose custom background and theme */}
+          </label>
           <div
             className="cursor-pointer"
             onClick={async () =>

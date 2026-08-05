@@ -18,6 +18,7 @@ import {
   completeSubtask,
   completeTask,
   deleteTask,
+  hideTask,
   renameTask,
   starTask,
   updatePriority,
@@ -82,11 +83,6 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
     ) {
       setDetails((prev) => (prev === task.id ? null : task.id));
     }
-  }
-
-  async function hideTask() {
-    console.log("hiding task...");
-    //TODO: implement hiding tasks from my day
   }
 
   async function handleCompleteSubtask(
@@ -224,7 +220,7 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
             size={15}
             title="Remove from My Day"
             className={optionStyles}
-            onClick={hideTask}
+            onClick={async () => await hideTask(task.id)}
           />
         )}
         <FaPen

@@ -3,16 +3,38 @@
 import type { TaskType } from "../Task";
 import { FaRegCircle, FaStar, FaTag } from "react-icons/fa";
 import { priorities } from "@/lib/constants";
+import { completeTask } from "@/app/tasks/[id]/actions";
 import Link from "next/link";
+import { FaCircleCheck } from "react-icons/fa6";
 
 function Task({ task }: { task: TaskType }) {
+  async function handleComplete(e: React.MouseEvent) {
+    e.preventDefault();
+    await completeTask(task.id, !task.completed);
+  }
+
   return (
     <Link
       key={task.id}
       href={`/tasks/${task.taskListId || "day"}`}
-      className="flex items-center gap-x-5 bg-gray-900 px-5 py-1.5 rounded text-gray-300 whitespace-nowrap overflow-hidden"
+      className={`flex items-center gap-x-5 px-5 py-1.5 rounded text-gray-300 whitespace-nowrap overflow-hidden
+        ${task.completed ? "bg-gray-900/50" : "bg-gray-900"}`}
     >
-      <FaRegCircle size={17} />
+      {task.completed ? (
+        <FaCircleCheck
+          size={17}
+          className="min-w-5"
+          onClick={(e) => handleComplete(e)}
+          title="Unmark as completed"
+        />
+      ) : (
+        <FaRegCircle
+          size={17}
+          className="min-w-5"
+          onClick={(e) => handleComplete(e)}
+          title="Mark as completed"
+        />
+      )}
       <div className="flex flex-col">
         <span className={task.completed ? "line-through" : ""}>
           {task.text}
@@ -62,7 +84,6 @@ function Task({ task }: { task: TaskType }) {
         </div>
       )}
     </Link>
-    //TODO: make these task items actually have functionality instead of just links that redirect to the page
   );
 }
 

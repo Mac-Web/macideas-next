@@ -16,7 +16,7 @@ export default async function Home() {
         >
           <div className="mb-10 flex gap-x-5">
             <Btn
-              text={session ? "Go to tasks" : "Sign in"}
+              text={session ? "Tasks" : "Sign in"}
               link={
                 session
                   ? "/tasks"
@@ -24,6 +24,8 @@ export default async function Home() {
               }
               primary
             />
+            {session && <Btn text="Notes" link="/notes" primary />}
+            {session && <Btn text="Projects" link="/projects" primary />}
             <Btn text="Learn more" link="https://macweb.app/apps/macideas" />
           </div>
         </Hero>

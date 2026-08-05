@@ -7,15 +7,16 @@ import {
   FaPlusCircle,
 } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
-import { createFolder, createTaskList } from "@/app/tasks/actions";
+import { createFolder } from "@/app/tasks/actions";
 import { createProject } from "@/app/projects/actions";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
+import { createNote } from "@/app/notes/actions";
 
 const optionStyles =
   "flex gap-x-2 items-center px-4 py-2 cursor-pointer hover:bg-gray-900 rounded";
 
-function CreateTaskList() {
+function Create() {
   const [loading, setLoading] = useState<boolean>(false);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -23,10 +24,10 @@ function CreateTaskList() {
   const pathname = usePathname();
   const router = useRouter();
 
-  async function handleCreate() {
+  async function handleCreateNote() {
     setLoading(true);
-    const id = await createTaskList(pathname);
-    if (id) router.push(`/tasks/${id}`);
+    const id = await createNote(pathname);
+    if (id) router.push(`/notes/${id}`);
     setLoading(false);
   }
 
@@ -55,10 +56,9 @@ function CreateTaskList() {
       <div
         className="border-2 hover:bg-gray-900 flex-1 justify-center py-2 cursor-pointer border-gray-700 rounded flex
         items-center gap-x-3 bg-gray-950 z-5"
-        onClick={handleCreate}
+        onClick={handleCreateNote}
       >
-        <FaPlusCircle size={17} />{" "}
-        {loading ? "Creating..." : "Create task list"}
+        <FaPlusCircle size={17} /> {loading ? "Creating..." : "Create note"}
       </div>
       <div
         className="border-2 hover:bg-gray-900 p-2 flex items-center justify-center w-10 cursor-pointer border-gray-700
@@ -96,4 +96,4 @@ function CreateTaskList() {
   );
 }
 
-export default CreateTaskList;
+export default Create;

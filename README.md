@@ -26,6 +26,8 @@ MacIdeas, an app under the [MacWeb](https://macweb.app) collection of online app
 - Plan and manage your daily work by adding tasks to the special My Day task list that refreshes every day
 - Customize MacIdeas' look by choosing custom theme colors and uploading custom backdrops to task lists
 - Efficiently search through all your folders, task lists, tasks, and more with the search bar
+- Easily and smoothily reorder folders, task lists, and tasks with drag and drop
+- Seamless integration with MacIdeas Notes and Projects
 - _more stuff coming soon_
 
 ### Notes
