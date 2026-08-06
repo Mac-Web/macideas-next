@@ -20,6 +20,7 @@ import {
 import { addDescription } from "@/app/tasks/[id]/actions";
 import { AnimatePresence } from "framer-motion";
 import { BsList } from "react-icons/bs";
+import UploadModal from "../modals/UploadModal";
 import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
 import Emoji from "../ui/Emoji";
@@ -35,6 +36,7 @@ function Bar({ taskList, folder, myDay }: BarProps) {
   const [description, setDescription] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   async function handleRename() {
     if (editing && editing.trim().length > 0) {
@@ -116,8 +118,9 @@ function Bar({ taskList, folder, myDay }: BarProps) {
         <div className="absolute right-3 flex items-center gap-x-5 text-gray-300">
           <FaImage
             size={17}
-            className="cursor-pointer"
             title="Upload background image"
+            className="cursor-pointer"
+            onClick={() => setUploading(true)}
           />
           <label className="cursor-pointer" title="Customize color">
             <input
@@ -157,6 +160,14 @@ function Bar({ taskList, folder, myDay }: BarProps) {
         </div>
       )}
       <AnimatePresence>
+        {uploading && (
+          <UploadModal
+            id={taskList.id}
+            closeModal={() => {
+              setUploading(false);
+            }}
+          />
+        )}
         {deleting && (
           <WarningModal
             title="Delete confirmation"

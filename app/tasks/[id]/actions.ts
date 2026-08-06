@@ -363,3 +363,18 @@ export async function hideTask(id: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function uploadBackground(id: string, backgroundImage: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.taskList.update({
+        where: { id, userId: session.user.id },
+        data: { backgroundImage },
+      });
+      revalidatePath(`/tasks/${id}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

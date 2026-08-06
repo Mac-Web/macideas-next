@@ -99,7 +99,12 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
   });
 
   return (
-    <div className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)]">
+    <div
+      className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)] bg-center! bg-cover!"
+      style={{
+        background: `linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url('${(taskList as TaskList).backgroundImage}')`,
+      }}
+    >
       <Bar
         taskList={taskList as TaskList}
         folder={taskList.folder}
