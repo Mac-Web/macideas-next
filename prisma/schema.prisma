@@ -206,6 +206,7 @@ model Tag {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks  Task[] @relation(name: "tags")
+  notes  Note[] @relation(name: "note tags")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -243,6 +244,7 @@ model Subtask {
 model MacIdeasSettings {
   id            String  @id @default(uuid())
   selected      Int[]   @default([0, 1, 2, 3, 4, 5, 6])
+  selectedNotes Int[]   @default([0, 1, 2])
   showCompleted Boolean @default(false)
   showOverdue   Boolean @default(false)
 
@@ -254,9 +256,12 @@ model MacIdeasSettings {
 }
 
 model Project {
-  id    String  @id @default(uuid())
-  name  String
-  color String?
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  color       String?
+  emoji       String?
+  starred     Boolean @default(false)
 
   userId    String
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -284,6 +289,7 @@ model Note {
   folderId String?
   folder   Folder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   projects Project[] @relation(name: "project notes")
+  tags     Tag[]     @relation(name: "note tags")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

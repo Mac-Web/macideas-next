@@ -181,8 +181,8 @@ export async function saveSettings(settings: MacIdeasSettings) {
   try {
     const session = await getSession();
     if (session) {
-      const { selected, showCompleted, showOverdue } = settings;
-      const base = { selected, showCompleted, showOverdue };
+      const { selected, selectedNotes, showCompleted, showOverdue } = settings;
+      const base = { selected, selectedNotes, showCompleted, showOverdue };
       await prisma.macIdeasSettings.upsert({
         where: { userId: session.user.id },
         update: { ...base },
@@ -209,7 +209,7 @@ export async function resetSettings() {
   }
 }
 
-export async function hideSection(sectionId: number) {
+export async function hideSection(sectionId: number, isNote?: boolean) {
   try {
     const session = await getSession();
     if (session) {
@@ -217,12 +217,16 @@ export async function hideSection(sectionId: number) {
         where: { userId: session.user.id },
       });
       const selected = (
-        existingSettings?.selected || [0, 1, 2, 3, 4, 5, 6]
+        isNote
+          ? existingSettings?.selectedNotes || [0, 1, 2]
+          : existingSettings?.selected || [0, 1, 2, 3, 4, 5, 6]
       ).filter((s) => s !== sectionId);
       await prisma.macIdeasSettings.upsert({
         where: { userId: session.user.id },
-        update: { selected },
-        create: { selected, userId: session.user.id },
+        update: isNote ? { selectedNotes: selected } : { selected },
+        create: isNote
+          ? { selectedNotes: selected, userId: session.user.id }
+          : { selected, userId: session.user.id },
       });
       revalidatePath("/tasks");
     }

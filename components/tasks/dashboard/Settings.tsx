@@ -6,7 +6,12 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import DashboardModal from "@/components/modals/DashboardModal";
 
-function Settings({ settings }: { settings?: MacIdeasSettings }) {
+interface SettingsProps {
+  settings?: MacIdeasSettings;
+  isNote?: boolean;
+}
+
+function Settings({ settings, isNote }: SettingsProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
   return (
@@ -24,6 +29,7 @@ function Settings({ settings }: { settings?: MacIdeasSettings }) {
           <DashboardModal
             closeModal={() => setMenuOpen(false)}
             settings={settings}
+            isNote={isNote}
           />
         )}
       </AnimatePresence>

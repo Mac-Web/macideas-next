@@ -21,3 +21,62 @@ export async function createProject(path: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function renameProject(id: string, name: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.project.update({
+        where: { id, userId: session.user.id },
+        data: { name },
+      });
+      revalidatePath("/projects");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function addEmoji(id: string, emoji: string | undefined) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.project.update({
+        where: { id, userId: session.user.id },
+        data: { emoji },
+      });
+      revalidatePath(`/projects`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function starProject(id: string, starred: boolean) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.project.update({
+        where: { id, userId: session.user.id },
+        data: { starred },
+      });
+      revalidatePath("/projects");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function deleteProject(id: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.project.delete({
+        where: { id, userId: session.user.id },
+      });
+      revalidatePath("/projects");
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

@@ -23,3 +23,9 @@ export const dashboardSettings = [
   { id: 5, name: "Tasks with tag" },
   { id: 6, name: "Recent tasks", icon: <FaClock size={40} /> },
 ];
+
+export const noteDashboardSettings = [
+  { id: 0, name: "Starred notes", icon: <FaStar size={40} /> },
+  { id: 1, name: "Notes with tag" },
+  { id: 2, name: "Recent notes", icon: <FaClock size={40} /> },
+];

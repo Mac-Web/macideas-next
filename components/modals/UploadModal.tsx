@@ -11,9 +11,10 @@ import Image from "next/image";
 interface UploadModalProps {
   id: string;
   closeModal: () => void;
+  isNote?: boolean;
 }
 
-function UploadModal({ id, closeModal }: UploadModalProps) {
+function UploadModal({ id, closeModal, isNote }: UploadModalProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -22,7 +23,7 @@ function UploadModal({ id, closeModal }: UploadModalProps) {
   async function handleSave() {
     if (blob) {
       setLoading(true);
-      await uploadBackground(id, blob.url);
+      await uploadBackground(id, blob.url, isNote);
       setLoading(false);
       closeModal();
     }

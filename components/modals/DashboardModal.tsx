@@ -3,7 +3,7 @@
 import type { MacIdeasSettings } from "@/generated/prisma/client";
 import { useState } from "react";
 import { resetSettings, saveSettings } from "@/app/tasks/actions";
-import { dashboardSettings } from "@/lib/constants";
+import { dashboardSettings, noteDashboardSettings } from "@/lib/constants";
 import { AnimatePresence } from "framer-motion";
 import WarningModal from "./WarningModal";
 import Modal from "../ui/Modal";
@@ -13,15 +13,19 @@ import Btn from "../ui/Btn";
 interface DashboardModalProps {
   closeModal: () => void;
   settings?: MacIdeasSettings;
+  isNote?: boolean;
 }
 
-function DashboardModal({ closeModal, settings }: DashboardModalProps) {
+function DashboardModal({ closeModal, settings, isNote }: DashboardModalProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [resetting, setResetting] = useState<boolean>(false);
   const [selectedSettings, setSelectedSettings] = useState<MacIdeasSettings>(
     settings || {
       id: "",
       selected: Array(dashboardSettings.length)
+        .fill(0)
+        .map((j, i) => j + i),
+      selectedNotes: Array(noteDashboardSettings.length)
         .fill(0)
         .map((j, i) => j + i),
       showCompleted: false,
@@ -51,40 +55,60 @@ function DashboardModal({ closeModal, settings }: DashboardModalProps) {
       <div className="flex flex-col gap-y-5 text-gray-300">
         <h2 className="text-white text-xl font-bold">Dashboard settings</h2>
         <div className="flex flex-col gap-y-3">
-          <Checkbox
-            text="Show completed tasks"
-            checked={selectedSettings.showCompleted}
-            setChecked={(showCompleted) =>
-              setSelectedSettings({ ...selectedSettings, showCompleted })
-            }
-          />
-          <Checkbox
-            text="Show overdue tasks"
-            checked={selectedSettings.showOverdue}
-            setChecked={(showOverdue) =>
-              setSelectedSettings({ ...selectedSettings, showOverdue })
-            }
-          />
-          <h2 className="text-white my-2 font-bold">Displayed widgets</h2>
-          {dashboardSettings.map((setting) => {
-            return (
+          {!isNote && (
+            <>
               <Checkbox
-                key={setting.id}
-                text={setting.name}
-                checked={selectedSettings.selected.includes(setting.id)}
-                setChecked={(c) =>
-                  setSelectedSettings({
-                    ...selectedSettings,
-                    selected: c
-                      ? [...selectedSettings.selected, setting.id]
-                      : selectedSettings.selected.filter(
-                          (s) => s !== setting.id,
-                        ),
-                  })
+                text="Show completed tasks"
+                checked={selectedSettings.showCompleted}
+                setChecked={(showCompleted) =>
+                  setSelectedSettings({ ...selectedSettings, showCompleted })
                 }
               />
-            );
-          })}
+              <Checkbox
+                text="Show overdue tasks"
+                checked={selectedSettings.showOverdue}
+                setChecked={(showOverdue) =>
+                  setSelectedSettings({ ...selectedSettings, showOverdue })
+                }
+              />
+            </>
+          )}
+          <h2 className="text-white my-2 font-bold">Displayed widgets</h2>
+          {(isNote ? noteDashboardSettings : dashboardSettings).map(
+            (setting) => {
+              return (
+                <Checkbox
+                  key={setting.id}
+                  text={setting.name}
+                  checked={(isNote
+                    ? selectedSettings.selectedNotes
+                    : selectedSettings.selected
+                  ).includes(setting.id)}
+                  setChecked={(c) =>
+                    setSelectedSettings(
+                      isNote
+                        ? {
+                            ...selectedSettings,
+                            selectedNotes: c
+                              ? [...selectedSettings.selectedNotes, setting.id]
+                              : selectedSettings.selectedNotes.filter(
+                                  (s) => s !== setting.id,
+                                ),
+                          }
+                        : {
+                            ...selectedSettings,
+                            selected: c
+                              ? [...selectedSettings.selected, setting.id]
+                              : selectedSettings.selected.filter(
+                                  (s) => s !== setting.id,
+                                ),
+                          },
+                    )
+                  }
+                />
+              );
+            },
+          )}
         </div>
         <div
           className="text-red-500 hover:underline w-fit cursor-pointer"
@@ -105,7 +129,7 @@ function DashboardModal({ closeModal, settings }: DashboardModalProps) {
         {resetting && (
           <WarningModal
             title="Reset confirmation"
-            description="Are you sure you want to reset your MacIdeas dashboard settings back to the original defaults? This action cannot be undone."
+            description="Are you sure you want to reset your MacIdeas dashboard settings back to the original defaults? This applies to both the tasks and notes pages. This action cannot be undone."
             confirm={handleReset}
             closeModal={() => setResetting(false)}
             loading={loading}

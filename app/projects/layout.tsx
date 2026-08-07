@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Sidebar from "@/components/notes/Sidebar";
+import Sidebar from "@/components/projects/Sidebar";
 
 export const metadata: Metadata = {
-  title: "Notes | MacIdeas",
-  description: "Create, browse, view, and manage your MacIdeas notes here!",
+  title: "Projects | MacIdeas",
+  description: "Create, browse, view, and manage your MacIdeas projects here!",
   authors: [{ name: "MacWeb", url: "https://macweb.app" }],
   openGraph: {
-    title: "Notes | MacIdeas",
-    description: "Create, browse, view, and manage your MacIdeas notes here!",
-    url: "https://macideas.macweb.app/notes",
+    title: "Projects | MacIdeas",
+    description:
+      "Create, browse, view, and manage your MacIdeas projects here!",
+    url: "https://macideas.macweb.app/projects",
     siteName: "MacIdeas",
     images: [
       {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NotesLayout({
+export default function ProjectsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

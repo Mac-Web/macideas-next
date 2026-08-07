@@ -364,14 +364,25 @@ export async function hideTask(id: string) {
   }
 }
 
-export async function uploadBackground(id: string, backgroundImage: string) {
+export async function uploadBackground(
+  id: string,
+  backgroundImage: string,
+  isNote?: boolean,
+) {
   try {
     const session = await getSession();
     if (session) {
-      await prisma.taskList.update({
-        where: { id, userId: session.user.id },
-        data: { backgroundImage },
-      });
+      if (isNote) {
+        await prisma.note.update({
+          where: { id, userId: session.user.id },
+          data: { backgroundImage },
+        });
+      } else {
+        await prisma.taskList.update({
+          where: { id, userId: session.user.id },
+          data: { backgroundImage },
+        });
+      }
       revalidatePath(`/tasks/${id}`);
     }
   } catch (err) {
