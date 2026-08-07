@@ -21,6 +21,9 @@ async function Sidebar() {
     include: { notes: true },
     orderBy: { name: "asc" },
   });
+  const cleanFolders = folders.map((folder) => {
+    return { ...folder, notes: null };
+  });
 
   return (
     <div className="w-70 border-r border-gray-700 h-[calc(100vh-68px)] py-5 relative">
@@ -32,7 +35,14 @@ async function Sidebar() {
               <FaRegStar size={15} /> Starred notes
             </h2>
             {starredNotes.map((note) => {
-              return <Note key={note.id} note={note} starred />;
+              return (
+                <Note
+                  key={note.id}
+                  note={note}
+                  folders={cleanFolders}
+                  starred
+                />
+              );
             })}
           </>
         )}
@@ -40,12 +50,17 @@ async function Sidebar() {
           <FaRegNoteSticky size={15} /> All notes
         </h2>
         {folders?.map((folder) => (
-          <Folder key={folder.id} folder={folder} />
+          <Folder
+            key={folder.id}
+            folder={folder}
+            folders={folders}
+            notes={notes}
+          />
         ))}
         {/* TODO: add drag and drop folders and starred folders? */}
         {notes.length > 0 ? (
           orphanedNotes.map((note) => {
-            return <Note key={note.id} note={note} />;
+            return <Note key={note.id} note={note} folders={cleanFolders} />;
           })
         ) : (
           <div className="text-sm text-center text-gray-300 py-5">

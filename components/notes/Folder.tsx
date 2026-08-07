@@ -4,6 +4,7 @@ import type { Folder, Note as NoteType } from "@/generated/prisma/client";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  FaCheckCircle,
   FaEllipsisV,
   FaFolder,
   FaFolderOpen,
@@ -13,11 +14,12 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { colorFolder, deleteFolder, renameFolder } from "@/app/tasks/actions";
+import { createNote } from "@/app/notes/actions";
 import { usePathname, useRouter } from "next/navigation";
 import WarningModal from "../modals/WarningModal";
+import FolderModal from "../modals/FolderModal";
 import Note from "./Note";
 import Input from "../ui/Input";
-import { createNote } from "@/app/notes/actions";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
@@ -28,14 +30,17 @@ export type FolderType = Folder & {
 
 interface FolderProps {
   folder: FolderType;
+  folders: Folder[];
+  notes: NoteType[];
 }
 
-function Folder({ folder }: FolderProps) {
+function Folder({ folder, folders, notes }: FolderProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
   const [folderOpen, setFolderOpen] = useState<boolean>(false);
+  const [selecting, setSelecting] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -49,6 +54,11 @@ function Folder({ folder }: FolderProps) {
       setRename(folder.name);
       setMenuOpen(false);
     }
+  }
+
+  function handleEdit() {
+    setSelecting(true);
+    setFolderOpen(true);
   }
 
   async function handleCreate() {
@@ -121,9 +131,9 @@ function Folder({ folder }: FolderProps) {
                 className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-950 absolute right-0
            top-[calc(100%+8px)] z-5"
               >
-                {/*TODO: <div className={optionStyles} onClick={handleEdit}>
+                <div className={optionStyles} onClick={handleEdit}>
                   <FaCheckCircle size={15} /> Edit
-                </div> */}
+                </div>
                 <div className={optionStyles} onClick={(e) => handleRename(e)}>
                   <FaPen size={15} /> Rename
                 </div>
@@ -157,12 +167,22 @@ function Folder({ folder }: FolderProps) {
               loading={loading}
             />
           )}
+          {selecting && (
+            <FolderModal
+              folder={{ ...folder, taskLists: folder.notes }}
+              taskLists={notes}
+              closeModal={() => setSelecting(false)}
+              isNote
+            />
+          )}
         </AnimatePresence>
       </div>
       {folderOpen && (
         <div className="flex flex-col gap-y-3 pl-5">
           {folder.notes.length > 0 ? (
-            folder.notes.map((note) => <Note key={note.id} note={note} />)
+            folder.notes.map((note) => (
+              <Note key={note.id} note={note} folders={folders} />
+            ))
           ) : (
             <div className="text-center text-gray-300 text-sm">
               No notes found in this folder.{" "}

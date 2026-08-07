@@ -1,9 +1,16 @@
 "use client";
 
-import type { Note as NoteType } from "@/generated/prisma/client";
+import type { Folder, Note as NoteType } from "@/generated/prisma/client";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaStar, FaPen, FaEllipsisV, FaRegStar, FaTrash } from "react-icons/fa";
+import {
+  FaStar,
+  FaPen,
+  FaEllipsisV,
+  FaRegStar,
+  FaTrash,
+  FaRegFolder,
+} from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
 import Emoji from "../ui/Emoji";
 import Link from "next/link";
@@ -16,6 +23,7 @@ import {
   renameNote,
   starNote,
 } from "@/app/notes/actions";
+import MoveModal from "../modals/MoveModal";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
@@ -23,13 +31,15 @@ const optionStyles =
 interface NoteProps {
   note: NoteType;
   starred?: boolean;
+  folders: Folder[];
 }
 
-function Note({ note, starred }: NoteProps) {
+function Note({ note, starred, folders }: NoteProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); //TODO: add move to folder option
+  const [loading, setLoading] = useState<boolean>(false);
+  const [moving, setMoving] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -116,6 +126,9 @@ function Note({ note, starred }: NoteProps) {
                 )}{" "}
                 {note.starred ? "Starred" : "Star"}
               </div>
+              <div className={optionStyles} onClick={() => setMoving(true)}>
+                <FaRegFolder size={15} /> Move
+              </div>
               <div
                 className={optionStyles + " text-red-500"}
                 onClick={() => setDeleting(true)}
@@ -127,6 +140,15 @@ function Note({ note, starred }: NoteProps) {
         </AnimatePresence>
       </div>
       <AnimatePresence>
+        {moving && (
+          <MoveModal
+            id={note.id}
+            folders={folders}
+            folder={note.folderId}
+            closeModal={() => setMoving(false)}
+            isNote
+          />
+        )}
         {deleting && (
           <WarningModal
             title="Delete confirmation"

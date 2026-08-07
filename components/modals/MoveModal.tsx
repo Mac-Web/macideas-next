@@ -4,6 +4,7 @@ import type { Folder } from "@/generated/prisma/client";
 import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { moveFolder } from "@/app/tasks/actions";
+import { moveNote } from "@/app/notes/actions";
 import Btn from "../ui/Btn";
 import Modal from "../ui/Modal";
 import Checkbox from "../ui/Checkbox";
@@ -14,9 +15,16 @@ interface MoveModalProps {
   folder: string | null;
   folders: Folder[];
   closeModal: () => void;
+  isNote?: boolean;
 }
 
-function MoveModal({ id, folder, folders, closeModal }: MoveModalProps) {
+function MoveModal({
+  id,
+  folder,
+  folders,
+  closeModal,
+  isNote,
+}: MoveModalProps) {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>(folder || "");
@@ -31,7 +39,11 @@ function MoveModal({ id, folder, folders, closeModal }: MoveModalProps) {
 
   async function handleSave() {
     setLoading(true);
-    await moveFolder(id, selected, pathname);
+    if (isNote) {
+      await moveNote(id, selected, pathname);
+    } else {
+      await moveFolder(id, selected, pathname);
+    }
     setLoading(false);
     closeModal();
   }

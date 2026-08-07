@@ -1,9 +1,10 @@
 "use client";
 
-import type { TaskList } from "@/generated/prisma/client";
+import type { Note, TaskList } from "@/generated/prisma/client";
 import type { FolderType } from "../tasks/Folder";
 import { useState, useMemo } from "react";
 import { selectFolder } from "@/app/tasks/actions";
+import { selectFolder as selectNoteFolder } from "@/app/notes/actions";
 import { usePathname } from "next/navigation";
 import Modal from "../ui/Modal";
 import Input from "../ui/Input";
@@ -12,11 +13,17 @@ import Checkbox from "../ui/Checkbox";
 
 interface FolderModalProps {
   folder: FolderType;
-  taskLists: TaskList[];
+  taskLists: TaskList[] | Note[];
   closeModal: () => void;
+  isNote?: boolean;
 }
 
-function FolderModal({ folder, taskLists, closeModal }: FolderModalProps) {
+function FolderModal({
+  folder,
+  taskLists,
+  closeModal,
+  isNote,
+}: FolderModalProps) {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedLists, setSelectedLists] = useState<string[]>(
@@ -39,7 +46,11 @@ function FolderModal({ folder, taskLists, closeModal }: FolderModalProps) {
 
   async function handleSave() {
     setLoading(true);
-    await selectFolder(folder.id, selectedLists, pathname);
+    if (isNote) {
+      await selectNoteFolder(folder.id, selectedLists, pathname);
+    } else {
+      await selectFolder(folder.id, selectedLists, pathname);
+    }
     setLoading(false);
     closeModal();
   }

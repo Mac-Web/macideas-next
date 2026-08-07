@@ -82,3 +82,39 @@ export async function deleteNote(id: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function moveNote(id: string, folderId: string, path: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.note.update({
+        where: { id, userId: session.user.id },
+        data: { folderId: folderId || null },
+      });
+      revalidatePath(path);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function selectFolder(id: string, notes: string[], path: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.folder.update({
+        where: { id, userId: session.user.id },
+        data: {
+          notes: {
+            set: notes.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+      revalidatePath(path);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
