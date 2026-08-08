@@ -20,11 +20,14 @@ async function Sidebar() {
   const orphanedLists = taskLists.filter((list) => !list.folderId);
   const folders = await prisma.folder.findMany({
     where: { userId: session.user.id },
-    include: { taskLists: true },
+    include: { taskLists: true, projects: true },
     orderBy: { name: "asc" },
   });
   const cleanFolders: FolderType[] = folders.map((f) => {
     return { ...f, taskLists: undefined };
+  });
+  const projects = await prisma.project.findMany({
+    where: { userId: session.user.id },
   });
 
   return (
@@ -58,6 +61,8 @@ async function Sidebar() {
             folder={folder}
             taskLists={taskLists}
             folders={cleanFolders}
+            projects={projects}
+            existing={folder.projects.map((p) => p.id)}
           />
         ))}
         {/* TODO: add drag and drop folders and starred folders? */}

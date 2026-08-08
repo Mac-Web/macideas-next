@@ -1,10 +1,11 @@
 "use client";
 
-import type { Note, TaskList } from "@/generated/prisma/client";
+import type { Note, Project, TaskList } from "@/generated/prisma/client";
 import type { FolderType } from "../tasks/Folder";
 import { useState, useMemo } from "react";
 import { selectFolder } from "@/app/tasks/actions";
 import { selectFolder as selectNoteFolder } from "@/app/notes/actions";
+import { addProjects } from "@/app/projects/actions";
 import { usePathname } from "next/navigation";
 import Modal from "../ui/Modal";
 import Input from "../ui/Input";
@@ -13,9 +14,11 @@ import Checkbox from "../ui/Checkbox";
 
 interface FolderModalProps {
   folder: FolderType;
-  taskLists: TaskList[] | Note[];
+  taskLists: TaskList[] | Note[] | Project[];
   closeModal: () => void;
   isNote?: boolean;
+  isProject?: boolean;
+  existing?: string[];
 }
 
 function FolderModal({
@@ -23,11 +26,13 @@ function FolderModal({
   taskLists,
   closeModal,
   isNote,
+  isProject,
+  existing,
 }: FolderModalProps) {
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedLists, setSelectedLists] = useState<string[]>(
-    folder.taskLists.map((l) => l.id),
+    existing || folder.taskLists.map((l) => l.id),
   );
   const sortedLists = useMemo(
     () =>
@@ -36,11 +41,13 @@ function FolderModal({
           t.name.toLowerCase().includes(search.trim().toLowerCase()),
         )
         .sort((a, b) =>
-          String(b.folderId === folder.id).localeCompare(
-            String(a.folderId === folder.id),
-          ),
+          isProject
+            ? 1
+            : String((b as TaskList).folderId === folder.id).localeCompare(
+                String((a as TaskList).folderId === folder.id),
+              ),
         ),
-    [taskLists, search, folder.id],
+    [taskLists, search, folder.id, isProject],
   );
   const pathname = usePathname();
 
@@ -48,6 +55,8 @@ function FolderModal({
     setLoading(true);
     if (isNote) {
       await selectNoteFolder(folder.id, selectedLists, pathname);
+    } else if (isProject) {
+      await addProjects(folder.id, selectedLists, pathname);
     } else {
       await selectFolder(folder.id, selectedLists, pathname);
     }
@@ -55,12 +64,16 @@ function FolderModal({
     closeModal();
   }
 
+  //TODO: update palceholders and other stuff so they say notes when isNote
+
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">Edit folder task lists</h2>
+        <h2 className="text-white text-xl font-bold">
+          Edit folder {isProject ? "projects" : "task lists"}
+        </h2>
         <Input
-          placeholder="Search task lists"
+          placeholder={`Search ${isProject ? "projects" : "task lists"}`}
           value={search}
           setValue={(s) => setSearch(s)}
           clear
@@ -87,7 +100,8 @@ function FolderModal({
             ))
           ) : (
             <div className="text-gray-300 text-center text-sm py-2">
-              No task lists found. Maybe try a different search?
+              No {isProject ? "projects" : "task lists"} found. Maybe try a
+              different search?
             </div>
           )}
         </div>

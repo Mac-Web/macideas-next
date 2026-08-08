@@ -10,9 +10,10 @@ interface EmojiProps {
   setSelected: (emoji: string | undefined) => void;
   placeholder?: string | React.ReactNode;
   ref?: React.RefObject<HTMLDivElement | null>;
+  styles?: string;
 }
 
-function Emoji({ setSelected, placeholder, ref }: EmojiProps) {
+function Emoji({ setSelected, placeholder, ref, styles }: EmojiProps) {
   const [picking, setPicking] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +41,12 @@ function Emoji({ setSelected, placeholder, ref }: EmojiProps) {
 
   return (
     <div className="relative text-gray-300 cursor-pointer" ref={menuRef}>
-      <div title="Select emoji" onClick={handleSelect} ref={ref}>
+      <div
+        title="Select emoji"
+        onClick={handleSelect}
+        ref={ref}
+        className={styles}
+      >
         {placeholder || <FaFaceSmile size={15} />}
       </div>
       <AnimatePresence>

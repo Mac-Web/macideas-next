@@ -1,9 +1,14 @@
 "use client";
 
-import type { Folder, Note as NoteType } from "@/generated/prisma/client";
+import type {
+  Folder,
+  Note as NoteType,
+  Project,
+} from "@/generated/prisma/client";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  FaBook,
   FaCheckCircle,
   FaEllipsisV,
   FaFolder,
@@ -32,15 +37,18 @@ interface FolderProps {
   folder: FolderType;
   folders: Folder[];
   notes: NoteType[];
+  projects: Project[];
+  existing?: string[];
 }
 
-function Folder({ folder, folders, notes }: FolderProps) {
+function Folder({ folder, folders, notes, projects, existing }: FolderProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
   const [folderOpen, setFolderOpen] = useState<boolean>(false);
   const [selecting, setSelecting] = useState<boolean>(false);
+  const [adding, setAdding] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
@@ -134,6 +142,9 @@ function Folder({ folder, folders, notes }: FolderProps) {
                 <div className={optionStyles} onClick={handleEdit}>
                   <FaCheckCircle size={15} /> Edit
                 </div>
+                <div className={optionStyles} onClick={() => setAdding(true)}>
+                  <FaBook size={15} /> Projects
+                </div>
                 <div className={optionStyles} onClick={(e) => handleRename(e)}>
                   <FaPen size={15} /> Rename
                 </div>
@@ -173,6 +184,15 @@ function Folder({ folder, folders, notes }: FolderProps) {
               taskLists={notes}
               closeModal={() => setSelecting(false)}
               isNote
+            />
+          )}
+          {adding && (
+            <FolderModal
+              folder={{ ...folder, taskLists: folder.notes }}
+              taskLists={projects}
+              closeModal={() => setAdding(false)}
+              isProject
+              existing={existing}
             />
           )}
         </AnimatePresence>

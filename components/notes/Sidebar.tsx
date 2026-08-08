@@ -18,11 +18,14 @@ async function Sidebar() {
   const starredNotes = notes.filter((note) => note.starred);
   const folders = await prisma.folder.findMany({
     where: { userId: session.user.id },
-    include: { notes: true },
+    include: { notes: true, projects: true },
     orderBy: { name: "asc" },
   });
   const cleanFolders = folders.map((folder) => {
     return { ...folder, notes: null };
+  });
+  const projects = await prisma.project.findMany({
+    where: { userId: session.user.id },
   });
 
   return (
@@ -55,6 +58,8 @@ async function Sidebar() {
             folder={folder}
             folders={folders}
             notes={notes}
+            projects={projects}
+            existing={folder.projects.map((p) => p.id)}
           />
         ))}
         {/* TODO: add drag and drop folders and starred folders? */}

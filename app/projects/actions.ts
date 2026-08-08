@@ -80,3 +80,28 @@ export async function deleteProject(id: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function addProjects(
+  id: string,
+  projects: string[],
+  pathname: string,
+) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.folder.update({
+        where: { id, userId: session.user.id },
+        data: {
+          projects: {
+            set: projects.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+      revalidatePath(pathname);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
