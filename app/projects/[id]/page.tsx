@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Items from "./Items";
 import Hero from "@/components/projects/Hero";
+import Add from "@/components/projects/Add";
 
 async function fetchProjectData(id: string) {
   const session = await getSession();
@@ -52,8 +53,25 @@ export async function generateMetadata({
 async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const project = await fetchProjectData(id);
-
-  // TODO: add option to add task lists/tasks/folders/notes to project from this page
+  const session = (await getSession())!;
+  const user = (await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: { folders: true, taskLists: true, tasks: true, notes: true },
+  }))!;
+  const existing = [
+    ...project.folders.map((f) => {
+      return { id: f.id, type: "Folders" };
+    }),
+    ...project.taskLists.map((t) => {
+      return { id: t.id, type: "Task lists" };
+    }),
+    ...project.tasks.map((t) => {
+      return { id: t.id, type: "Tasks" };
+    }),
+    ...project.notes.map((n) => {
+      return { id: n.id, type: "Notes" };
+    }),
+  ];
 
   return (
     <div className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)] gap-y-5 px-10">
@@ -63,6 +81,14 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
         description={project.description}
       />
       <Items project={project} />
+      <Add
+        id={project.id}
+        folders={user.folders}
+        taskLists={user.taskLists}
+        tasks={user.tasks}
+        notes={user.notes}
+        existing={existing}
+      />
     </div>
   );
 }

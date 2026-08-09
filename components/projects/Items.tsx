@@ -11,7 +11,7 @@ import { addEmoji as addNoteEmoji } from "@/app/notes/actions";
 import Emoji from "../ui/Emoji";
 
 const itemStyles =
-  "border-2 border-gray-700 rounded px-4 py-2 text-lg hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
+  "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
 
 interface ItemsProps {
   open: ProjectType;
@@ -36,12 +36,33 @@ function Items({ open, search, handleOpen }: ItemsProps) {
               title="Open folder"
               onDoubleClick={() => handleOpen(folder)}
             >
-              <FaFolder
-                size={25}
-                className="w-8"
-                style={{ color: folder.color || "" }}
-              />{" "}
-              {folder.name}
+              <div className="flex items-center gap-x-3 flex-4">
+                <FaFolder
+                  size={25}
+                  className="w-8"
+                  style={{ color: folder.color || "" }}
+                />{" "}
+                {folder.name}
+              </div>
+              <div
+                className="flex-1 text-xs flex items-center gap-x-2"
+                title="This item is a folder"
+              >
+                <FaFolder />
+                Folder
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={folder.updatedAt.toISOString()}
+              >
+                Modified {folder.updatedAt.toLocaleDateString()}
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={folder.createdAt.toISOString()}
+              >
+                Created {folder.createdAt.toLocaleDateString()}
+              </div>
             </div>
           );
         })}
@@ -57,12 +78,33 @@ function Items({ open, search, handleOpen }: ItemsProps) {
               className={itemStyles}
               title="Go to task list"
             >
-              <Emoji
-                setSelected={async (e) => await addEmoji(taskList.id, e)}
-                placeholder={taskList.emoji || <BsList size={25} />}
-                styles="text-xl w-8"
-              />
-              {taskList.name}
+              <div className="flex items-center gap-x-3 flex-4">
+                <Emoji
+                  setSelected={async (e) => await addEmoji(taskList.id, e)}
+                  placeholder={taskList.emoji || <BsList size={25} />}
+                  styles="text-xl w-8"
+                />
+                {taskList.name}
+              </div>
+              <div
+                className="flex-1 text-xs flex items-center gap-x-2"
+                title="This item is a task list"
+              >
+                <BsList />
+                Task list
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={taskList.updatedAt.toISOString()}
+              >
+                Modified {taskList.updatedAt.toLocaleDateString()}
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={taskList.createdAt.toISOString()}
+              >
+                Created {taskList.createdAt.toLocaleDateString()}
+              </div>
             </div>
           );
         })}
@@ -80,7 +122,28 @@ function Items({ open, search, handleOpen }: ItemsProps) {
               className={itemStyles}
               title="Go to task"
             >
-              <FaCheckCircle size={25} className="w-8" /> {task.text}
+              <div className="flex items-center gap-x-3 flex-4">
+                <FaCheckCircle size={25} className="w-8" /> {task.text}
+              </div>
+              <div
+                className="flex-1 text-xs flex items-center gap-x-2"
+                title="This item is a task"
+              >
+                <FaCheckCircle />
+                Task
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={task.updatedAt.toISOString()}
+              >
+                Modified {task.updatedAt.toLocaleDateString()}
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={task.createdAt.toISOString()}
+              >
+                Created {task.createdAt.toLocaleDateString()}
+              </div>
             </div>
           );
         })}
@@ -96,11 +159,32 @@ function Items({ open, search, handleOpen }: ItemsProps) {
               className={itemStyles}
               title="Go to note"
             >
-              <Emoji
-                setSelected={async (e) => await addNoteEmoji(note.id, e)}
-                placeholder={note.emoji || <FaNoteSticky size={25} />}
-              />
-              {note.name}
+              <div className="flex items-center gap-x-3 flex-4">
+                <Emoji
+                  setSelected={async (e) => await addNoteEmoji(note.id, e)}
+                  placeholder={note.emoji || <FaNoteSticky size={25} />}
+                />
+                {note.name}
+              </div>
+              <div
+                className="flex-1 text-xs flex items-center gap-x-2"
+                title="This item is a task list"
+              >
+                <FaNoteSticky />
+                Note
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={note.updatedAt.toISOString()}
+              >
+                Modified {note.updatedAt.toLocaleDateString()}
+              </div>
+              <div
+                className="flex-1 text-xs"
+                title={note.createdAt.toISOString()}
+              >
+                Created {note.createdAt.toLocaleDateString()}
+              </div>
             </div>
           );
         })}

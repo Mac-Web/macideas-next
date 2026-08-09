@@ -17,7 +17,7 @@ import Folder from "@/components/projects/Folder";
 import Items from "@/components/projects/Items";
 
 const itemStyles =
-  "border-2 border-gray-700 rounded px-4 py-2 text-lg hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
+  "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
 
 export type FolderType = FolderT & {
   taskLists: TaskList[];
@@ -66,7 +66,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
   // TODO: add sort/filter
 
   return (
-    <div className="w-full flex flex-col gap-y-5 items-center">
+    <div className="w-full flex flex-col gap-y-5 items-center h-[calc(100%-80px)]">
       <div className="w-100">
         <Input
           placeholder={`Search ${open ? open.name : "projects"}`}
@@ -87,7 +87,15 @@ function Projects({ projects }: { projects: ProjectType[] }) {
           </div>
         ))}
       </div>
-      <div className="flex flex-col gap-y-3 w-full">
+      {open && (
+        <div className="flex gap-x-3 w-full text-sm text-gray-300 px-4 bg-gray-900 rounded py-2">
+          <div className="flex-4 cursor-pointer">Name</div>
+          <div className="flex-1 cursor-pointer">Type</div>
+          <div className="flex-1 cursor-pointer">Modified</div>
+          <div className="flex-1 cursor-pointer">Created</div>
+        </div>
+      )}
+      <div className="flex flex-col gap-y-3 w-full mb-3 overflow-auto">
         {!open ? (
           displayedProjects.length > 0 ? (
             displayedProjects.map((project) => {

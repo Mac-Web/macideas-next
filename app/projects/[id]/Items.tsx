@@ -35,7 +35,7 @@ function Items({ project }: { project: ProjectType }) {
           </div>
         )}
       </div>
-      <div className="w-full flex flex-col gap-y-3">
+      <div className="w-full flex flex-col gap-y-3 h-full overflow-auto mb-3">
         {open ? (
           <Folder open={open} search={search.trim().toLowerCase()} />
         ) : (
