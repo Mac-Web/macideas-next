@@ -1,10 +1,6 @@
 "use client";
 
-import type {
-  Folder,
-  Note as NoteType,
-  Project,
-} from "@/generated/prisma/client";
+import type { Folder, Note as NoteT, Project } from "@/generated/prisma/client";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -29,6 +25,10 @@ import Input from "../ui/Input";
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
 
+type NoteType = NoteT & {
+  projects: Project[];
+};
+
 export type FolderType = Folder & {
   notes: NoteType[];
 };
@@ -36,7 +36,7 @@ export type FolderType = Folder & {
 interface FolderProps {
   folder: FolderType;
   folders: Folder[];
-  notes: NoteType[];
+  notes: NoteT[];
   projects: Project[];
   existing?: string[];
 }
@@ -201,7 +201,12 @@ function Folder({ folder, folders, notes, projects, existing }: FolderProps) {
         <div className="flex flex-col gap-y-3 pl-5">
           {folder.notes.length > 0 ? (
             folder.notes.map((note) => (
-              <Note key={note.id} note={note} folders={folders} />
+              <Note
+                key={note.id}
+                note={note}
+                folders={folders}
+                projects={projects}
+              />
             ))
           ) : (
             <div className="text-center text-gray-300 text-sm">

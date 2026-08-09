@@ -2,11 +2,13 @@
 
 import type {
   Folder,
-  TaskList as TaskListType,
+  Project,
+  TaskList as TaskListT,
 } from "@/generated/prisma/client";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import {
+  FaBook,
   FaEllipsisV,
   FaPen,
   FaRegFolder,
@@ -27,22 +29,29 @@ import WarningModal from "../modals/WarningModal";
 import Input from "../ui/Input";
 import Link from "next/link";
 import MoveModal from "../modals/MoveModal";
+import ProjectModal from "../modals/ProjectModal";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
+
+type TaskListType = TaskListT & {
+  projects: Project[];
+};
 
 interface TaskListProps {
   taskList: TaskListType;
   starred?: boolean;
   folders: Folder[];
+  projects: Project[];
 }
 
-function TaskList({ taskList, starred, folders }: TaskListProps) {
+function TaskList({ taskList, starred, folders, projects }: TaskListProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [moving, setMoving] = useState<boolean>(false);
+  const [adding, setAdding] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -116,6 +125,9 @@ function TaskList({ taskList, starred, folders }: TaskListProps) {
               className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-950 absolute right-0
            top-[calc(100%+8px)] z-5"
             >
+              <div className={optionStyles} onClick={() => setAdding(true)}>
+                <FaBook size={15} /> Projects
+              </div>
               <div className={optionStyles} onClick={(e) => handleRename(e)}>
                 <FaPen size={15} /> Rename
               </div>
@@ -161,6 +173,14 @@ function TaskList({ taskList, starred, folders }: TaskListProps) {
             folders={folders}
             folder={taskList.folderId}
             closeModal={() => setMoving(false)}
+          />
+        )}
+        {adding && (
+          <ProjectModal
+            id={taskList.id}
+            projects={projects}
+            closeModal={() => setAdding(false)}
+            existing={taskList.projects.map((p) => p.id)}
           />
         )}
       </AnimatePresence>

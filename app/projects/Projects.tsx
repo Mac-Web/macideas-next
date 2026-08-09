@@ -1,25 +1,30 @@
 "use client";
 
 import type {
-  Folder,
+  Folder as FolderT,
   Note,
   Project,
   Task,
   TaskList,
 } from "@/generated/prisma/client";
 import { useMemo, useState } from "react";
-import { FaBook, FaCaretRight, FaFrown } from "react-icons/fa";
+import { FaBook, FaCaretRight } from "react-icons/fa";
 import { addEmoji, createProject } from "./actions";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Emoji from "@/components/ui/Emoji";
+import Folder from "@/components/projects/Folder";
+import Items from "@/components/projects/Items";
 
-type FolderType = Folder & {
+const itemStyles =
+  "border-2 border-gray-700 rounded px-4 py-2 text-lg hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
+
+export type FolderType = FolderT & {
   taskLists: TaskList[];
   notes: Note[];
 };
 
-type ProjectType = Project & {
+export type ProjectType = Project & {
   tasks: Task[];
   taskLists: TaskList[];
   notes: Note[];
@@ -58,6 +63,8 @@ function Projects({ projects }: { projects: ProjectType[] }) {
     if (id) router.push(`/projects/${id}`);
   }
 
+  // TODO: add sort/filter
+
   return (
     <div className="w-full flex flex-col gap-y-5 items-center">
       <div className="w-100">
@@ -87,13 +94,14 @@ function Projects({ projects }: { projects: ProjectType[] }) {
               return (
                 <div
                   key={project.id}
-                  className="border-2 border-gray-700 rounded px-4 py-2 text-lg hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none"
+                  className={itemStyles}
                   onDoubleClick={() => handleOpen(project)}
+                  title="Open project"
                 >
                   <Emoji
                     setSelected={async (e) => await addEmoji(project.id, e)}
                     placeholder={project.emoji || <FaBook size={25} />}
-                    styles="text-2xl w-8"
+                    styles="text-xl w-8"
                   />
                   {project.name}
                 </div>
@@ -111,46 +119,13 @@ function Projects({ projects }: { projects: ProjectType[] }) {
             </div>
           )
         ) : (open as ProjectType)?.starred !== undefined ? (
-          <div>
-            {(open as ProjectType).folders.map((folder) => {
-              return <div key={folder.id}>FOLDER: {folder.name}</div>;
-            })}
-            {open.taskLists.map((taskList) => {
-              return <div key={taskList.id}>TASK LIST: {taskList.name}</div>;
-            })}
-            {(open as ProjectType).tasks.map((task) => {
-              return <div key={task.id}>TASK: {task.text}</div>;
-            })}
-            {open.notes.map((note) => {
-              return <div key={note.id}>NOTE: {note.name}</div>;
-            })}
-            {(open as ProjectType).folders.length +
-              (open as ProjectType).tasks.length +
-              open.taskLists.length +
-              open.notes.length ===
-              0 && (
-              <div className="flex flex-col gap-y-5 text-gray-300 items-center py-10">
-                <FaFrown size={50} />
-                There&apos;s nothing in this project yet...
-              </div>
-            )}
-          </div>
+          <Items
+            open={open as ProjectType}
+            search={search.trim().toLowerCase()}
+            handleOpen={handleOpen}
+          />
         ) : (
-          <div>
-            {open.taskLists.map((taskList) => {
-              return <div key={taskList.id}>TASK LIST: {taskList.name}</div>;
-            })}
-            {open.notes.map((note) => {
-              return <div key={note.id}>NOTE: {note.name}</div>;
-            })}
-
-            {open.taskLists.length + open.notes.length === 0 && (
-              <div className="flex flex-col gap-y-5 text-gray-300 items-center py-10">
-                <FaFrown size={50} />
-                There&apos;s nothing in this folder yet...
-              </div>
-            )}
-          </div>
+          <Folder open={open} search={search.trim().toLowerCase()} />
         )}
       </div>
     </div>

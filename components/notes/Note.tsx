@@ -1,6 +1,6 @@
 "use client";
 
-import type { Folder, Note as NoteType } from "@/generated/prisma/client";
+import type { Folder, Note as NoteT, Project } from "@/generated/prisma/client";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -10,6 +10,7 @@ import {
   FaRegStar,
   FaTrash,
   FaRegFolder,
+  FaBook,
 } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
 import Emoji from "../ui/Emoji";
@@ -24,22 +25,29 @@ import {
   starNote,
 } from "@/app/notes/actions";
 import MoveModal from "../modals/MoveModal";
+import ProjectModal from "../modals/ProjectModal";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
+
+type NoteType = NoteT & {
+  projects: Project[];
+};
 
 interface NoteProps {
   note: NoteType;
   starred?: boolean;
   folders: Folder[];
+  projects: Project[];
 }
 
-function Note({ note, starred, folders }: NoteProps) {
+function Note({ note, starred, folders, projects }: NoteProps) {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
   const [rename, setRename] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [moving, setMoving] = useState<boolean>(false);
+  const [adding, setAdding] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
@@ -85,8 +93,9 @@ function Note({ note, starred, folders }: NoteProps) {
       ) : (
         <Link
           href={`/notes/${note.id}`}
-          className={`flex gap-x-3 items-center whitespace-nowrap text-gray-300 px-4 py-2 rounded group-hover:bg-gray-900/60
-            w-full ${pathname.includes(note.id) && "bg-gray-900 group-hover:bg-gray-900! text-teal-600 font-bold"}`}
+          className={`flex gap-x-3 items-center whitespace-nowrap text-gray-300 px-4 py-2 rounded
+             group-hover:bg-gray-900/60 w-full
+             ${pathname.includes(note.id) && "bg-gray-900 group-hover:bg-gray-900! text-teal-600 font-bold"}`}
         >
           <Emoji
             setSelected={async (e) => await addEmoji(note.id, e)}
@@ -112,6 +121,9 @@ function Note({ note, starred, folders }: NoteProps) {
               className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-950 absolute right-0
            top-[calc(100%+8px)] z-5"
             >
+              <div className={optionStyles} onClick={() => setAdding(true)}>
+                <FaBook size={15} /> Projects
+              </div>
               <div className={optionStyles} onClick={(e) => handleRename(e)}>
                 <FaPen size={15} /> Rename
               </div>
@@ -156,6 +168,15 @@ function Note({ note, starred, folders }: NoteProps) {
             confirm={handleDelete}
             closeModal={() => setDeleting(false)}
             loading={loading}
+          />
+        )}
+        {adding && (
+          <ProjectModal
+            id={note.id}
+            projects={projects}
+            closeModal={() => setAdding(false)}
+            existing={note.projects.map((p) => p.id)}
+            isNote
           />
         )}
       </AnimatePresence>

@@ -28,6 +28,7 @@ async function fetchTaskListData(id: string) {
       include: {
         tags: { orderBy: { name: "asc" } },
         subtasks: true,
+        projects: true,
       },
       orderBy: { createdAt: "desc" },
     });
@@ -48,7 +49,11 @@ async function fetchTaskListData(id: string) {
       where: { id, userId: session.user.id },
       include: {
         tasks: {
-          include: { tags: { orderBy: { name: "asc" } }, subtasks: true },
+          include: {
+            tags: { orderBy: { name: "asc" } },
+            subtasks: true,
+            projects: true,
+          },
           orderBy: { createdAt: "desc" },
         },
         folder: true,
@@ -97,6 +102,9 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
     where: { userId: session!.user.id },
     orderBy: { name: "asc" },
   });
+  const projects = await prisma.project.findMany({
+    where: { userId: session?.user.id },
+  });
 
   return (
     <div
@@ -118,6 +126,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
         name={taskList.name}
         tags={tags}
         myDay={myDay}
+        projects={projects}
       />
     </div>
   );

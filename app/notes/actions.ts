@@ -118,3 +118,28 @@ export async function selectFolder(id: string, notes: string[], path: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function addNoteProjects(
+  id: string,
+  selected: string[],
+  path: string,
+) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.note.update({
+        where: { id, userId: session.user.id },
+        data: {
+          projects: {
+            set: selected.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+      revalidatePath(path);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

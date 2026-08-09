@@ -14,13 +14,14 @@ async function Sidebar() {
   if (!session) redirect("/");
   const taskLists = await prisma.taskList.findMany({
     where: { userId: session.user.id },
+    include: { projects: true },
     orderBy: { updatedAt: "desc" },
   });
   const starredTaskLists = taskLists.filter((list) => list.starred);
   const orphanedLists = taskLists.filter((list) => !list.folderId);
   const folders = await prisma.folder.findMany({
     where: { userId: session.user.id },
-    include: { taskLists: true, projects: true },
+    include: { taskLists: { include: { projects: true } }, projects: true },
     orderBy: { name: "asc" },
   });
   const cleanFolders: FolderType[] = folders.map((f) => {
@@ -47,6 +48,7 @@ async function Sidebar() {
                   taskList={taskList}
                   starred
                   folders={cleanFolders}
+                  projects={projects}
                 />
               );
             })}
@@ -73,6 +75,7 @@ async function Sidebar() {
                 key={taskList.id}
                 taskList={taskList}
                 folders={cleanFolders}
+                projects={projects}
               />
             );
           })

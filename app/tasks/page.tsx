@@ -27,7 +27,9 @@ async function Page() {
   });
   const tags = await prisma.tag.findMany({
     where: { userId: session.user.id },
-    include: { tasks: { include: { tags: true, subtasks: true } } },
+    include: {
+      tasks: { include: { tags: true, subtasks: true, projects: true } },
+    },
   });
   const allTasks: Record<string, Task[]> = {
     0: tasks.filter((task) => {

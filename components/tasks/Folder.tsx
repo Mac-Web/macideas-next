@@ -3,7 +3,7 @@
 import type {
   Folder,
   Project,
-  TaskList as TaskListType,
+  TaskList as TaskListT,
 } from "@/generated/prisma/client";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -32,6 +32,10 @@ import FolderModal from "../modals/FolderModal";
 
 const optionStyles =
   "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
+
+type TaskListType = TaskListT & {
+  projects: Project[];
+};
 
 export type FolderType = Folder & {
   taskLists: TaskListType[];
@@ -210,7 +214,12 @@ function Folder({
         <div className="flex flex-col gap-y-3 pl-5">
           {folder.taskLists.length > 0 ? (
             folder.taskLists.map((list) => (
-              <TaskList key={list.id} taskList={list} folders={folders} />
+              <TaskList
+                key={list.id}
+                taskList={list}
+                folders={folders}
+                projects={projects}
+              />
             ))
           ) : (
             <div className="text-center text-gray-300 text-sm">

@@ -1,8 +1,14 @@
 "use client";
 
-import type { Subtask, Tag, Task as TaskT } from "@/generated/prisma/client";
+import type {
+  Project,
+  Subtask,
+  Tag,
+  Task as TaskT,
+} from "@/generated/prisma/client";
 import { AnimatePresence } from "framer-motion";
 import {
+  FaBook,
   FaCalendar,
   FaCheck,
   FaEyeSlash,
@@ -13,7 +19,7 @@ import {
   FaTag,
   FaTrash,
 } from "react-icons/fa";
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 import {
   completeSubtask,
   completeTask,
@@ -27,6 +33,7 @@ import { priorities } from "@/lib/constants";
 import { FaCircleCheck } from "react-icons/fa6";
 import WarningModal from "../modals/WarningModal";
 import TagModal from "../modals/TagModal";
+import ProjectModal from "../modals/ProjectModal";
 import DateModal from "../modals/DateModal";
 import Dropdown from "../ui/Dropdown";
 import Input from "../ui/Input";
@@ -36,6 +43,7 @@ const optionStyles = "opacity-0 group-hover:opacity-100 transition-opacity!";
 export type TaskType = TaskT & {
   tags: Tag[];
   subtasks: Subtask[];
+  projects: Project[];
 };
 
 interface TaskProps {
@@ -43,14 +51,25 @@ interface TaskProps {
   setDetails: React.Dispatch<React.SetStateAction<string | null>>;
   tags: Tag[];
   taskListId: string;
+  projects: Project[];
+  highlighted: boolean;
 }
 
-function Task({ task, setDetails, tags, taskListId }: TaskProps) {
+function Task({
+  task,
+  setDetails,
+  tags,
+  taskListId,
+  projects,
+  highlighted,
+}: TaskProps) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [tagging, setTagging] = useState<boolean>(false);
+  const [adding, setAdding] = useState<boolean>(false);
   const [picking, setPicking] = useState<boolean>(false);
   const [editing, setEditing] = useState<string | null>(null);
+  const [highlight, setHighlight] = useState<boolean>(highlighted);
   const menuRef = useRef<HTMLDivElement>(null);
   const completeRef = useRef<HTMLDivElement>(null);
   const editRef = useRef<HTMLDivElement>(null);
@@ -95,9 +114,19 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
     await completeSubtask(id, taskListId, completed);
   }
 
+  useEffect(() => {
+    const highlightTimeout = setTimeout(() => {
+      setHighlight(false);
+    }, 2000);
+
+    return () => {
+      clearTimeout(highlightTimeout);
+    };
+  }, []);
+
   return (
     <div
-      className={`group ${task.completed ? "bg-gray-900/40" : "bg-gray-900"} rounded px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-gray-300 relative`}
+      className={`group ${task.completed ? "bg-gray-900/40" : "bg-gray-900"} rounded px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-gray-300 relative ${highlight && "bg-teal-950"}`}
       onClick={handlePanel}
     >
       {editing !== null ? (
@@ -235,6 +264,12 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
           className={optionStyles}
           onClick={() => setTagging(true)}
         />
+        <FaBook
+          size={15}
+          title="Add to projects"
+          className={optionStyles}
+          onClick={() => setAdding(true)}
+        />
         <FaCalendar
           size={15}
           title="Edit dates"
@@ -287,6 +322,15 @@ function Task({ task, setDetails, tags, taskListId }: TaskProps) {
               startDate={task.start || undefined}
               dueDate={task.due || undefined}
               closeModal={() => setPicking(false)}
+            />
+          )}
+          {adding && (
+            <ProjectModal
+              id={task.id}
+              projects={projects}
+              existing={task.projects.map((p) => p.id)}
+              closeModal={() => setAdding(false)}
+              isTask
             />
           )}
         </AnimatePresence>

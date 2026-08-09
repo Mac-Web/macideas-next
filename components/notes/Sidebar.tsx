@@ -13,12 +13,13 @@ async function Sidebar() {
   if (!session) redirect("/");
   const notes = await prisma.note.findMany({
     where: { userId: session.user.id },
+    include: { projects: true },
   });
   const orphanedNotes = notes.filter((note) => !note.folderId);
   const starredNotes = notes.filter((note) => note.starred);
   const folders = await prisma.folder.findMany({
     where: { userId: session.user.id },
-    include: { notes: true, projects: true },
+    include: { notes: { include: { projects: true } }, projects: true },
     orderBy: { name: "asc" },
   });
   const cleanFolders = folders.map((folder) => {
@@ -43,6 +44,7 @@ async function Sidebar() {
                   key={note.id}
                   note={note}
                   folders={cleanFolders}
+                  projects={projects}
                   starred
                 />
               );
@@ -65,7 +67,14 @@ async function Sidebar() {
         {/* TODO: add drag and drop folders and starred folders? */}
         {notes.length > 0 ? (
           orphanedNotes.map((note) => {
-            return <Note key={note.id} note={note} folders={cleanFolders} />;
+            return (
+              <Note
+                key={note.id}
+                note={note}
+                folders={cleanFolders}
+                projects={projects}
+              />
+            );
           })
         ) : (
           <div className="text-sm text-center text-gray-300 py-5">

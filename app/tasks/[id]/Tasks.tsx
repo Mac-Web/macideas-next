@@ -1,6 +1,6 @@
 "use client";
 
-import type { Tag } from "@/generated/prisma/client";
+import type { Project, Tag } from "@/generated/prisma/client";
 import type { TaskType } from "@/components/tasks/Task";
 import { useState, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,6 +12,7 @@ import {
   FaTag,
 } from "react-icons/fa";
 import { priorities } from "@/lib/constants";
+import { useSearchParams } from "next/navigation";
 import Task from "@/components/tasks/Task";
 import TaskInput from "@/components/tasks/TaskInput";
 import Input from "@/components/ui/Input";
@@ -37,9 +38,10 @@ interface TasksProps {
   name: string;
   tags: Tag[];
   myDay?: boolean;
+  projects: Project[];
 }
 
-function Tasks({ tasks, id, name, tags, myDay }: TasksProps) {
+function Tasks({ tasks, id, name, tags, myDay, projects }: TasksProps) {
   const [details, setDetails] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
@@ -120,6 +122,7 @@ function Tasks({ tasks, id, name, tags, myDay }: TasksProps) {
     return sorted;
   }, [search, tasks, showCompleted, filter, sort, order]);
   const task = tasks.find((task) => task.id === details);
+  const searchParams = useSearchParams();
 
   return (
     <div className="w-full h-full flex overflow-x-hidden">
@@ -224,6 +227,8 @@ function Tasks({ tasks, id, name, tags, myDay }: TasksProps) {
                   setDetails={setDetails}
                   tags={tags}
                   taskListId={id}
+                  projects={projects}
+                  highlighted={searchParams.get("task") === task.id}
                 />
               );
             })

@@ -389,3 +389,24 @@ export async function uploadBackground(
     console.error("Error: " + err);
   }
 }
+
+export async function addProjects(id: string, selected: string[]) {
+  try {
+    const session = await getSession();
+    if (session) {
+      const updatedTask = await prisma.task.update({
+        where: { id, userId: session.user.id },
+        data: {
+          projects: {
+            set: selected.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+      revalidatePath(`/tasks/${updatedTask.taskListId}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

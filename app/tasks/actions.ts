@@ -234,3 +234,28 @@ export async function hideSection(sectionId: number, isNote?: boolean) {
     console.error("Error: " + err);
   }
 }
+
+export async function addTaskProjects(
+  id: string,
+  selected: string[],
+  path: string,
+) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.taskList.update({
+        where: { id, userId: session.user.id },
+        data: {
+          projects: {
+            set: selected.map((id) => {
+              return { id };
+            }),
+          },
+        },
+      });
+      revalidatePath(path);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
