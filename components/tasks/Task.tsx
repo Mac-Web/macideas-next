@@ -53,6 +53,7 @@ interface TaskProps {
   taskListId: string;
   projects: Project[];
   highlighted: boolean;
+  background?: boolean;
 }
 
 function Task({
@@ -62,6 +63,7 @@ function Task({
   taskListId,
   projects,
   highlighted,
+  background,
 }: TaskProps) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -126,7 +128,15 @@ function Task({
 
   return (
     <div
-      className={`group ${task.completed ? "bg-gray-900/40" : "bg-gray-900"} rounded px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-gray-300 relative ${highlight && "bg-teal-950"}`}
+      className={`group ${
+        task.completed
+          ? background
+            ? "bg-gray-900/30"
+            : "bg-gray-900/40"
+          : background
+            ? "bg-gray-900/70"
+            : "bg-gray-900"
+      } rounded backdrop-blur-xs px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-gray-300 relative ${highlight && "bg-teal-950"}`}
       onClick={handlePanel}
     >
       {editing !== null ? (

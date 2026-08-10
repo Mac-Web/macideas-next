@@ -12,6 +12,7 @@ interface InputProps {
   clear?: boolean;
   focused?: boolean;
   full?: boolean;
+  transparent?: boolean;
 }
 
 function Input({
@@ -23,6 +24,7 @@ function Input({
   clear,
   focused,
   full,
+  transparent,
 }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -39,7 +41,7 @@ function Input({
 
   return (
     <div
-      className={`flex items-center relative bg-gray-900 rounded ${full && "w-full"}`}
+      className={`flex items-center relative bg-gray-900 rounded ${full && "w-full"} ${transparent && "bg-gray-900/70 backdrop-blur-xs"}`}
     >
       <input
         placeholder={placeholder}

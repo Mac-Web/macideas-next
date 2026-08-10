@@ -15,6 +15,7 @@ import Input from "@/components/ui/Input";
 import Emoji from "@/components/ui/Emoji";
 import Folder from "@/components/projects/Folder";
 import Items from "@/components/projects/Items";
+import Bar from "@/components/projects/Bar";
 
 const itemStyles =
   "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
@@ -33,6 +34,7 @@ export type ProjectType = Project & {
 
 function Projects({ projects }: { projects: ProjectType[] }) {
   const [search, setSearch] = useState<string>("");
+  const [sort, setSort] = useState<string | null>(null);
   const [breadCrumbs, setBreadCrumbs] = useState<
     { id: string; name: string }[]
   >([{ id: "0", name: "Projects" }]);
@@ -87,14 +89,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
           </div>
         ))}
       </div>
-      {open && (
-        <div className="flex gap-x-3 w-full text-sm text-gray-300 px-4 bg-gray-900 rounded py-2">
-          <div className="flex-4 cursor-pointer">Name</div>
-          <div className="flex-1 cursor-pointer">Type</div>
-          <div className="flex-1 cursor-pointer">Modified</div>
-          <div className="flex-1 cursor-pointer">Created</div>
-        </div>
-      )}
+      {open && <Bar sort={sort} setSort={setSort} />}
       <div className="flex flex-col gap-y-3 w-full mb-3 overflow-auto">
         {!open ? (
           displayedProjects.length > 0 ? (
@@ -131,9 +126,14 @@ function Projects({ projects }: { projects: ProjectType[] }) {
             open={open as ProjectType}
             search={search.trim().toLowerCase()}
             handleOpen={handleOpen}
+            sort={sort}
           />
         ) : (
-          <Folder open={open} search={search.trim().toLowerCase()} />
+          <Folder
+            open={open}
+            search={search.trim().toLowerCase()}
+            sort={sort}
+          />
         )}
       </div>
     </div>

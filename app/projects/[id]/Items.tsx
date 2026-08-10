@@ -6,10 +6,12 @@ import Input from "@/components/ui/Input";
 import Folder from "@/components/projects/Folder";
 import Project from "@/components/projects/Items";
 import { FaCaretRight } from "react-icons/fa";
+import Bar from "@/components/projects/Bar";
 
 function Items({ project }: { project: ProjectType }) {
   const [search, setSearch] = useState<string>("");
   const [open, setOpen] = useState<FolderType | null>(null);
+  const [sort, setSort] = useState<string | null>(null);
 
   return (
     <>
@@ -35,14 +37,20 @@ function Items({ project }: { project: ProjectType }) {
           </div>
         )}
       </div>
+      <Bar sort={sort} setSort={setSort} />
       <div className="w-full flex flex-col gap-y-3 h-full overflow-auto mb-3">
         {open ? (
-          <Folder open={open} search={search.trim().toLowerCase()} />
+          <Folder
+            open={open}
+            search={search.trim().toLowerCase()}
+            sort={sort}
+          />
         ) : (
           <Project
             open={project}
             search={search.trim().toLowerCase()}
             handleOpen={(f) => setOpen(f)}
+            sort={sort}
           />
         )}
       </div>

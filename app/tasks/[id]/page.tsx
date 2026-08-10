@@ -111,7 +111,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
       className="flex flex-col items-center flex-1 relative h-[calc(100vh-68px)] bg-center! bg-cover!"
       style={{
         background: (taskList as TaskList).backgroundImage
-          ? `linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url('${(taskList as TaskList).backgroundImage}')`
+          ? `linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('${(taskList as TaskList).backgroundImage}')`
           : "",
       }}
     >
@@ -127,6 +127,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
         tags={tags}
         myDay={myDay}
         projects={projects}
+        background={(taskList as TaskList).backgroundImage ? true : false}
       />
     </div>
   );

@@ -39,9 +39,18 @@ interface TasksProps {
   tags: Tag[];
   myDay?: boolean;
   projects: Project[];
+  background?: boolean;
 }
 
-function Tasks({ tasks, id, name, tags, myDay, projects }: TasksProps) {
+function Tasks({
+  tasks,
+  id,
+  name,
+  tags,
+  myDay,
+  projects,
+  background,
+}: TasksProps) {
   const [details, setDetails] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
@@ -136,7 +145,8 @@ function Tasks({ tasks, id, name, tags, myDay, projects }: TasksProps) {
             placeholder={`Search ${name}`}
             value={search}
             setValue={(s) => setSearch(s)}
-            styles="text-base!"
+            styles="text-base"
+            transparent={background}
             full
             clear
           />
@@ -229,6 +239,7 @@ function Tasks({ tasks, id, name, tags, myDay, projects }: TasksProps) {
                   taskListId={id}
                   projects={projects}
                   highlighted={searchParams.get("task") === task.id}
+                  background={background}
                 />
               );
             })
@@ -243,7 +254,7 @@ function Tasks({ tasks, id, name, tags, myDay, projects }: TasksProps) {
             </div>
           )}
         </div>
-        <TaskInput id={id} tags={tags} myDay={myDay} />
+        <TaskInput id={id} tags={tags} myDay={myDay} background={background} />
       </div>
       <AnimatePresence mode="popLayout">
         {task && (

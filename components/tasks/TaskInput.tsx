@@ -19,9 +19,10 @@ interface TaskInputProps {
   id: string;
   tags: Tag[];
   myDay?: boolean;
+  background?: boolean;
 }
 
-function TaskInput({ id, tags, myDay }: TaskInputProps) {
+function TaskInput({ id, tags, myDay, background }: TaskInputProps) {
   const [newTask, setNewTask] = useState<TaskType>(blankTask);
   const [loading, setLoading] = useState<boolean>(false);
   const [picking, setPicking] = useState<boolean>(false);
@@ -40,7 +41,7 @@ function TaskInput({ id, tags, myDay }: TaskInputProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full"
+      className={`border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full ${background && "bg-gray-950"}`}
     >
       <div className="flex gap-x-5 text-gray-300 px-3 items-center">
         <FaTag
@@ -96,6 +97,7 @@ function TaskInput({ id, tags, myDay }: TaskInputProps) {
           value={newTask.text}
           setValue={(text) => setNewTask({ ...newTask, text })}
           styles="w-full flex-1 bg-gray-950"
+          transparent
           full
         />
         <Btn text={loading ? "Adding..." : "Add"} type="submit" primary />
