@@ -40,7 +40,10 @@ function Emoji({ setSelected, placeholder, ref, styles }: EmojiProps) {
   }, [ref]);
 
   return (
-    <div className="relative text-gray-300 cursor-pointer" ref={menuRef}>
+    <div
+      className="relative text-black dark:text-gray-300 cursor-pointer"
+      ref={menuRef}
+    >
       <div
         title="Select emoji"
         onClick={handleSelect}
@@ -55,7 +58,7 @@ function Emoji({ setSelected, placeholder, ref, styles }: EmojiProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="border-2 border-gray-700 rounded bg-gray-950 fixed left-25 top-45 z-10"
+            className="border-2 border-gray-700 rounded bg-gray-200 dark:bg-gray-950 fixed left-25 top-45 z-10"
           >
             <Picker
               data={data}
@@ -66,7 +69,7 @@ function Emoji({ setSelected, placeholder, ref, styles }: EmojiProps) {
             />
             {placeholder && (
               <div
-                className="cursor-pointer text-center py-1 m-2 hover:bg-gray-900"
+                className="cursor-pointer text-center py-1 m-2 hover:bg-gray-300 dark:hover:bg-gray-900"
                 onClick={() => handlePick("")}
               >
                 Clear emoji

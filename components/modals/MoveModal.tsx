@@ -51,7 +51,9 @@ function MoveModal({
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">Move task list</h2>
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          Move task list
+        </h2>
         <Input
           placeholder="Search folders"
           value={search}
@@ -63,7 +65,7 @@ function MoveModal({
             displayedFolders.map((folder) => (
               <label
                 key={folder.id}
-                className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-900 px-3 py-1.5"
+                className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 px-3 py-1.5"
               >
                 <Checkbox
                   text={folder.name}
@@ -73,7 +75,7 @@ function MoveModal({
               </label>
             ))
           ) : (
-            <div className="text-gray-300 text-center text-sm py-2">
+            <div className="text-black dark:text-gray-300 text-center text-sm py-2">
               No folders found. Maybe try a different search?
             </div>
           )}

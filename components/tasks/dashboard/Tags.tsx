@@ -26,7 +26,7 @@ function Tags({ tags, showCompleted }: TagsProps) {
   return (
     <div className="border-2 border-gray-700 rounded p-5 flex flex-col gap-y-5 flex-1 min-w-[40%]">
       <div className="flex gap-x-3 items-center relative group">
-        <div className="text-white text-xl font-bold">
+        <div className="text-black dark:text-white text-xl font-bold">
           Task{tasks.length === 1 ? "" : "s"} with
         </div>
         <Dropdown
@@ -37,7 +37,9 @@ function Tags({ tags, showCompleted }: TagsProps) {
           values={tags.map((t) => t.name)}
           styles="text-sm!"
         />
-        <div className="text-white text-xl font-bold">tag ({tasks.length})</div>
+        <div className="text-black dark:text-white text-xl font-bold">
+          tag ({tasks.length})
+        </div>
         <div className="absolute right-0">
           <Hide id={5} />
         </div>
@@ -49,7 +51,7 @@ function Tags({ tags, showCompleted }: TagsProps) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col gap-y-5 items-center text-gray-300 text-center py-10 justify-center h-full">
+        <div className="flex flex-col gap-y-5 items-center text-black dark:text-gray-300 text-center py-10 justify-center h-full">
           <FaCircleCheck size={40} />
           You don&apos;t have any tasks with the {selectedTag.name} tag
         </div>

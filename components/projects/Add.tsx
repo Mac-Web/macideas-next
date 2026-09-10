@@ -23,8 +23,8 @@ function Add({ id, folders, taskLists, tasks, notes, existing }: AddProps) {
     <>
       <div
         onClick={() => setMenuOpen(true)}
-        className="absolute top-10 right-10 text-gray-300 cursor-pointer border-2 border-gray-700 rounded p-1.5
-          hover:bg-gray-900"
+        className="absolute top-10 right-10 text-black dark:text-gray-300 cursor-pointer border-2 border-gray-700 rounded p-1.5
+          hover:bg-gray-300 dark:hover:bg-gray-900"
         title="Add to project"
       >
         <FaPlus size={20} />

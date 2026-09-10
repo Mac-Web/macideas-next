@@ -59,7 +59,9 @@ function TagModal({
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">Select tags</h2>
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          Select tags
+        </h2>
         <Input
           placeholder="Search tags"
           value={search}
@@ -82,7 +84,7 @@ function TagModal({
               />
             ))
           ) : (
-            <div className="text-gray-300 text-center text-sm py-2">
+            <div className="text-black dark:text-gray-300 text-center text-sm py-2">
               No tags found, create one below!
             </div>
           )}

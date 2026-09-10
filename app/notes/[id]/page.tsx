@@ -57,7 +57,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
       }}
     >
       <Bar note={existingNote} folder={existingNote.folder} />
-      <div className="text-white text-xl font-bold py-5">
+      <div className="text-black dark:text-white text-xl font-bold py-5">
         {existingNote.name}
       </div>
     </div>

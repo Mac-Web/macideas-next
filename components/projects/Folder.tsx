@@ -12,7 +12,7 @@ import Emoji from "../ui/Emoji";
 import { TaskList } from "@/generated/prisma/client";
 
 const itemStyles =
-  "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
+  "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-black dark:text-gray-300 select-none";
 
 interface FolderProps {
   open: FolderType;
@@ -102,7 +102,7 @@ function Folder({ open, search, sort }: FolderProps) {
         );
       })}
       {open.taskLists.length + open.notes.length === 0 && (
-        <div className="flex flex-col gap-y-5 text-gray-300 items-center py-10">
+        <div className="flex flex-col gap-y-5 text-black dark:text-gray-300 items-center py-10">
           <FaFrown size={50} />
           There&apos;s nothing in this folder yet...
         </div>

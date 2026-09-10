@@ -10,8 +10,8 @@ function Note({ note }: { note: NoteType }) {
   return (
     <Link
       href={`/notes/${note.id}`}
-      className="text-gray-300 w-48 rounded border-2 border-gray-700 flex flex-col gap-y-3 p-5
-       hover:bg-gray-900"
+      className="text-black dark:text-gray-300 w-48 rounded border-2 border-gray-700 flex flex-col gap-y-3 p-5
+       hover:bg-gray-300 dark:hover:bg-gray-900"
     >
       <h2 className="text-white text-xl font-bold">{note.name}</h2>
       {note.description && <div className="text-sm">{note.description}</div>}
@@ -20,7 +20,7 @@ function Note({ note }: { note: NoteType }) {
           {note.tags.slice(0, 2).map((tag) => (
             <div
               key={tag.id}
-              className="flex gap-x-2 text-sm items-center bg-gray-950 rounded px-2 py-0.5"
+              className="flex gap-x-2 text-sm items-center bg-gray-200 dark:bg-gray-950 rounded px-2 py-0.5"
               style={{ backgroundColor: tag.color || undefined }}
             >
               {tag.emoji ? <span>{tag.emoji}</span> : <FaTag size={10} />}
@@ -28,7 +28,7 @@ function Note({ note }: { note: NoteType }) {
             </div>
           ))}
           {note.tags.length > 2 && (
-            <div className="text-sm bg-gray-950 rounded px-2">
+            <div className="text-sm bg-gray-200 dark:bg-gray-950 rounded px-2">
               +{note.tags.length - 2}
             </div>
           )}

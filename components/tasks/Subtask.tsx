@@ -29,8 +29,8 @@ function Subtask({ subtask, taskListId }: SubtaskProps) {
   return (
     <div
       key={subtask.id}
-      className={`bg-gray-900 rounded px-2 py-1 text-gray-300 flex items-center gap-x-2 relative
-                 ${subtask.completed && "line-through bg-gray-900/50"}`}
+      className={`bg-gray-900 rounded px-2 py-1 text-black dark:text-gray-300 flex items-center gap-x-2 relative
+                 ${subtask.completed && "line-through bg-gray-300/50 dark:bg-gray-900/50"}`}
     >
       {subtask.completed ? (
         <FaCircleCheck

@@ -10,8 +10,8 @@ interface BtnProps {
 }
 
 function Btn({ text, link, onclick, type, styles, primary }: BtnProps) {
-  const btnStyles = `px-3 py-1.5 rounded cursor-pointer border-2 font-bold text-white
-        ${primary ? "bg-teal-600 hover:bg-teal-700 border-teal-600 hover:border-teal-700" : "border-gray-700"} ${styles}`;
+  const btnStyles = `px-3 py-1.5 rounded cursor-pointer border-2 font-bold text-black dark:text-white
+        ${primary ? "bg-teal-500 dark:bg-teal-600 hover:bg-teal-600 dark:hover:bg-teal-700 border-teal-500 dark:border-teal-600 hover:border-teal-600 dark:hover:border-teal-700" : "border-gray-700"} ${styles}`;
 
   return link ? (
     <Link href={link} className={btnStyles}>

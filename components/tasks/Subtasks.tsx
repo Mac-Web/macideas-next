@@ -65,7 +65,7 @@ function Subtasks({ taskId, taskListId, subtasks }: SubtasksProps) {
         </form>
       )}
       <div
-        className="cursor-pointer border-2 border-gray-700 hover:bg-gray-900 rounded py-1 flex items-center gap-x-3 justify-center"
+        className="cursor-pointer border-2 border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-900 rounded py-1 flex items-center gap-x-3 justify-center"
         onClick={() => setSubtask(subtask === null ? "" : null)}
       >
         {subtask === null ? (

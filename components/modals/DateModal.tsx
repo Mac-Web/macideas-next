@@ -39,10 +39,14 @@ function DateModal({
     }
   }
 
+  //TODO: fix modal not fixed overlap issue
+
   return (
     <Modal closeModal={closeModal}>
-      <div className="flex flex-col gap-y-5 text-gray-300">
-        <h2 className="text-white text-xl font-bold">Start & due dates</h2>
+      <div className="flex flex-col gap-y-5 text-black dark:text-gray-300">
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          Start & due dates
+        </h2>
         <div className="flex flex-col gap-y-1">
           Start time
           <div className="flex gap-x-3 items-center">
@@ -58,7 +62,7 @@ function DateModal({
                 dateFormat: "m/d/Y H:i",
                 static: true,
               }}
-              className="bg-gray-900 rounded cursor-pointer px-3 py-1.5 outline-none"
+              className="bg-gray-300 dark:bg-gray-900 rounded cursor-pointer px-3 py-1.5 outline-none"
             />
             {start && (
               <FaXmark
@@ -85,7 +89,7 @@ function DateModal({
                 dateFormat: "m/d/Y H:i",
                 static: true,
               }}
-              className="bg-gray-900 rounded cursor-pointer px-3 py-1.5 outline-none"
+              className="bg-gray-300 dark:bg-gray-900 rounded cursor-pointer px-3 py-1.5 outline-none"
             />
             {due && (
               <FaXmark

@@ -21,7 +21,7 @@ async function Sidebar() {
         <Home />
         {starredProjects.length > 0 && (
           <>
-            <h2 className="text-white font-bold flex gap-x-3 px-2 mb-2 items-center">
+            <h2 className="text-black dark:text-white font-bold flex gap-x-3 px-2 mb-2 items-center">
               <FaRegStar size={15} /> Starred projects
             </h2>
             {starredProjects.map((project) => {
@@ -29,7 +29,7 @@ async function Sidebar() {
             })}
           </>
         )}
-        <h2 className="text-white font-bold flex gap-x-3 px-2 items-center mb-2">
+        <h2 className="text-black dark:text-white font-bold flex gap-x-3 px-2 items-center mb-2">
           <FaBookOpen size={15} /> All projects
         </h2>
         {/* TODO: add drag and drop folders and starred folders? */}
@@ -38,7 +38,7 @@ async function Sidebar() {
             return <Project key={project.id} project={project} />;
           })
         ) : (
-          <div className="text-sm text-center text-gray-300 py-5">
+          <div className="text-sm text-center text-black dark:text-gray-300 py-5">
             No projects found
           </div>
         )}

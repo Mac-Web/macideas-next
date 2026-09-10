@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 
 const optionStyles =
-  "flex gap-x-2 items-center px-4 py-2 cursor-pointer hover:bg-gray-900 rounded";
+  "flex gap-x-2 items-center px-4 py-2 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 rounded";
 
 function CreateTaskList() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,18 +51,18 @@ function CreateTaskList() {
   }, []);
 
   return (
-    <div className="absolute bottom-3 w-[calc(100%-40px)] left-5 flex gap-x-2 text-gray-300 justify-center">
+    <div className="absolute bottom-3 w-[calc(100%-40px)] left-5 flex gap-x-2 text-black dark:text-gray-300 justify-center">
       <div
-        className="border-2 hover:bg-gray-900 flex-1 justify-center py-2 cursor-pointer border-gray-700 rounded flex
-        items-center gap-x-3 bg-gray-950 z-5"
+        className="border-2 hover:bg-gray-300 dark:hover:bg-gray-900 flex-1 justify-center py-2 cursor-pointer border-gray-700 rounded flex
+        items-center gap-x-3 bg-gray-200 dark:bg-gray-950 z-5"
         onClick={handleCreate}
       >
         <FaPlusCircle size={17} />{" "}
         {loading ? "Creating..." : "Create task list"}
       </div>
       <div
-        className="border-2 hover:bg-gray-900 p-2 flex items-center justify-center w-10 cursor-pointer border-gray-700
-         rounded bg-gray-950 z-5"
+        className="border-2 hover:bg-gray-300 dark:hover:bg-gray-900 p-2 flex items-center justify-center w-10 cursor-pointer border-gray-700
+         rounded bg-gray-200 dark:bg-gray-950 z-5"
         onClick={() => setMenuOpen(!menuOpen)}
         ref={menuBtnRef}
       >
@@ -77,7 +77,7 @@ function CreateTaskList() {
             initial={{ y: 80, scaleY: 0 }}
             animate={{ y: 0, scaleY: 1 }}
             exit={{ y: 80, scaleY: 0 }}
-            className="bg-gray-950 absolute bottom-13 z-1 border-gray-700 border-2 rounded p-2 flex flex-col gap-y-1 w-full"
+            className="bg-gray-200 dark:bg-gray-950 absolute bottom-13 z-1 border-gray-700 border-2 rounded p-2 flex flex-col gap-y-1 w-full"
             ref={menuRef}
           >
             <div

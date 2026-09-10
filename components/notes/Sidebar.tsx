@@ -35,7 +35,7 @@ async function Sidebar() {
         <Home />
         {starredNotes.length > 0 && (
           <>
-            <h2 className="text-white font-bold flex gap-x-3 px-2 mb-2 items-center">
+            <h2 className="text-black dark:text-white font-bold flex gap-x-3 px-2 mb-2 items-center">
               <FaRegStar size={15} /> Starred notes
             </h2>
             {starredNotes.map((note) => {
@@ -51,7 +51,7 @@ async function Sidebar() {
             })}
           </>
         )}
-        <h2 className="text-white font-bold flex gap-x-3 px-2 items-center mb-2">
+        <h2 className="text-black dark:text-white font-bold flex gap-x-3 px-2 items-center mb-2">
           <FaRegNoteSticky size={15} /> All notes
         </h2>
         {folders?.map((folder) => (
@@ -77,7 +77,7 @@ async function Sidebar() {
             );
           })
         ) : (
-          <div className="text-sm text-center text-gray-300 py-5">
+          <div className="text-sm text-center text-black dark:text-gray-300 py-5">
             No notes found
           </div>
         )}

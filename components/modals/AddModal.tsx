@@ -63,7 +63,9 @@ function AddModal({
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">Add to project</h2>
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          Add to project
+        </h2>
         <Input
           placeholder={`Search ${tab.toLowerCase()}`}
           value={search}
@@ -75,8 +77,8 @@ function AddModal({
             <div
               key={i}
               onClick={() => setTab(t)}
-              className={`px-2 py-1 rounded border-2 border-gray-700 cursor-pointer text-gray-300 text-sm
-                hover:bg-gray-900 ${tab === t && "bg-gray-900! font-bold"}`}
+              className={`px-2 py-1 rounded border-2 border-gray-700 cursor-pointer text-black dark:text-gray-300 text-sm
+                hover:bg-gray-300 dark:hover:bg-gray-900 ${tab === t && "bg-gray-300 dark:bg-gray-900! font-bold"}`}
             >
               {t} {tab === t && `(${displayed.length})`}
             </div>
@@ -87,7 +89,7 @@ function AddModal({
             displayed.map((item) => (
               <label
                 key={item.id}
-                className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-900 px-3 py-1.5"
+                className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 px-3 py-1.5"
               >
                 <Checkbox
                   text={(item as Folder).name || (item as Task).text}
@@ -105,7 +107,7 @@ function AddModal({
               </label>
             ))
           ) : (
-            <div className="text-gray-300 text-center text-sm py-2">
+            <div className="text-black dark:text-gray-300 text-center text-sm py-2">
               No results found. Maybe try a different search?
             </div>
           )}

@@ -19,7 +19,7 @@ function Tags({ tags }: { tags: TagType[] }) {
   return (
     <div className="border-2 border-gray-700 rounded p-5 flex flex-col gap-y-5 flex-1 min-w-[40%]">
       <div className="flex gap-x-3 items-center relative group">
-        <div className="text-white text-xl font-bold">
+        <div className="text-black dark:text-white text-xl font-bold">
           Note{selectedTag.notes.length === 1 ? "" : "s"} with
         </div>
         <Dropdown
@@ -30,7 +30,7 @@ function Tags({ tags }: { tags: TagType[] }) {
           values={tags.map((t) => t.name)}
           styles="text-sm!"
         />
-        <div className="text-white text-xl font-bold">
+        <div className="text-black dark:text-white text-xl font-bold">
           tag ({selectedTag.notes.length})
         </div>
         <div className="absolute right-0">
@@ -44,7 +44,7 @@ function Tags({ tags }: { tags: TagType[] }) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col gap-y-5 items-center text-gray-300 text-center py-10 justify-center h-full">
+        <div className="flex flex-col gap-y-5 items-center text-black dark:text-gray-300 text-center py-10 justify-center h-full">
           <FaFaceFrown size={40} />
           You don&apos;t have any notes with the {selectedTag.name} tag
         </div>

@@ -72,7 +72,7 @@ function Bar({ note, folder }: BarProps) {
         />
       ) : (
         <div
-          className="text-white font-bold text-lg flex gap-x-5 items-center cursor-pointer py-1"
+          className="text-black dark:text-white font-bold text-lg flex gap-x-5 items-center cursor-pointer py-1"
           onClick={() => setEditing(note.name)}
         >
           {note.name.slice(0, 40) + (note.name.length > 40 ? "..." : "")}
@@ -88,26 +88,26 @@ function Bar({ note, folder }: BarProps) {
         />
       ) : note.description ? (
         <div
-          className="text-xs text-gray-300 cursor-pointer"
+          className="text-xs text-black dark:text-gray-300 cursor-pointer"
           onClick={() => setDescription(note.description)}
         >
           {note.description}
         </div>
       ) : (
         <div
-          className="hover:underline text-xs text-gray-300 cursor-pointer"
+          className="hover:underline text-xs text-black dark:text-gray-300 cursor-pointer"
           onClick={() => setDescription("")}
         >
           Add description
         </div>
       )}
       {folder && (
-        <div className="ml-3 flex text-gray-300 items-center gap-x-2 text-xs">
+        <div className="ml-3 flex text-black dark:text-gray-300 items-center gap-x-2 text-xs">
           <FaFolder size={15} style={{ color: folder.color || "" }} />{" "}
           {folder.name}
         </div>
       )}
-      <div className="absolute right-3 flex items-center gap-x-5 text-gray-300">
+      <div className="absolute right-3 flex items-center gap-x-5 text-black dark:text-gray-300">
         <FaImage
           size={17}
           title="Upload background image"

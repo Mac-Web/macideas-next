@@ -41,21 +41,21 @@ function Input({
 
   return (
     <div
-      className={`flex items-center relative bg-gray-900 rounded ${full && "w-full"} ${transparent && "bg-gray-900/70 backdrop-blur-xs"}`}
+      className={`flex items-center relative bg-gray-300 dark:bg-gray-900 rounded ${full && "w-full"} ${transparent && "bg-gray-300/70 dark:bg-gray-900/70 backdrop-blur-xs"}`}
     >
       <input
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onblur}
-        className={`px-3 py-1.5 outline-none text-white text-lg ${styles}
+        className={`px-3 py-1.5 outline-none text-black dark:text-white text-lg ${styles}
         ${clear && "w-[calc(100%-30px)]"}`}
         ref={inputRef}
       />
       {clear && value.length > 0 && (
         <div
-          className="flex items-center justify-center hover:bg-gray-300 hover:dark:bg-gray-800 rounded cursor-pointer 
-                  duration-300 w-7.5 h-7.5 absolute right-2 text-gray-300"
+          className="flex items-center justify-center hover:bg-gray-400 hover:dark:bg-gray-800 rounded cursor-pointer 
+                  duration-300 w-7.5 h-7.5 absolute right-2 text-black dark:text-gray-300"
           title="Clear"
           onMouseDown={handleClear}
         >

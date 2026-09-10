@@ -23,7 +23,7 @@ function Items({ project }: { project: ProjectType }) {
           clear
         />
       </div>
-      <div className="text-gray-300 flex gap-x-2 text-sm w-full">
+      <div className="text-black dark:text-gray-300 flex gap-x-2 text-sm w-full">
         <div
           className="flex gap-x-2 items-center cursor-pointer"
           onClick={() => setOpen(null)}

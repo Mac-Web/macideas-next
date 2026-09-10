@@ -18,7 +18,7 @@ import Items from "@/components/projects/Items";
 import Bar from "@/components/projects/Bar";
 
 const itemStyles =
-  "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-gray-300 select-none";
+  "border-2 border-gray-700 rounded px-4 py-2 hover:bg-gray-300 dark:hover:bg-gray-900 cursor-pointer flex items-center gap-x-3 text-black dark:text-gray-300 select-none";
 
 export type FolderType = FolderT & {
   taskLists: TaskList[];
@@ -77,7 +77,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
           clear
         />
       </div>
-      <div className="text-gray-300 flex gap-x-2 text-sm w-full">
+      <div className="text-black dark:text-gray-300 flex gap-x-2 text-sm w-full">
         {breadCrumbs.map((b, i) => (
           <div
             key={i}
@@ -111,7 +111,7 @@ function Projects({ projects }: { projects: ProjectType[] }) {
               );
             })
           ) : (
-            <div className="text-gray-300 text-center">
+            <div className="text-black dark:text-gray-300 text-center">
               <div>No projects found :(</div> Try a different search or{" "}
               <span
                 className="cursor-pointer underline hover:text-teal-600"

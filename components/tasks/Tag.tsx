@@ -16,7 +16,7 @@ import Input from "../ui/Input";
 import Emoji from "../ui/Emoji";
 
 const optionStyles =
-  "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
+  "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 rounded";
 
 interface TagProps {
   tag: TagType;
@@ -85,7 +85,7 @@ function Tag({ tag, selected, setSelected, taskListId }: TagProps) {
 
   return (
     <label
-      className="relative flex items-center border-2 border-gray-700 rounded hover:bg-gray-900 px-3 py-1.5
+      className="relative flex items-center border-2 border-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-900 px-3 py-1.5
     cursor-pointer"
       style={{ backgroundColor: tag.color || undefined }}
     >
@@ -106,7 +106,7 @@ function Tag({ tag, selected, setSelected, taskListId }: TagProps) {
         />
       )}
       <div
-        className="cursor-pointer absolute right-3 text-gray-300"
+        className="cursor-pointer absolute right-3 text-black dark:text-gray-300"
         ref={menuRef}
       >
         <FaEllipsisV size={17} onClick={handleOpen} />
@@ -116,7 +116,7 @@ function Tag({ tag, selected, setSelected, taskListId }: TagProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-950 absolute right-0
+              className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-200 dark:bg-gray-950 absolute right-0
            top-[calc(100%+8px)] z-5"
             >
               <div className={optionStyles} onClick={handleRename}>

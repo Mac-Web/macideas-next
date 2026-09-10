@@ -13,7 +13,7 @@ interface CheckboxProps {
 function Checkbox({ text, checked, setChecked, icon, styles }: CheckboxProps) {
   return (
     <label
-      className={`flex items-center gap-x-3 text-gray-300 cursor-pointer w-fit ${styles}`}
+      className={`flex items-center gap-x-3 text-black dark:text-gray-300 cursor-pointer w-fit ${styles}`}
     >
       <input
         type="checkbox"
@@ -22,8 +22,8 @@ function Checkbox({ text, checked, setChecked, icon, styles }: CheckboxProps) {
         className="hidden"
       />
       <div
-        className={`h-4 w-4 border-2 relative border-gray-700 rounded flex items-center justify-center
-          ${checked && "bg-gray-700"}`}
+        className={`h-4 w-4 border-2 relative border-gray-700 rounded flex items-center justify-center text-gray-300 
+           ${checked && "bg-gray-700"}`}
       >
         <FaCheck
           size={14}

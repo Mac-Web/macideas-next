@@ -121,7 +121,7 @@ function Footer() {
       </div>
       <div className={footerColumnStyles}>
         <h2 className={footerColumnTitleStyles}>Social</h2>
-        <div className="flex flex-wrap gap-5 items-center text-gray-300">
+        <div className="flex flex-wrap gap-5 items-center text-gray-800 dark:text-gray-300">
           <a href="mailto:hello@macweb.app" target="_blank" title="Email us">
             <FaEnvelope size={25} />
           </a>

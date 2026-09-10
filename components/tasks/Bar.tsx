@@ -59,9 +59,9 @@ function Bar({ taskList, folder, myDay }: BarProps) {
   }
 
   return (
-    <div className="w-full border-b border-b-gray-700 flex items-center gap-x-3 px-3 py-2 relative">
+    <div className="w-full bg-gray-200/70 dark:bg-transparent border-b border-b-gray-700 flex items-center gap-x-3 px-3 py-2 relative">
       {myDay ? (
-        <FaSun size={20} className="text-gray-300" />
+        <FaSun size={20} className="text-black dark:text-gray-300" />
       ) : (
         <Emoji
           setSelected={async (e) => await addEmoji(taskList.id, e)}
@@ -78,7 +78,7 @@ function Bar({ taskList, folder, myDay }: BarProps) {
         />
       ) : (
         <div
-          className="text-white font-bold text-lg flex gap-x-5 items-center cursor-pointer py-1"
+          className="text-black dark:text-white font-bold text-lg flex gap-x-5 items-center cursor-pointer py-1"
           onClick={() => !myDay && setEditing(taskList.name)}
         >
           {taskList.name.slice(0, 40) +
@@ -95,27 +95,27 @@ function Bar({ taskList, folder, myDay }: BarProps) {
         />
       ) : taskList.description ? (
         <div
-          className="text-xs text-gray-300 cursor-pointer"
+          className="text-xs text-black dark:text-gray-300 cursor-pointer"
           onClick={() => !myDay && setDescription(taskList.description)}
         >
           {taskList.description}
         </div>
       ) : (
         <div
-          className="hover:underline text-xs text-gray-300 cursor-pointer"
+          className="hover:underline text-xs text-black dark:text-gray-300 cursor-pointer"
           onClick={() => setDescription("")}
         >
           Add description
         </div>
       )}
       {folder && (
-        <div className="ml-3 flex text-gray-300 items-center gap-x-2 text-xs">
+        <div className="ml-3 flex text-black dark:text-gray-300 items-center gap-x-2 text-xs">
           <FaFolder size={15} style={{ color: folder.color || "" }} />{" "}
           {folder.name}
         </div>
       )}
       {!myDay && (
-        <div className="absolute right-3 flex items-center gap-x-5 text-gray-300">
+        <div className="absolute right-3 flex items-center gap-x-5 text-black dark:text-gray-300">
           <FaImage
             size={17}
             title="Upload background image"
@@ -146,7 +146,7 @@ function Bar({ taskList, folder, myDay }: BarProps) {
             ) : (
               <FaRegStar
                 size={17}
-                className="text-gray-300"
+                className="text-black dark:text-gray-300"
                 title="Star task list"
               />
             )}

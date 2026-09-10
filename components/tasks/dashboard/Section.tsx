@@ -14,8 +14,11 @@ interface SectionProps {
 function Section({ title, tasks, children, link, sectionId }: SectionProps) {
   return (
     <div className="border-2 border-gray-700 rounded p-5 flex flex-col gap-y-5 flex-1 min-w-[40%]">
-      <div className="flex text-gray-300 items-center justify-between group">
-        <Link href={link || ""} className="text-white text-xl font-bold w-fit">
+      <div className="flex text-black dark:text-gray-300 items-center justify-between group">
+        <Link
+          href={link || ""}
+          className="text-black dark:text-white text-xl font-bold w-fit"
+        >
           {title} ({tasks.length})
         </Link>
         <Hide id={sectionId} />
@@ -24,7 +27,7 @@ function Section({ title, tasks, children, link, sectionId }: SectionProps) {
         {tasks.length > 0 ? (
           tasks.map((task) => <Task key={task.id} task={task} />)
         ) : (
-          <div className="flex flex-col gap-y-5 items-center text-gray-300 text-center py-10 justify-center h-full">
+          <div className="flex flex-col gap-y-5 items-center text-black dark:text-gray-300 text-center py-10 justify-center h-full">
             {children}
             You don&apos;t have any {title.toLowerCase()} yet
           </div>

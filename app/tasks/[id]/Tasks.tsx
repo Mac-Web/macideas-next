@@ -30,7 +30,7 @@ const sorts = [
   "Starred",
 ];
 const filters = ["All", "Starred", "Incomplete", "Completed"];
-const optionStyles = "flex items-center gap-x-2 text-gray-300";
+const optionStyles = "flex items-center gap-x-2 text-black dark:text-gray-300";
 
 interface TasksProps {
   tasks: TaskType[];
@@ -137,7 +137,9 @@ function Tasks({
     <div className="w-full h-full flex overflow-x-hidden">
       <div className="px-3 w-full h-full">
         <div className="py-3 flex gap-x-3 items-center">
-          <h2 className="text-white font-bold text-lg w-70">
+          <h2
+            className={`text-black dark:text-white font-bold text-lg w-70 ${background && "text-white"}`}
+          >
             Task{displayedTasks.length === 1 ? "" : "s"} (
             {displayedTasks.length})
           </h2>
@@ -177,7 +179,7 @@ function Tasks({
               {priorities.map((p, i) => (
                 <div
                   key={i}
-                  className={`flex gap-x-2 items-center cursor-pointer hover:bg-gray-900 px-2 py-1 rounded
+                  className={`flex gap-x-2 items-center cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 px-2 py-1 rounded
                     ${filter === p.name && "font-bold text-teal-600"}`}
                   onClick={() => {
                     setFilter(p.name);
@@ -192,7 +194,7 @@ function Tasks({
                 ? tags.map((tag) => (
                     <div
                       key={tag.id}
-                      className={`flex gap-x-2 items-center text-sm cursor-pointer hover:bg-gray-900 px-2 py-1 rounded
+                      className={`flex gap-x-2 items-center text-sm cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 px-2 py-1 rounded
                     ${filter === tag.id && "font-bold text-teal-600"}`}
                       onClick={() => {
                         setFilter(tag.id);
@@ -224,7 +226,7 @@ function Tasks({
               if (!c && filter === "Completed") setFilter("All");
               setShowCompleted(c);
             }}
-            styles="text-sm gap-x-2!"
+            styles={`text-sm gap-x-2! text-black dark:text-gray-300 ${background && "text-white"}`}
           />
         </div>
         <div className="flex flex-col gap-y-2 pb-3 overflow-auto h-[calc(100%-174px)]">
@@ -244,11 +246,11 @@ function Tasks({
               );
             })
           ) : tasks.filter((t) => !t.completed).length > 0 ? (
-            <div className="text-gray-300 text-center py-10">
+            <div className="text-black dark:text-gray-300 text-center py-10">
               No tasks found! Create one below or try a different search.
             </div>
           ) : (
-            <div className="text-gray-300 flex flex-col gap-y-5 justify-center h-[calc(100%-114px)] items-center">
+            <div className="text-black dark:text-gray-300 flex flex-col gap-y-5 justify-center h-[calc(100%-114px)] items-center">
               <FaCheckCircle size={50} />
               <p>Great work, all tasks are completed!</p>
             </div>

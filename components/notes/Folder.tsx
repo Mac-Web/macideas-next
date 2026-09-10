@@ -23,7 +23,7 @@ import Note from "./Note";
 import Input from "../ui/Input";
 
 const optionStyles =
-  "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer hover:bg-gray-900 rounded";
+  "flex gap-x-2 items-center text-sm px-2 py-1.5 cursor-pointer bg-gray-300 dark:hover:bg-gray-900 rounded";
 
 type NoteType = NoteT & {
   projects: Project[];
@@ -107,8 +107,8 @@ function Folder({ folder, folders, notes, projects, existing }: FolderProps) {
           />
         ) : (
           <div
-            className="flex gap-x-3 items-center whitespace-nowrap text-gray-300 px-4 py-2 rounded
-          group-hover:bg-gray-900/60 w-full cursor-pointer"
+            className="flex gap-x-3 items-center whitespace-nowrap text-black dark:text-gray-300 px-4 py-2 rounded
+          group-hover:bg-gray-300/60 dark:group-hover:bg-gray-900/60 w-full cursor-pointer"
             onClick={() => setFolderOpen(!folderOpen)}
           >
             {folderOpen ? (
@@ -120,13 +120,13 @@ function Folder({ folder, folders, notes, projects, existing }: FolderProps) {
           </div>
         )}
         <FaPlusCircle
-          className="absolute right-12 text-gray-300 group-hover:opacity-100 transition-opacity! opacity-0 cursor-pointer"
+          className="absolute right-12 text-black dark:text-gray-300 group-hover:opacity-100 transition-opacity! opacity-0 cursor-pointer"
           title="Create note"
           size={17}
           onClick={handleCreate}
         />
         <div
-          className={`cursor-pointer absolute right-4 ${!menuOpen && "opacity-0"} text-gray-300 group-hover:opacity-100 transition-opacity!`}
+          className={`cursor-pointer absolute right-4 ${!menuOpen && "opacity-0"} text-black dark:text-gray-300 group-hover:opacity-100 transition-opacity!`}
           onClick={() => setMenuOpen(true)}
         >
           <FaEllipsisV size={17} />
@@ -136,7 +136,7 @@ function Folder({ folder, folders, notes, projects, existing }: FolderProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-950 absolute right-0
+                className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-200 dark:bg-gray-950 absolute right-0
            top-[calc(100%+8px)] z-5"
               >
                 <div className={optionStyles} onClick={handleEdit}>
@@ -209,7 +209,7 @@ function Folder({ folder, folders, notes, projects, existing }: FolderProps) {
               />
             ))
           ) : (
-            <div className="text-center text-gray-300 text-sm">
+            <div className="text-center text-black dark:text-gray-300 text-sm">
               No notes found in this folder.{" "}
               <span className="cursor-pointer underline" onClick={handleCreate}>
                 Create one

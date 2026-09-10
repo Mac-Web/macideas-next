@@ -52,8 +52,10 @@ function DashboardModal({ closeModal, settings, isNote }: DashboardModalProps) {
 
   return (
     <Modal closeModal={closeModal}>
-      <div className="flex flex-col gap-y-5 text-gray-300">
-        <h2 className="text-white text-xl font-bold">Dashboard settings</h2>
+      <div className="flex flex-col gap-y-5 text-black dark:text-gray-300">
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          Dashboard settings
+        </h2>
         <div className="flex flex-col gap-y-3">
           {!isNote && (
             <>
@@ -73,7 +75,9 @@ function DashboardModal({ closeModal, settings, isNote }: DashboardModalProps) {
               />
             </>
           )}
-          <h2 className="text-white my-2 font-bold">Displayed widgets</h2>
+          <h2 className="text-black dark:text-white my-2 font-bold">
+            Displayed widgets
+          </h2>
           {(isNote ? noteDashboardSettings : dashboardSettings).map(
             (setting) => {
               return (

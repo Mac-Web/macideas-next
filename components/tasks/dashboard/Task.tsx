@@ -17,8 +17,8 @@ function Task({ task }: { task: TaskType }) {
     <Link
       key={task.id}
       href={`/tasks/${task.taskListId || "day"}`}
-      className={`flex items-center gap-x-5 px-5 py-1.5 rounded text-gray-300 whitespace-nowrap overflow-hidden
-        ${task.completed ? "bg-gray-900/50" : "bg-gray-900"}`}
+      className={`flex items-center gap-x-5 px-5 py-1.5 rounded text-black dark:text-gray-300 whitespace-nowrap overflow-hidden
+        ${task.completed ? "bg-gray-300/50 dark:bg-gray-900/50" : "bg-gray-300 dark:bg-gray-900"}`}
     >
       {task.completed ? (
         <FaCircleCheck
@@ -59,7 +59,7 @@ function Task({ task }: { task: TaskType }) {
       )}
       {task.priority && task.priority !== "None" && (
         <div
-          className={`text-sm rounded px-1.5 py-0.5 ${priorities.find((p) => p.name === task.priority)?.color}`}
+          className={`text-sm rounded text-gray-300 px-1.5 py-0.5 ${priorities.find((p) => p.name === task.priority)?.color}`}
         >
           {priorities.find((p) => p.name === task.priority)?.name}
         </div>
@@ -69,7 +69,7 @@ function Task({ task }: { task: TaskType }) {
           {task.tags.slice(0, 2).map((tag) => (
             <div
               key={tag.id}
-              className="flex gap-x-2 text-sm items-center bg-gray-950 rounded px-2 py-0.5"
+              className="flex gap-x-2 text-sm items-center bg-gray-200 dark:bg-gray-950 rounded px-2 py-0.5"
               style={{ backgroundColor: tag.color || undefined }}
             >
               {tag.emoji ? <span>{tag.emoji}</span> : <FaTag size={10} />}
@@ -77,7 +77,7 @@ function Task({ task }: { task: TaskType }) {
             </div>
           ))}
           {task.tags.length > 2 && (
-            <div className="text-sm bg-gray-950 rounded px-2">
+            <div className="text-sm bg-gray-200 dark:bg-gray-950 rounded px-2">
               +{task.tags.length - 2}
             </div>
           )}

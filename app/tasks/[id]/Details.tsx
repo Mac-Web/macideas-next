@@ -63,14 +63,16 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
   }, [task]);
 
   return (
-    <div className="w-70 border-l border-l-gray-700 h-full bg-gray-950 p-5 relative overflow-y-auto overflow-x-hidden">
+    <div className="w-70 border-l border-l-gray-700 h-full bg-gray-200 dark:bg-gray-950 p-5 relative overflow-y-auto overflow-x-hidden">
       <motion.div
         initial={{ x: "100%", opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ type: "spring", damping: 15, duration: 0.01 }}
-        className="text-gray-300 flex flex-col gap-y-5 overflow-auto text-sm"
+        className="text-black dark:text-gray-300 flex flex-col gap-y-5 overflow-auto text-sm"
       >
-        <h2 className="text-lg text-white font-bold">Task details</h2>
+        <h2 className="text-lg text-black dark:text-white font-bold">
+          Task details
+        </h2>
         <label className="flex flex-col gap-y-1">
           Task
           <Input
@@ -133,7 +135,7 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
             {task.tags.map((tag) => (
               <div
                 key={tag.id}
-                className="flex gap-x-2 items-center bg-gray-900 rounded px-2 py-1"
+                className="flex gap-x-2 items-center bg-gray-300 dark:bg-gray-900 rounded px-2 py-1"
                 style={{ backgroundColor: tag.color || undefined }}
               >
                 {tag.emoji ? <span>{tag.emoji}</span> : <FaTag size={13} />}
@@ -184,7 +186,7 @@ function Details({ task, setDetails, tags, id }: DetailsProps) {
       </motion.div>
       <FaXmark
         size={20}
-        className="cursor-pointer text-gray-300 absolute top-3 right-3"
+        className="cursor-pointer text-black dark:text-gray-300 absolute top-3 right-3"
         onClick={() => setDetails(null)}
         title="Close panel"
       />

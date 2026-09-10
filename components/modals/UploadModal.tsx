@@ -48,8 +48,10 @@ function UploadModal({ id, closeModal, isNote }: UploadModalProps) {
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">Upload background</h2>
-        <label className="break-all rounded flex items-center gap-y-3 text-gray-300 flex-col cursor-pointer text-center text-sm">
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          Upload background
+        </h2>
+        <label className="break-all rounded flex items-center gap-y-3 text-black dark:text-gray-300 flex-col cursor-pointer text-center text-sm">
           <input
             name="file"
             ref={inputFileRef}
@@ -73,7 +75,7 @@ function UploadModal({ id, closeModal, isNote }: UploadModalProps) {
               {blob.pathname}
             </>
           ) : (
-            <div className="rounded border-2 border-gray-700 hover:bg-gray-900 w-full flex gap-y-3 py-5 items-center flex-col">
+            <div className="rounded border-2 border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-900 w-full flex gap-y-3 py-5 items-center flex-col">
               <FaUpload size={35} />
               Upload
             </div>

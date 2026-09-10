@@ -131,12 +131,12 @@ function Task({
       className={`group ${
         task.completed
           ? background
-            ? "bg-gray-900/30"
-            : "bg-gray-900/40"
+            ? "bg-gray-300/30 dark:bg-gray-900/30"
+            : "bg-gray-300/40 dark:bg-gray-900/40"
           : background
-            ? "bg-gray-900/70"
-            : "bg-gray-900"
-      } rounded backdrop-blur-xs px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-gray-300 relative ${highlight && "bg-teal-950"}`}
+            ? "bg-gray-300/70 dark:bg-gray-900/70"
+            : "bg-gray-300 dark:bg-gray-900"
+      } rounded backdrop-blur-xs px-3 py-2.5 flex items-center gap-x-3 cursor-pointer text-black dark:text-gray-300 relative ${highlight && "bg-teal-200 dark:bg-teal-950"}`}
       onClick={handlePanel}
     >
       {editing !== null ? (
@@ -231,7 +231,7 @@ function Task({
           {task.tags.slice(0, 3).map((tag) => (
             <div
               key={tag.id}
-              className="flex gap-x-2 text-sm items-center bg-gray-950 rounded px-2 py-0.5"
+              className="flex gap-x-2 text-sm items-center bg-gray-200 dark:bg-gray-950 rounded px-2 py-0.5"
               style={{ backgroundColor: tag.color || undefined }}
             >
               {tag.emoji ? <span>{tag.emoji}</span> : <FaTag size={10} />}
@@ -239,7 +239,7 @@ function Task({
             </div>
           ))}
           {task.tags.length > 3 && (
-            <div className="text-sm bg-gray-950 rounded px-2">
+            <div className="text-sm bg-gray-200 dark:bg-gray-950 rounded px-2">
               +{task.tags.length - 3}
             </div>
           )}
@@ -251,7 +251,7 @@ function Task({
           setSelected={async (p) => await updatePriority(task.id, p)}
           values={priorities.map((p) => p.name)}
           text="Priority"
-          styles={`${task.priority && task.priority !== "None" ? "" : optionStyles} py-0.5! ${priorities.find((p) => p.name === task.priority)?.color}`}
+          styles={`${task.priority && task.priority !== "None" ? "" : optionStyles + " text-black! dark:text-gray-300!"} py-0.5! text-gray-300 ${priorities.find((p) => p.name === task.priority)?.color}`}
           hover={false}
         />
         {taskListId === "day" && (

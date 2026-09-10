@@ -38,10 +38,10 @@ export default async function Home() {
               height={200}
             />
             <div className="flex flex-col gap-y-5">
-              <h2 className="text-white font-bold text-2xl">
+              <h2 className="text-black dark:text-white font-bold text-2xl">
                 Cool section title 1
               </h2>
-              <p className="text-gray-300">
+              <p className="text-black dark:text-gray-300">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla
                 distinctio error aspernatur quisquam ex natus nobis ducimus
                 quis! A quasi at omnis velit consectetur sit perspiciatis labore
@@ -51,10 +51,10 @@ export default async function Home() {
           </div>
           <div className="flex flex-col gap-y-10 md:flex-row gap-x-20 items-center">
             <div className="flex flex-col gap-y-5">
-              <h2 className="text-white font-bold text-2xl">
+              <h2 className="text-black dark:text-white font-bold text-2xl">
                 Cool section title 2
               </h2>
-              <p className="text-gray-300">
+              <p className="text-black dark:text-gray-300">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla
                 distinctio error aspernatur quisquam ex natus nobis ducimus
                 quis! A quasi at omnis velit consectetur sit perspiciatis labore

@@ -39,7 +39,7 @@ function Hero({ id, name, description }: HeroProps) {
         />
       ) : (
         <div
-          className="text-white text-2xl font-bold cursor-pointer"
+          className="text-black dark:text-white text-2xl font-bold cursor-pointer"
           title="Rename project"
           onClick={() => setNewName(name)}
         >
@@ -56,7 +56,7 @@ function Hero({ id, name, description }: HeroProps) {
         />
       ) : description ? (
         <div
-          className="cursor-pointer text-gray-300 text-sm text-center"
+          className="cursor-pointer text-black dark:text-gray-300 text-sm text-center"
           title="Edit description"
           onClick={() => setNewDescription(description)}
         >
@@ -64,7 +64,7 @@ function Hero({ id, name, description }: HeroProps) {
         </div>
       ) : (
         <div
-          className="cursor-pointer text-gray-300 text-sm hover:underline"
+          className="cursor-pointer text-black dark:text-gray-300 text-sm hover:underline"
           onClick={() => setNewDescription("")}
         >
           Add description

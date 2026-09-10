@@ -41,9 +41,9 @@ function TaskInput({ id, tags, myDay, background }: TaskInputProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full ${background && "bg-gray-950"}`}
+      className={`border-2 border-gray-700 rounded flex flex-col pt-3.5 pb-2 gap-y-2 w-full ${background && "bg-gray-200 dark:bg-gray-950"}`}
     >
-      <div className="flex gap-x-5 text-gray-300 px-3 items-center">
+      <div className="flex gap-x-5 text-black dark:text-gray-300 px-3 items-center">
         <FaTag
           size={17}
           title="Add tags"
@@ -96,7 +96,7 @@ function TaskInput({ id, tags, myDay, background }: TaskInputProps) {
           placeholder="Enter your task here"
           value={newTask.text}
           setValue={(text) => setNewTask({ ...newTask, text })}
-          styles="w-full flex-1 bg-gray-950"
+          styles="w-full flex-1 bg-gray-200 dark:bg-gray-950"
           transparent
           full
         />

@@ -21,8 +21,10 @@ function WarningModal({
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">{title}</h2>
-        <p className="text-gray-300">{description}</p>
+        <h2 className="text-black dark:text-white text-xl font-bold">
+          {title}
+        </h2>
+        <p className="text-black dark:text-gray-300">{description}</p>
         <div className="flex gap-x-3">
           <Btn
             text={loading ? "Loading..." : "Confirm"}

@@ -51,7 +51,7 @@ function ProjectModal({
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
-        <h2 className="text-white text-xl font-bold">
+        <h2 className="text-black dark:text-white text-xl font-bold">
           Edit {isNote ? "note" : "task list"} projects
         </h2>
         <Input
@@ -65,7 +65,7 @@ function ProjectModal({
             projects.map((project) => (
               <label
                 key={project.id}
-                className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-900 px-3 py-1.5"
+                className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 px-3 py-1.5"
               >
                 <Checkbox
                   text={project.name}
@@ -81,7 +81,7 @@ function ProjectModal({
               </label>
             ))
           ) : (
-            <div className="text-gray-300 text-center text-sm py-2">
+            <div className="text-black dark:text-gray-300 text-center text-sm py-2">
               No projects found. Maybe try a different search?
             </div>
           )}

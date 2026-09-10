@@ -11,7 +11,7 @@ interface BarProps {
 
 function Bar({ sort, setSort }: BarProps) {
   return (
-    <div className="flex gap-x-3 w-full text-sm text-gray-300 px-4 bg-gray-900 rounded py-2">
+    <div className="flex gap-x-3 w-full text-sm text-black dark:text-gray-300 px-4 bg-gray-300 dark:bg-gray-900 rounded py-2">
       <div className={optionStyles + " flex-4"} onClick={() => setSort("n")}>
         Name {sort === "n" && <FaCaretDown size={15} />}
       </div>

@@ -13,7 +13,7 @@ function Hide({ id, isNote }: HideProps) {
     <FaEyeSlash
       size={20}
       title="Hide from dashboard"
-      className="cursor-pointer text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity!"
+      className="cursor-pointer text-black dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity!"
       onClick={async () => await hideSection(id, isNote)}
     />
   );

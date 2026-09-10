@@ -97,8 +97,8 @@ function TaskList({ taskList, starred, folders, projects }: TaskListProps) {
       ) : (
         <Link
           href={`/tasks/${taskList.id}`}
-          className={`flex gap-x-3 items-center whitespace-nowrap text-gray-300 px-4 py-2 rounded group-hover:bg-gray-900/60
-            w-full ${pathname.includes(taskList.id) && "bg-gray-900 group-hover:bg-gray-900! text-teal-600 font-bold"}`}
+          className={`flex gap-x-3 items-center whitespace-nowrap text-black dark:text-gray-300 px-4 py-2 rounded group-hover:bg-gray-300/60! dark:group-hover:bg-gray-900/60!
+            w-full ${pathname.includes(taskList.id) && "bg-gray-300 dark:bg-gray-900 group-hover:bg-gray-300! dark:group-hover:bg-gray-900! text-teal-600 font-bold"}`}
         >
           <Emoji
             setSelected={async (e) => await addEmoji(taskList.id, e)}
@@ -112,7 +112,7 @@ function TaskList({ taskList, starred, folders, projects }: TaskListProps) {
         </Link>
       )}
       <div
-        className={`cursor-pointer absolute right-4 ${!menuOpen && "opacity-0"} text-gray-300 group-hover:opacity-100 transition-opacity!`}
+        className={`cursor-pointer absolute right-4 ${!menuOpen && "opacity-0"} text-black dark:text-gray-300 group-hover:opacity-100 transition-opacity!`}
         onClick={() => setMenuOpen(true)}
       >
         <FaEllipsisV size={17} />
@@ -122,7 +122,7 @@ function TaskList({ taskList, starred, folders, projects }: TaskListProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-950 absolute right-0
+              className="flex flex-col gap-y-1 border-2 border-gray-700 rounded p-2 bg-gray-200 dark:bg-gray-950 absolute right-0
            top-[calc(100%+8px)] z-5"
             >
               <div className={optionStyles} onClick={() => setAdding(true)}>

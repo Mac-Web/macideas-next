@@ -20,7 +20,7 @@ function Textarea({
       placeholder={placeholder}
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      className={`bg-gray-900 rounded px-3 py-1.5 outline-none text-white resize-none text-sm ${styles}`}
+      className={`bg-gray-300 dark:bg-gray-900 rounded px-3 py-1.5 outline-none text-black dark:text-white resize-x-none text-sm ${styles}`}
       onBlur={onblur}
     ></textarea>
   );
