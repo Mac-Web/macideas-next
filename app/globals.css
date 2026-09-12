@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -17,3 +18,40 @@
 body {
   @apply bg-gray-200 dark:bg-gray-950;
 }
+
+.tiptap {
+  @apply px-10 py-3 h-full min-w-full overflow-y-auto outline-none prose dark:prose-invert;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  @apply text-gray-500 dark:text-gray-600 italic;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+ul[data-type="taskList"] {
+  list-style: none;
+  margin-left: 0;
+  padding: 0;
+}
+ul[data-type="taskList"] li {
+  align-items: flex-start;
+  display: flex;
+}
+ul[data-type="taskList"] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+ul[data-type="taskList"] li > div {
+  flex: 1 1 auto;
+}
+ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+}
+ul[data-type="taskList"] ul[data-type="taskList"] {
+  margin: 0;
+}
+/*todo: fix tiptap task list css*/

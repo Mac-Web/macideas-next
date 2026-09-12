@@ -27,9 +27,10 @@ import Input from "../ui/Input";
 interface BarProps {
   note: Note;
   folder: Folder | null;
+  saved?: boolean;
 }
 
-function Bar({ note, folder }: BarProps) {
+function Bar({ note, folder, saved }: BarProps) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [editing, setEditing] = useState<string | null>(null);
@@ -107,6 +108,11 @@ function Bar({ note, folder }: BarProps) {
           {folder.name}
         </div>
       )}
+      <div
+        className={`opacity-0 ${saved && "opacity-100"} transition-opacity! text-xs pl-10`}
+      >
+        Note saved
+      </div>
       <div className="absolute right-3 flex items-center gap-x-5 text-black dark:text-gray-300">
         <FaImage
           size={17}

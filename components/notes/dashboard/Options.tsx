@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { FaPlusCircle, FaFolderPlus, FaBook } from "react-icons/fa";
 
 const optionStyles =
-  "border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 flex flex-col gap-y-2 items-center p-5 text-gray-300 w-40";
+  "border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 flex flex-col gap-y-2 items-center p-5 text-black dark:text-gray-300 w-40";
 
 function Options() {
   const router = useRouter();

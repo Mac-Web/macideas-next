@@ -13,7 +13,9 @@ function Note({ note }: { note: NoteType }) {
       className="text-black dark:text-gray-300 w-48 rounded border-2 border-gray-700 flex flex-col gap-y-3 p-5
        hover:bg-gray-300 dark:hover:bg-gray-900"
     >
-      <h2 className="text-white text-xl font-bold">{note.name}</h2>
+      <h2 className="text-black dark:text-white text-xl font-bold">
+        {note.name}
+      </h2>
       {note.description && <div className="text-sm">{note.description}</div>}
       {note.tags && (
         <div className="flex gap-x-1">

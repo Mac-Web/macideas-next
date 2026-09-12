@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import Bar from "@/components/notes/Bar";
+import Editor from "@/components/notes/Editor";
 
 async function fetchNoteData(id: string) {
   const session = await getSession();
@@ -56,10 +56,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
           : "",
       }}
     >
-      <Bar note={existingNote} folder={existingNote.folder} />
-      <div className="text-black dark:text-white text-xl font-bold py-5">
-        {existingNote.name}
-      </div>
+      <Editor existingNote={existingNote} />
     </div>
   );
 }
