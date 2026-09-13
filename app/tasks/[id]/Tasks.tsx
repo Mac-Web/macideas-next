@@ -152,7 +152,7 @@ function Tasks({
             full
             clear
           />
-          <div className={optionStyles}>
+          <div className={optionStyles + (background ? " text-gray-300!" : "")}>
             <FaSort size={17} />
             <Dropdown
               selected={sort}
@@ -161,7 +161,7 @@ function Tasks({
               text="Sort by"
             />
           </div>
-          <div className={optionStyles}>
+          <div className={optionStyles + (background ? " text-gray-300!" : "")}>
             <FaFilter size={17} />
             <Dropdown
               selected={
@@ -210,7 +210,7 @@ function Tasks({
                 : null}
             </Dropdown>
           </div>
-          <div className={optionStyles}>
+          <div className={optionStyles + (background ? " text-gray-300!" : "")}>
             <FaArrowsAltV size={17} />
             <Dropdown
               selected={order}

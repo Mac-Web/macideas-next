@@ -64,16 +64,14 @@ function FolderModal({
     closeModal();
   }
 
-  //TODO: update palceholders and other stuff so they say notes when isNote
-
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
         <h2 className="text-black dark:text-white text-xl font-bold">
-          Edit folder {isProject ? "projects" : "task lists"}
+          Edit folder {isProject ? "projects" : isNote ? "notes" : "task lists"}
         </h2>
         <Input
-          placeholder={`Search ${isProject ? "projects" : "task lists"}`}
+          placeholder={`Search ${isProject ? "projects" : isNote ? "notes" : "task lists"}`}
           value={search}
           setValue={(s) => setSearch(s)}
           clear
@@ -100,8 +98,8 @@ function FolderModal({
             ))
           ) : (
             <div className="text-black dark:text-gray-300 text-center text-sm py-2">
-              No {isProject ? "projects" : "task lists"} found. Maybe try a
-              different search?
+              No {isProject ? "projects" : isNote ? "notes" : "task lists"}{" "}
+              found. Maybe try a different search?
             </div>
           )}
         </div>

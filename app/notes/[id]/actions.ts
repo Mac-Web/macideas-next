@@ -18,3 +18,17 @@ export async function addDescription(id: string, description: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function saveContent(id: string, content: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.note.update({
+        where: { id, userId: session.user.id },
+        data: { content },
+      });
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

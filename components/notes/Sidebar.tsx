@@ -30,7 +30,7 @@ async function Sidebar() {
   });
 
   return (
-    <div className="w-70 border-r border-gray-700 h-[calc(100vh-68px)] py-5 relative">
+    <div className="w-65 border-r border-gray-700 h-[calc(100vh-68px)] py-5 relative">
       <div className="flex flex-col gap-y-3 flex-1 h-[calc(100%-45px)] px-3 overflow-auto">
         <Home />
         {starredNotes.length > 0 && (

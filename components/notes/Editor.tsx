@@ -4,9 +4,15 @@ import type { Level } from "@tiptap/extension-heading";
 import type { Folder, Note } from "@/generated/prisma/client";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useState, useEffect, useRef } from "react";
+import { saveContent } from "@/app/notes/[id]/actions";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
-import { TextStyle, FontFamily, FontSize } from "@tiptap/extension-text-style";
+import {
+  TextStyle,
+  FontFamily,
+  FontSize,
+  Color,
+} from "@tiptap/extension-text-style";
 import { Placeholder } from "@tiptap/extensions";
 import {
   FaAt,
@@ -19,24 +25,23 @@ import {
   FaMinus,
   FaPlus,
   FaQuoteLeft,
+  FaSave,
   FaStrikethrough,
   FaSubscript,
   FaSuperscript,
   FaUnderline,
 } from "react-icons/fa";
 import { MdFormatListNumbered, MdRedo, MdUndo } from "react-icons/md";
-import { FaTextSlash } from "react-icons/fa6";
+import { FaA, FaTextSlash, FaXmark } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
-import { TaskList, TaskItem } from "@tiptap/extension-list";
+import WarningModal from "../modals/WarningModal";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
 import Bar from "./Bar";
 import Dropdown from "../ui/Dropdown";
 import Input from "../ui/Input";
-import { BsCheck2 } from "react-icons/bs";
 
-const optionStyles =
-  "cursor-pointer rounded hover:bg-gray-300 dark:hover:bg-gray-900 p-1.5 text-gray-700 dark:text-gray-300";
 const CustomSuperscript = Superscript.extend({
   addKeyboardShortcuts() {
     return {
@@ -52,17 +57,26 @@ const levels = [
   "Paragraph",
 ];
 const fonts = ["Inter", "Comic Sans", "Serif", "Monospace", "Cursive", "Exo 2"];
+const alignments = ["Left", "Center", "Right", "Justify"];
 
 type NoteType = Note & {
   folder: Folder | null;
 };
 
-function Editor({ existingNote }: { existingNote: NoteType }) {
+interface EditorProps {
+  existingNote: NoteType;
+  background?: boolean;
+}
+
+function Editor({ existingNote, background }: EditorProps) {
   const [saved, setSaved] = useState<boolean>(false);
   const [link, setLink] = useState<string | null>(null);
   const [level, setLevel] = useState<string>(levels[4]);
   const [font, setFont] = useState<string>(fonts[0]);
   const [current, setCurrent] = useState<number>(15);
+  const [color, setColor] = useState<string>("#CCCCCC");
+  const [alignment, setAlignment] = useState<string>(alignments[0]);
+  const [clearing, setClearing] = useState<boolean>(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -71,19 +85,21 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
       TextStyle,
       FontFamily,
       FontSize,
+      Color,
       Highlight,
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
       Placeholder.configure({
         placeholder: "My cool note...",
-      }), //TODO: add text color option
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
     ],
     immediatelyRender: false,
     injectCSS: false,
+    content: JSON.parse(existingNote.content || "{}"),
   });
   const linkRef = useRef<HTMLDivElement>(null);
+  const optionStyles = `cursor-pointer rounded hover:bg-gray-300 dark:hover:bg-gray-900 p-1.5 text-gray-700 dark:text-gray-300 ${background && " text-gray-300! hover:bg-gray-900!"}`;
 
   function handleLink(e: React.SubmitEvent) {
     e.preventDefault();
@@ -99,14 +115,26 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
     setLink(null);
   }
 
+  function handleClear() {
+    if (editor) {
+      editor.commands.clearContent();
+      setClearing(false);
+    }
+  }
+
+  async function handleSave() {
+    if (editor) {
+      await saveContent(existingNote.id, JSON.stringify(editor.getJSON()));
+      setSaved(true);
+      setTimeout(() => {
+        setSaved(false);
+      }, 2000);
+    }
+  }
+
   useEffect(() => {
     const autoSave = setInterval(async () => {
-      if (editor) {
-        setSaved(true);
-        setTimeout(() => {
-          setSaved(false);
-        }, 2000);
-      }
+      await handleSave();
     }, 30000); //TODO: add a setting for auto save duration
 
     const clickHandler = (e: MouseEvent) => {
@@ -114,11 +142,20 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
         setLink(null);
       }
     };
+    const keyHandler = async (e: KeyboardEvent) => {
+      if (e.key === "s" && e.ctrlKey) {
+        e.preventDefault();
+        await handleSave();
+      }
+    };
+
     document.addEventListener("click", clickHandler);
+    document.addEventListener("keydown", keyHandler);
 
     return () => {
       clearInterval(autoSave);
       document.removeEventListener("click", clickHandler);
+      document.removeEventListener("keydown", keyHandler);
     };
   }, [editor]);
 
@@ -149,12 +186,29 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
     }
   }, [current, editor]);
 
+  useEffect(() => {
+    if (editor) {
+      editor.chain().focus().setColor(color).run();
+    }
+  }, [color, editor]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.chain().focus().setTextAlign(alignment.toLowerCase()).run();
+    }
+  }, [alignment, editor]);
+
   return (
     <>
-      <Bar note={existingNote} folder={existingNote.folder} saved={saved} />
+      <Bar
+        note={existingNote}
+        folder={existingNote.folder}
+        saved={saved}
+        background={background}
+      />
       {editor && (
         <>
-          <div className="flex gap-x-2 py-2 w-full px-8 border-b border-gray-700 text-gray-400 dark:text-gray-700 font-bold items-center">
+          <div className="flex gap-2 w-full p-2 border-b border-gray-700 text-gray-400 dark:text-gray-700 font-bold items-center flex-wrap">
             <MdUndo
               size={27}
               onClick={() => editor.commands.undo()}
@@ -187,6 +241,12 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
               setSelected={(f) => setFont(f)}
               values={fonts}
               text="Font family"
+            />
+            <Dropdown
+              selected={alignment}
+              setSelected={(a) => setAlignment(a)}
+              values={alignments}
+              text="Alignment"
             />
             <FaMinus
               size={27}
@@ -233,6 +293,20 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
               className={optionStyles}
               title="Strike through text (Ctrl+Shift+S)"
             />
+            <label>
+              <FaA
+                size={27}
+                className={optionStyles}
+                title="Set text color"
+                style={{ color: color }}
+              />
+              <input
+                type="color"
+                className="hidden"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              />
+            </label>
             <FaHighlighter
               size={27}
               onClick={() => editor.commands.toggleHighlight()}
@@ -251,12 +325,6 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
               className={optionStyles}
               title="Numbered list (Ctrl+Shift+7)"
-            />
-            <BsCheck2
-              size={27}
-              onClick={() => editor.chain().focus().toggleTaskList().run()}
-              className={optionStyles}
-              title="Task list`"
             />
             |
             <div className="relative" ref={linkRef}>
@@ -315,10 +383,34 @@ function Editor({ existingNote }: { existingNote: NoteType }) {
               className={optionStyles}
               title="Superscript (Ctrl+P)"
             />
+            |
+            <FaSave
+              size={27}
+              onClick={handleSave}
+              className={optionStyles}
+              title="Save note (Ctrl+S)"
+            />
+            <FaXmark
+              size={27}
+              onClick={() => setClearing(true)}
+              className={optionStyles + " text-red-500!"}
+              title="Clear note"
+            />
+            {/* TODO: add 3 dot menu for overflowing options for responsive deisgn instead of flex-wrap */}
           </div>
           <EditorContent editor={editor} className="w-full h-full" />
         </>
       )}
+      <AnimatePresence>
+        {clearing && (
+          <WarningModal
+            title="Clear confirmation"
+            description="Are you sure you want to completely clear all the content in this note? This will remove all the text and formatting but keep the empty note."
+            confirm={handleClear}
+            closeModal={() => setClearing(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

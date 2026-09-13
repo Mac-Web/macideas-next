@@ -56,7 +56,10 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
           : "",
       }}
     >
-      <Editor existingNote={existingNote} />
+      <Editor
+        existingNote={existingNote}
+        background={existingNote.backgroundImage ? true : false}
+      />
     </div>
   );
 }

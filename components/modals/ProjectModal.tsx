@@ -1,7 +1,7 @@
 "use client";
 
 import type { Project } from "@/generated/prisma/client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { addTaskProjects } from "@/app/tasks/actions";
 import { addNoteProjects } from "@/app/notes/actions";
@@ -31,6 +31,11 @@ function ProjectModal({
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedLists, setSelectedLists] = useState<string[]>(existing || []);
+  const filteredList = useMemo(() => {
+    return projects.filter((p) =>
+      p.name.toLowerCase().includes(search.trim().toLowerCase()),
+    );
+  }, [projects, search]);
   const pathname = usePathname();
 
   async function handleSave() {
@@ -46,8 +51,6 @@ function ProjectModal({
     closeModal();
   }
 
-  //TODO: update palceholders and other stuff so they say notes when isNote
-
   return (
     <Modal closeModal={closeModal}>
       <div className="flex flex-col gap-y-5">
@@ -61,8 +64,8 @@ function ProjectModal({
           clear
         />
         <div className="flex flex-col gap-y-2 max-h-80 overflow-auto">
-          {projects.length > 0 ? (
-            projects.map((project) => (
+          {filteredList.length > 0 ? (
+            filteredList.map((project) => (
               <label
                 key={project.id}
                 className="border-2 border-gray-700 rounded cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-900 px-3 py-1.5"
