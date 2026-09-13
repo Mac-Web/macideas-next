@@ -53,12 +53,19 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
       style={{
         background: existingNote.backgroundImage
           ? `linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url('${existingNote.backgroundImage}')`
-          : "",
+          : existingNote.backgroundColor
+            ? existingNote.backgroundColor
+            : "",
       }}
     >
       <Editor
         existingNote={existingNote}
         background={existingNote.backgroundImage ? true : false}
+        hasBg={
+          existingNote.backgroundColor || existingNote.backgroundImage
+            ? true
+            : false
+        }
       />
     </div>
   );

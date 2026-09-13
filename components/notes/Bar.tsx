@@ -5,6 +5,7 @@ import {
   FaFolder,
   FaImage,
   FaPalette,
+  FaRedo,
   FaRegStar,
   FaStar,
   FaTrash,
@@ -18,7 +19,7 @@ import {
   renameNote,
   starNote,
 } from "@/app/notes/actions";
-import { addDescription } from "@/app/notes/[id]/actions";
+import { addDescription, resetBg, updateColor } from "@/app/notes/[id]/actions";
 import WarningModal from "../modals/WarningModal";
 import UploadModal from "../modals/UploadModal";
 import Emoji from "../ui/Emoji";
@@ -29,9 +30,10 @@ interface BarProps {
   folder: Folder | null;
   saved?: boolean;
   background?: boolean;
+  hasBg?: boolean;
 }
 
-function Bar({ note, folder, saved, background }: BarProps) {
+function Bar({ note, folder, saved, background, hasBg }: BarProps) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [editing, setEditing] = useState<string | null>(null);
@@ -119,6 +121,14 @@ function Bar({ note, folder, saved, background }: BarProps) {
       <div
         className={`absolute right-3 flex items-center gap-x-5 text-black dark:text-gray-300 ${background && "text-white!"}`}
       >
+        {hasBg && (
+          <FaRedo
+            size={17}
+            title="Reset background image and color"
+            className="cursor-pointer"
+            onClick={async () => await resetBg(note.id)}
+          />
+        )}
         <FaImage
           size={17}
           title="Upload background image"
@@ -128,11 +138,10 @@ function Bar({ note, folder, saved, background }: BarProps) {
         <label className="cursor-pointer" title="Customize color">
           <input
             type="color"
-            onChange={(e) => console.log(e.target.value)}
+            onChange={async (e) => await updateColor(note.id, e.target.value)}
             className="hidden"
           />
           <FaPalette size={17} />
-          {/* TODO: add option to upload/choose custom background and theme */}
         </label>
         <div
           className="cursor-pointer"

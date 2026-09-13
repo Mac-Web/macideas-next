@@ -39,7 +39,7 @@ export default async function Home() {
             />
             <div className="flex flex-col gap-y-5">
               <h2 className="text-black dark:text-white font-bold text-2xl">
-                Cool section title 1
+                Powerful & customizable task management
               </h2>
               <p className="text-black dark:text-gray-300">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla
@@ -52,7 +52,7 @@ export default async function Home() {
           <div className="flex flex-col gap-y-10 md:flex-row gap-x-20 items-center">
             <div className="flex flex-col gap-y-5">
               <h2 className="text-black dark:text-white font-bold text-2xl">
-                Cool section title 2
+                Feature-rich note taking editor
               </h2>
               <p className="text-black dark:text-gray-300">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla
@@ -67,6 +67,25 @@ export default async function Home() {
               width={200}
               height={200}
             />
+          </div>
+          <div className="flex flex-col gap-y-10 md:flex-row gap-x-20 items-center">
+            <Image
+              src="/logo.png"
+              alt="Placeholder image"
+              width={200}
+              height={200}
+            />
+            <div className="flex flex-col gap-y-5">
+              <h2 className="text-black dark:text-white font-bold text-2xl">
+                Integrated project organization
+              </h2>
+              <p className="text-black dark:text-gray-300">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla
+                distinctio error aspernatur quisquam ex natus nobis ducimus
+                quis! A quasi at omnis velit consectetur sit perspiciatis labore
+                commodi explicabo exercitationem?
+              </p>
+            </div>
           </div>
         </div>
       </div>

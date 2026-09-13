@@ -410,3 +410,33 @@ export async function addProjects(id: string, selected: string[]) {
     console.error("Error: " + err);
   }
 }
+
+export async function updateColor(id: string, color: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.taskList.update({
+        where: { id, userId: session.user.id },
+        data: { backgroundColor: color },
+      });
+      revalidatePath(`/tasks/${id}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function resetBg(id: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.taskList.update({
+        where: { id, userId: session.user.id },
+        data: { backgroundColor: null, backgroundImage: null },
+      });
+      revalidatePath(`/tasks/${id}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}

@@ -6,6 +6,7 @@ import {
   FaFolder,
   FaImage,
   FaPalette,
+  FaRedo,
   FaRegStar,
   FaStar,
   FaSun,
@@ -17,7 +18,7 @@ import {
   renameTaskList,
   starTaskList,
 } from "@/app/tasks/actions";
-import { addDescription } from "@/app/tasks/[id]/actions";
+import { addDescription, resetBg, updateColor } from "@/app/tasks/[id]/actions";
 import { AnimatePresence } from "framer-motion";
 import { BsList } from "react-icons/bs";
 import UploadModal from "../modals/UploadModal";
@@ -29,9 +30,10 @@ interface BarProps {
   taskList: TaskList;
   folder: Folder | null;
   myDay?: boolean;
+  background?: boolean;
 }
 
-function Bar({ taskList, folder, myDay }: BarProps) {
+function Bar({ taskList, folder, myDay, background }: BarProps) {
   const [editing, setEditing] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<boolean>(false);
@@ -116,6 +118,14 @@ function Bar({ taskList, folder, myDay }: BarProps) {
       )}
       {!myDay && (
         <div className="absolute right-3 flex items-center gap-x-5 text-black dark:text-gray-300">
+          {background && (
+            <FaRedo
+              size={17}
+              title="Reset background image and color"
+              className="cursor-pointer"
+              onClick={async () => await resetBg(taskList.id)}
+            />
+          )}
           <FaImage
             size={17}
             title="Upload background image"
@@ -125,11 +135,12 @@ function Bar({ taskList, folder, myDay }: BarProps) {
           <label className="cursor-pointer" title="Customize color">
             <input
               type="color"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={async (e) =>
+                await updateColor(taskList.id, e.target.value)
+              }
               className="hidden"
             />
             <FaPalette size={17} />
-            {/* TODO: add option to upload/choose custom background and theme */}
           </label>
           <div
             className="cursor-pointer"

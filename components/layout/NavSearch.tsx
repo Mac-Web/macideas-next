@@ -6,6 +6,8 @@ import Input from "../ui/Input";
 function NavSearch() {
   const [search, setSearch] = useState<string>("");
 
+  //TODO: implement search for tasks, notes, and projects
+
   return (
     <div className="flex-1">
       <Input

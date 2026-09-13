@@ -112,13 +112,21 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
       style={{
         background: (taskList as TaskList).backgroundImage
           ? `linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),url('${(taskList as TaskList).backgroundImage}')`
-          : "",
+          : (taskList as TaskList).backgroundColor
+            ? (taskList as TaskList).backgroundColor!
+            : "",
       }}
     >
       <Bar
         taskList={taskList as TaskList}
         folder={taskList.folder}
         myDay={myDay}
+        background={
+          (taskList as TaskList).backgroundColor ||
+          (taskList as TaskList).backgroundImage
+            ? true
+            : false
+        }
       />
       <Tasks
         tasks={taskList.tasks}

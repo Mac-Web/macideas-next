@@ -66,9 +66,10 @@ type NoteType = Note & {
 interface EditorProps {
   existingNote: NoteType;
   background?: boolean;
+  hasBg?: boolean;
 }
 
-function Editor({ existingNote, background }: EditorProps) {
+function Editor({ existingNote, background, hasBg }: EditorProps) {
   const [saved, setSaved] = useState<boolean>(false);
   const [link, setLink] = useState<string | null>(null);
   const [level, setLevel] = useState<string>(levels[4]);
@@ -205,6 +206,7 @@ function Editor({ existingNote, background }: EditorProps) {
         folder={existingNote.folder}
         saved={saved}
         background={background}
+        hasBg={hasBg}
       />
       {editor && (
         <>

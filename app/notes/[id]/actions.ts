@@ -32,3 +32,33 @@ export async function saveContent(id: string, content: string) {
     console.error("Error: " + err);
   }
 }
+
+export async function updateColor(id: string, color: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.note.update({
+        where: { id, userId: session.user.id },
+        data: { backgroundColor: color },
+      });
+      revalidatePath(`/notes/${id}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
+
+export async function resetBg(id: string) {
+  try {
+    const session = await getSession();
+    if (session) {
+      await prisma.note.update({
+        where: { id, userId: session.user.id },
+        data: { backgroundColor: null, backgroundImage: null },
+      });
+      revalidatePath(`/notes/${id}`);
+    }
+  } catch (err) {
+    console.error("Error: " + err);
+  }
+}
