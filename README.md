@@ -8,35 +8,41 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-black?style=for-the-badge&logo=vercel)
 
-MacIdeas, an app under the [MacWeb](https://macweb.app) collection of online apps, is an easy to use productivity tool for managing and organizing tasks, creating notes, and keeping track of your work! There are a ton of features, options, and customization settings that make MacIdeas a useful app that boosts your productivity and improves your work habit!
+MacIdeas, an app under the [MacWeb](https://macweb.app) collection of online apps, is an easy to use fullstack productivity platform for managing and organizing tasks, creating notes, organizing projects, and keeping track of your work! There are a ton of features, options, and customization settings that make MacIdeas a useful app that boosts your productivity and improves your work habit!
 
 ## Features
 
+- Create, edit, and manage custom task lists, tasks, notes, projects, and folders
+- All your important data on MacIdeas are backed up online securely and privately
+- Organize task lists and notes by starring or moving them into custom folders
+- Add custom emojis and colors to your folders, task lists, notes, projects, and tags to customize their appearance
+- Customize your preferences for what task/note widgets to show on the tasks/notes dashboard
+- Customize MacIdeas' look by choosing custom theme colors and uploading custom backdrop images to task lists and notes
+- Efficiently search through all your folders, task lists, tasks, notes, projects, and more with the search bar
+- Seamless integration across MacIdeas Tasks, Notes and Projects, as well as other MacWeb apps
+- Smooth page transitions, animations, and light/dark mode toggle
+
 ### Tasks
 
-- Create, edit, and manage custom task lists
-- Organize task lists by starring or moving them into custom folders
 - Create tasks and edit their text, description, tags, due date, start date, importance priority, and subtasks
 - Organize, browse, and view tasks easily by assigning custom tags, marking them as completed, and starring them
 - Search, filter, and sort tasks with a ton of different options to easily browse and manage your tasks
 - View additional details and advanced edit options for tasks with the task details panel
-- Add custom emojis and colors to your folders, task lists, and tags to customize their appearance
 - View your daily, starred, due/start soon, recent tasks, and more on the tasks dashboard
-- Customize your preferences for what tasks and widgets to show on the tasks dashboard
 - Plan and manage your daily work by adding tasks to the special My Day task list that refreshes every day
-- Customize MacIdeas' look by choosing custom theme colors and uploading custom backdrops to task lists
-- Efficiently search through all your folders, task lists, tasks, and more with the search bar
-- Easily and smoothily reorder folders, task lists, and tasks with drag and drop
-- Seamless integration with MacIdeas Notes and Projects
-- _more stuff coming soon_
 
 ### Notes
 
-- _coming soon!_
+- Easily create and edit sophisticated notes through MacIdeas' full-featured powerful rich text editor powered by Tiptap
+- Editing features include typography, formatting, color, size, lists, links, embeds, code blocks, quotes, and more
+- Organize and visualize all your ideas and text with the easy to use WYSIWYG editor with extensive keyboard shortcut support
+- Autosaves note content every 30 seconds to save your work and progress
 
 ### Projects
 
-- _coming soon!_
+- Organize all your tasks, notes, and folders effectively by grouping them into projects
+- Customize each project's content, information, and appearance to easily organize all your information
+- Easily browse through all the project's content with the search bar and the intuitive file browser
 
 ## Tech stack
 

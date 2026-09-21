@@ -8,6 +8,7 @@ import Options from "@/components/notes/dashboard/Options";
 import Section from "@/components/notes/dashboard/Section";
 import Settings from "@/components/tasks/dashboard/Settings";
 import { FaFaceFrown } from "react-icons/fa6";
+import React from "react";
 
 async function Page() {
   const session = await getSession();
@@ -47,7 +48,9 @@ async function Page() {
         {displayedSections.length > 0 ? (
           displayedSections.map((setting) => {
             return setting.id === 1 ? (
-              <Tags key={setting.id} tags={tags} />
+              <React.Fragment key={1}>
+                {tags.length > 0 && <Tags key={setting.id} tags={tags} />}
+              </React.Fragment>
             ) : (
               <Section
                 key={setting.id}
