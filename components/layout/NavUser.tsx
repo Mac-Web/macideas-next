@@ -61,7 +61,7 @@ function NavUser({ user }: { user: User | undefined }) {
           />
         ) : (
           <Image
-            src="/icons/profile/user.svg"
+            src="/user.svg"
             alt="Avatar"
             title="Avatar"
             width={40}
