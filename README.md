@@ -8,6 +8,8 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-black?style=for-the-badge&logo=vercel)
 
+![MacIdeas Demo Screenshot](/public/banner.webp)
+
 MacIdeas, an app under the [MacWeb](https://macweb.app) collection of online apps, is an easy to use fullstack productivity platform for managing and organizing tasks, creating notes, organizing projects, and keeping track of your work! There are a ton of features, options, and customization settings that make MacIdeas a useful app that boosts your productivity and improves your work habit!
 
 ## Features
