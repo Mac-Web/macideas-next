@@ -10,6 +10,7 @@ import Settings from "@/components/tasks/dashboard/Settings";
 import Section from "@/components/tasks/dashboard/Section";
 import Tags from "@/components/tasks/dashboard/Tags";
 import Options from "@/components/tasks/dashboard/Options";
+import React from "react";
 
 async function Page() {
   const session = await getSession();
@@ -86,11 +87,15 @@ async function Page() {
         {displayedSections.length > 0 ? (
           displayedSections.map((setting) => {
             return setting.id === 5 ? (
-              <Tags
-                key={setting.id}
-                tags={tags}
-                showCompleted={userSettings?.showCompleted}
-              />
+              <React.Fragment key={5}>
+                {tags.length > 0 && (
+                  <Tags
+                    key={setting.id}
+                    tags={tags}
+                    showCompleted={userSettings?.showCompleted}
+                  />
+                )}
+              </React.Fragment>
             ) : (
               <Section
                 key={setting.id}

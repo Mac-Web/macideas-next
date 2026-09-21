@@ -30,7 +30,7 @@ function Tags({ tags, showCompleted }: TagsProps) {
           Task{tasks.length === 1 ? "" : "s"} with
         </div>
         <Dropdown
-          selected={selectedTag.name}
+          selected={selectedTag?.name}
           setSelected={(t) =>
             setSelectedTag(tags.find((tag) => tag.name === t)!)
           }
@@ -53,7 +53,7 @@ function Tags({ tags, showCompleted }: TagsProps) {
       ) : (
         <div className="flex flex-col gap-y-5 items-center text-black dark:text-gray-300 text-center py-10 justify-center h-full">
           <FaCircleCheck size={40} />
-          You don&apos;t have any tasks with the {selectedTag.name} tag
+          You don&apos;t have any tasks with the {selectedTag?.name} tag
         </div>
       )}
     </div>

@@ -8,6 +8,7 @@ interface InputProps {
   value: string;
   setValue: (value: string) => void;
   onblur?: () => void;
+  onclear?: () => void;
   styles?: string;
   clear?: boolean;
   focused?: boolean;
@@ -20,6 +21,7 @@ function Input({
   value,
   setValue,
   onblur,
+  onclear,
   styles,
   clear,
   focused,
@@ -30,6 +32,7 @@ function Input({
 
   function handleClear() {
     setValue("");
+    if (onclear) onclear();
     setTimeout(() => {
       inputRef.current?.focus();
     }, 10);

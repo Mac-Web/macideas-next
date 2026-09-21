@@ -289,7 +289,7 @@ model Note {
   folderId String?
   folder   Folder?   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   projects Project[] @relation(name: "project notes")
-  tags     Tag[]     @relation(name: "note tags")
+  tags     Tag[]     @relation(name: "note tags") //TODO: actually implement tags
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
