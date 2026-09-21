@@ -10,6 +10,8 @@
 
 ![MacIdeas Demo Screenshot](/public/banner.webp)
 
+**For the shipwright: everything in this project is 100% human written, including all the code and this readme. You can check my Hackatime stats to verify that I did not use AI on this project at all**
+
 MacIdeas, an app under the [MacWeb](https://macweb.app) collection of online apps, is an easy to use fullstack productivity platform for managing and organizing tasks, creating notes, organizing projects, and keeping track of your work! There are a ton of features, options, and customization settings that make MacIdeas a useful app that boosts your productivity and improves your work habit!
 
 ## Features
